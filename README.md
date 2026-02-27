@@ -142,3 +142,24 @@ php artisan serve
 ------------
 
 ![Img](https://github.com/SakNoelCode/Imagenes_Proyectos/blob/master/sistema-ventas-captura.png)
+
+## Módulo de pedidos (apartados)
+
+Se agregó un nuevo módulo para **apartar productos** con control de inventario temporal y trazabilidad:
+
+- Crea pedidos con folio automático diario (`PED-YYYYMMDD-####`).
+- Registra la persona que recogerá el pedido.
+- Al guardar, descuenta stock del inventario en forma temporal.
+- Registra el movimiento en kardex con tipo `PEDIDO`.
+- Permite cancelar pedidos apartados para liberar stock.
+- Genera PDF del pedido con folio, cliente, detalle de productos e importes.
+
+### Rutas principales
+
+- `GET /admin/pedidos`
+- `GET /admin/pedidos/create`
+- `POST /admin/pedidos`
+- `GET /admin/pedidos/{pedido}`
+- `DELETE /admin/pedidos/{pedido}`
+- `GET /admin/pedidos/{pedido}/pdf`
+

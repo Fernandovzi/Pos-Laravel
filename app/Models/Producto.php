@@ -30,6 +30,13 @@ class Producto extends Model
             ->withPivot('cantidad', 'precio_venta');
     }
 
+    public function pedidos(): BelongsToMany
+    {
+        return $this->belongsToMany(Pedido::class)
+            ->withTimestamps()
+            ->withPivot('cantidad', 'precio');
+    }
+
     public function categoria(): BelongsTo
     {
         return $this->belongsTo(Categoria::class);
