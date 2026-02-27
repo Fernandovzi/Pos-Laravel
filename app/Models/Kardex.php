@@ -20,7 +20,7 @@ class Kardex extends Model
 
     public function producto(): BelongsTo
     {
-        return $this->belongsTo(Kardex::class);
+        return $this->belongsTo(Producto::class);
     }
 
     public function getFechaAttribute(): string
@@ -56,7 +56,7 @@ class Kardex extends Model
         if ($tipo == TipoTransaccionEnum::Compra) {
             $entrada = $data['cantidad'];
             $saldo += $entrada;
-        } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Ajuste) {
+        } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Ajuste || $tipo == TipoTransaccionEnum::Pedido) {
             $salida = $data['cantidad'];
             $saldo -= $salida;
         }
@@ -94,6 +94,9 @@ class Kardex extends Model
                 break;
             case TipoTransaccionEnum::Ajuste:
                 $descripcion = 'Ajuste de producto';
+                break;
+            case TipoTransaccionEnum::Pedido:
+                $descripcion = 'Salida temporal por pedido folio ' . $data['folio'];
                 break;
         }
 

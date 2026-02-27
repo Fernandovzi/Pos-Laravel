@@ -23,6 +23,11 @@ class Cliente extends Model
         return $this->hasMany(Venta::class);
     }
 
+    public function pedidos(): HasMany
+    {
+        return $this->hasMany(Pedido::class);
+    }
+
      /**
      * Obtener la razon social, tipo y número de documento del cliente
      * @return string

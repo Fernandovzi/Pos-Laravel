@@ -99,6 +99,14 @@
                 </x-nav.link-collapsed>
                 @endcan
 
+                <x-nav.link-collapsed
+                    id="collapsePedidos"
+                    icon="fa-solid fa-receipt"
+                    content="Pedidos">
+                    <x-nav.link-collapsed-item :href="route('pedidos.index')" content="Ver" />
+                    <x-nav.link-collapsed-item :href="route('pedidos.create')" content="Crear" />
+                </x-nav.link-collapsed>
+
                 @hasrole('administrador')
                 <x-nav.heading>Otros</x-nav.heading>
                 @endhasrole

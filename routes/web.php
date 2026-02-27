@@ -17,6 +17,7 @@ use App\Http\Controllers\loginController;
 use App\Http\Controllers\logoutController;
 use App\Http\Controllers\marcaController;
 use App\Http\Controllers\MovimientoController;
+use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\presentacioneController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\profileController;
@@ -59,6 +60,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('empleados', EmpleadoController::class)->except('show');
     Route::resource('cajas', CajaController::class)->except('edit', 'update', 'show');
     Route::resource('movimientos', MovimientoController::class)->except('show', 'edit', 'update', 'destroy');
+    Route::resource('pedidos', PedidoController::class)->except('edit', 'update');
+    Route::get('/pedidos/{pedido}/pdf', [PedidoController::class, 'exportPdf'])->name('pedidos.pdf');
 
     Route::resource('clientes', App\Http\Controllers\ClienteController::class);
 
