@@ -15,6 +15,7 @@ use App\Services\EmpresaService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -24,7 +25,7 @@ class ventaController extends Controller
 {
     protected EmpresaService $empresaService;
 
-    function __construct(EmpresaService $empresaService)
+    public function __construct(EmpresaService $empresaService)
     {
         $this->middleware('permission:ver-venta|crear-venta|mostrar-venta|eliminar-venta', ['only' => ['index']]);
         $this->middleware('permission:crear-venta', ['only' => ['create', 'store']]);
@@ -34,6 +35,7 @@ class ventaController extends Controller
         $this->middleware('check-show-venta-user', ['only' => ['show']]);
         $this->empresaService = $empresaService;
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -52,28 +54,8 @@ class ventaController extends Controller
      */
     public function create(ComprobanteService $comprobanteService): View
     {
-
-        $productos = Producto::join('inventario as i', function ($join) {
-            $join->on('i.producto_id', '=', 'productos.id');
-        })
-            ->join('presentaciones as p', function ($join) {
-                $join->on('p.id', '=', 'productos.presentacione_id');
-            })
-            ->select(
-                'p.sigla',
-                'productos.nombre',
-                'productos.codigo',
-                'productos.id',
-                'i.cantidad',
-                'productos.precio'
-            )
-            ->where('productos.estado', 1)
-            ->where('i.cantidad', '>', 0)
-            ->get();
-
-        $clientes = Cliente::whereHas('persona', function ($query) {
-            $query->where('estado', 1);
-        })->get();
+        $productos = $this->obtenerProductosDisponibles();
+        $clientes = $this->obtenerClientesActivos();
         $comprobantes = $comprobanteService->obtenerComprobantes();
         $optionsMetodoPago = MetodoPagoEnum::cases();
         $empresa = $this->empresaService->obtenerEmpresa();
@@ -92,50 +74,48 @@ class ventaController extends Controller
      */
     public function store(StoreVentaRequest $request): RedirectResponse
     {
-        DB::beginTransaction();
         try {
-            //Llenar mi tabla venta
-            $venta = Venta::create($request->validated());
+            $venta = DB::transaction(function () use ($request) {
+                $venta = Venta::create($request->validated());
+                $detalleVenta = $this->obtenerDetalleVenta($request);
 
-            //Llenar mi tabla venta_producto
-            //1. Recuperar los arrays
-            $arrayProducto_id = $request->get('arrayidproducto');
-            $arrayCantidad = $request->get('arraycantidad');
-            $arrayPrecioVenta = $request->get('arrayprecioventa');
+                $pivotData = $detalleVenta
+                    ->mapWithKeys(function (array $detalle): array {
+                        return [
+                            $detalle['producto_id'] => [
+                                'cantidad' => $detalle['cantidad'],
+                                'precio_venta' => $detalle['precio_venta'],
+                            ],
+                        ];
+                    })
+                    ->all();
 
-            //2.Realizar el llenado
-            $siseArray = count($arrayProducto_id);
-            $cont = 0;
+                $venta->productos()->syncWithoutDetaching($pivotData);
 
-            while ($cont < $siseArray) {
-                $venta->productos()->syncWithoutDetaching([
-                    $arrayProducto_id[$cont] => [
-                        'cantidad' => $arrayCantidad[$cont],
-                        'precio_venta' => $arrayPrecioVenta[$cont],
-                    ]
-                ]);
+                $detalleVenta->each(function (array $detalle) use ($venta): void {
+                    CreateVentaDetalleEvent::dispatch(
+                        $venta,
+                        $detalle['producto_id'],
+                        $detalle['cantidad'],
+                        $detalle['precio_venta']
+                    );
+                });
 
-                //Despachar evento
-                CreateVentaDetalleEvent::dispatch(
-                    $venta,
-                    $arrayProducto_id[$cont],
-                    $arrayCantidad[$cont],
-                    $arrayPrecioVenta[$cont]
-                );
+                CreateVentaEvent::dispatch($venta);
 
-                $cont++;
-            }
+                return $venta;
+            });
 
-            //Despachar evento
-            CreateVentaEvent::dispatch($venta);
-
-            DB::commit();
             ActivityLogService::log('Creación de una venta', 'Ventas', $request->validated());
+
             return redirect()->route('movimientos.index', ['caja_id' => $venta->caja_id])
                 ->with('success', 'Venta registrada');
         } catch (Throwable $e) {
-            DB::rollBack();
-            Log::error('Error al crear la venta', ['error' => $e->getMessage()]);
+            Log::error('Error al crear la venta', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
             return redirect()->route('ventas.index')->with('error', 'Ups, algo falló');
         }
     }
@@ -145,7 +125,8 @@ class ventaController extends Controller
      */
     public function show(Venta $venta): View
     {
-        $empresa =  $this->empresaService->obtenerEmpresa();
+        $empresa = $this->empresaService->obtenerEmpresa();
+
         return view('venta.show', compact('venta', 'empresa'));
     }
 
@@ -176,5 +157,63 @@ class ventaController extends Controller
             ]);
 
         return redirect()->route('ventas.index')->with('success', 'Venta eliminada');*/
+    }
+
+    /**
+     * Recupera solo productos activos y con stock disponible para la venta.
+     */
+    private function obtenerProductosDisponibles(): Collection
+    {
+        return Producto::join('inventario as i', function ($join) {
+            $join->on('i.producto_id', '=', 'productos.id');
+        })
+            ->join('presentaciones as p', function ($join) {
+                $join->on('p.id', '=', 'productos.presentacione_id');
+            })
+            ->select(
+                'p.sigla',
+                'productos.nombre',
+                'productos.codigo',
+                'productos.id',
+                'i.cantidad',
+                'productos.precio'
+            )
+            ->where('productos.estado', 1)
+            ->where('i.cantidad', '>', 0)
+            ->get();
+    }
+
+    /**
+     * Recupera clientes activos incluyendo la persona para evitar consultas N+1.
+     */
+    private function obtenerClientesActivos(): Collection
+    {
+        return Cliente::with('persona')
+            ->whereHas('persona', function ($query) {
+                $query->where('estado', 1);
+            })
+            ->get();
+    }
+
+    /**
+     * Construye la estructura normalizada del detalle de venta.
+     *
+     * @return Collection<int, array{producto_id:int, cantidad:float|int, precio_venta:float|int}>
+     */
+    private function obtenerDetalleVenta(StoreVentaRequest $request): Collection
+    {
+        $idsProductos = $request->validated('arrayidproducto');
+        $cantidades = $request->validated('arraycantidad');
+        $preciosVenta = $request->validated('arrayprecioventa');
+
+        return collect($idsProductos)
+            ->values()
+            ->map(function ($productoId, int $index) use ($cantidades, $preciosVenta): array {
+                return [
+                    'producto_id' => (int) $productoId,
+                    'cantidad' => $cantidades[$index],
+                    'precio_venta' => $preciosVenta[$index],
+                ];
+            });
     }
 }
