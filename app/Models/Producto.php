@@ -49,7 +49,7 @@ class Producto extends Model
 
     public function proveedore(): BelongsTo
     {
-        return $this->belongsTo(Proveedore::class, 'proveedor_id');
+        return $this->belongsTo(Proveedore::class, 'proveedore_id');
     }
 
     public function presentacione(): BelongsTo
