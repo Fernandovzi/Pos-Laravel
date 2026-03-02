@@ -1,3 +1,3 @@
-<a class="nav-link" href="{{ $href }}">
+<a class="nav-link {{ request()->url() == $href ? 'active' : '' }}" href="{{ $href }}">
     {{$content}}
 </a>
