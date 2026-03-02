@@ -8,119 +8,161 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
     .pos-sale-page {
-        --pos-primary: #2563eb;
-        --pos-secondary: #0f766e;
-        --pos-success: #16a34a;
-        --pos-warning: #d97706;
-        --pos-danger: #dc2626;
-        --pos-bg: #f3f6fb;
-        --pos-surface: #ffffff;
-        --pos-border: #dbe4f0;
-        --pos-text: #0f172a;
-        --pos-muted: #475569;
-        --pos-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-        background: var(--pos-bg);
-        color: var(--pos-text);
+        --sale-primary: #ff6c37;
+        --sale-primary-soft: rgba(255, 108, 55, 0.12);
+        --sale-bg: #f5f7fb;
+        --sale-surface: #ffffff;
+        --sale-border: #e5e7eb;
+        --sale-text: #111827;
+        --sale-muted: #6b7280;
+        --sale-success: #15803d;
+        --sale-danger: #dc2626;
+        --sale-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+        background: var(--sale-bg);
         min-height: 100%;
-        padding-bottom: 2rem;
+        color: var(--sale-text);
     }
 
-    @media (prefers-color-scheme: dark) {
-        .pos-sale-page {
-            --pos-primary: #60a5fa;
-            --pos-secondary: #2dd4bf;
-            --pos-success: #4ade80;
-            --pos-warning: #fbbf24;
-            --pos-danger: #f87171;
-            --pos-bg: #0b1220;
-            --pos-surface: #111b2e;
-            --pos-border: #243247;
-            --pos-text: #e2e8f0;
-            --pos-muted: #93a4bc;
-            --pos-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-        }
+    .sale-page-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: .75rem;
+        margin-bottom: 1rem;
     }
 
-    .pos-card {
-        background: var(--pos-surface);
-        border: 1px solid var(--pos-border);
-        border-radius: 16px;
-        box-shadow: var(--pos-shadow);
-        overflow: hidden;
+    .sale-page-title {
+        margin: 0;
+        font-weight: 800;
+        letter-spacing: -0.02em;
     }
 
-    .pos-card-header {
-        background: linear-gradient(90deg, var(--pos-primary), #3b82f6);
-        color: #fff;
+    .sale-page-tag {
+        background: var(--sale-primary-soft);
+        color: #c2410c;
+        font-size: .82rem;
+        padding: .35rem .7rem;
+        border-radius: 999px;
         font-weight: 700;
-        letter-spacing: .02em;
-        padding: .85rem 1rem;
+    }
+
+    .sale-shell {
+        background: var(--sale-surface);
+        border: 1px solid var(--sale-border);
+        border-radius: 16px;
+        box-shadow: var(--sale-shadow);
+    }
+
+    .sale-section {
+        border-bottom: 1px solid var(--sale-border);
+        padding: 1rem 1.1rem;
+    }
+
+    .sale-section:last-child { border-bottom: 0; }
+
+    .sale-section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: .5rem;
+        margin-bottom: .9rem;
     }
 
-    .pos-card-header--success {
-        background: linear-gradient(90deg, var(--pos-secondary), #14b8a6);
+    .sale-section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        margin: 0;
     }
 
-    .pos-card-body { padding: 1.25rem; }
+    .sale-state {
+        font-size: .78rem;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: .3rem .6rem;
+    }
+
+    .sale-state--active { background: #dcfce7; color: #166534; }
+    .sale-state--pending { background: #fef3c7; color: #92400e; }
+    .sale-state--paid { background: #dbeafe; color: #1d4ed8; }
 
     .pos-sale-page .form-label {
+        margin-bottom: .35rem;
+        color: #4b5563;
         font-weight: 600;
-        color: var(--pos-muted);
+        font-size: .9rem;
     }
 
     .pos-sale-page .form-control,
-    .pos-sale-page .bootstrap-select .dropdown-toggle {
+    .pos-sale-page .bootstrap-select .dropdown-toggle,
+    .pos-sale-page .input-group-text {
         min-height: 48px;
         border-radius: 12px;
-        border: 1px solid var(--pos-border);
-        font-size: 1rem;
+        border: 1px solid var(--sale-border);
     }
 
-    .pos-quick-btn {
-        min-height: 52px;
-        padding-inline: 1.4rem;
+    .pos-sale-page .form-control:focus,
+    .pos-sale-page .bootstrap-select .dropdown-toggle:focus {
+        border-color: rgba(255, 108, 55, 0.5);
+        box-shadow: 0 0 0 .2rem rgba(255, 108, 55, 0.12);
+    }
+
+    .sale-btn {
+        min-height: 50px;
         border-radius: 12px;
         font-weight: 700;
+        padding-inline: 1.1rem;
+    }
+
+    .sale-btn-primary { background: var(--sale-primary); border-color: var(--sale-primary); }
+    .sale-btn-primary:hover { background: #e55623; border-color: #e55623; }
+
+    .sale-grid-info {
+        background: #f9fafb;
+        border: 1px solid var(--sale-border);
+        border-radius: 12px;
+        padding: .85rem;
+    }
+
+    .sale-table-wrap {
+        border: 1px solid var(--sale-border);
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+    .sale-table thead th {
+        background: #111827;
+        color: #fff;
+        border: 0;
+        font-size: .8rem;
+        text-transform: uppercase;
+        letter-spacing: .02em;
+        padding: .8rem .65rem;
+    }
+
+    .sale-table tbody td,
+    .sale-table tbody th,
+    .sale-table tfoot th {
+        vertical-align: middle;
+        padding: .8rem .65rem;
+    }
+
+    .sale-table tfoot tr:last-child th {
+        border-top: 2px solid #d1d5db;
         font-size: 1rem;
     }
 
-    .pos-table thead th {
-        background: #1e3a8a;
-        color: #fff;
-        padding: .85rem .75rem;
-        border: 0;
+    .sale-total-amount {
+        color: #111827;
+        font-size: 1.25rem;
+        font-weight: 800;
     }
 
-    .pos-table tbody td, .pos-table tbody th {
-        padding: .85rem .75rem;
-        vertical-align: middle;
-        font-size: .98rem;
+    @media (max-width: 768px) {
+        .sale-section { padding: .9rem; }
+        .sale-btn { width: 100%; }
     }
-
-    .pos-table tfoot th {
-        color: var(--pos-text);
-        background: rgba(37,99,235,.06);
-    }
-
-    .pos-status {
-        display: inline-flex;
-        align-items: center;
-        border-radius: 999px;
-        padding: .25rem .65rem;
-        font-size: .8rem;
-        font-weight: 700;
-        margin-left: .4rem;
-    }
-
-    .pos-status--active { background: rgba(22,163,74,.15); color: var(--pos-success); }
-    .pos-status--paid { background: rgba(37,99,235,.15); color: var(--pos-primary); }
-    .pos-status--pending { background: rgba(217,119,6,.18); color: var(--pos-warning); }
-    .pos-status--cancelled { background: rgba(220,38,38,.18); color: var(--pos-danger); }
-
-    .pos-total { font-size: 1.25rem; font-weight: 800; }
 </style>
 
 @endpush
@@ -128,7 +170,10 @@
 @section('content')
 <div class="pos-sale-page">
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center fw-bold">POS · Realizar Venta</h1>
+    <div class="sale-page-header mt-3">
+        <h1 class="sale-page-title">Crear venta</h1>
+        <span class="sale-page-tag">Flujo rápido POS</span>
+    </div>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Ventas</a></li>
@@ -138,18 +183,18 @@
 
 <form action="{{ route('ventas.store') }}" method="post" class="pos-form">
     @csrf
-    <div class="container-lg mt-4">
+    <div class="container-lg mt-3">
         <div class="row gy-4">
 
             <!-----Venta---->
             <div class="col-12">
-                <div class="pos-card">
-                    <div class="pos-card-header pos-card-header--success">
-                        <span>Datos generales</span>
-                        <span class="pos-status pos-status--active">Activo</span>
-                    </div>
-                    <div class="pos-card-body">
-                    <div class="row g-4">
+                <div class="sale-shell">
+                    <section class="sale-section">
+                        <div class="sale-section-header">
+                            <h2 class="sale-section-title">Datos generales</h2>
+                            <span class="sale-state sale-state--active">Activo</span>
+                        </div>
+                    <div class="row g-3">
 
                         <!--Cliente-->
                         <div class="col-12">
@@ -201,22 +246,19 @@
                             @enderror
                         </div>
                     </div>
-                </div>
+                    </section>
                 </div>
             </div>
 
             <!------venta producto---->
             <div class="col-12">
-                <div class="pos-card">
-                    <div class="pos-card-header">
-                        <span>Detalles de la venta</span>
-                        <div>
-                            <span class="pos-status pos-status--pending">Pendiente</span>
-                            <span class="pos-status pos-status--cancelled">Cancelado</span>
+                <div class="sale-shell">
+                    <section class="sale-section">
+                        <div class="sale-section-header">
+                            <h2 class="sale-section-title">Detalle de productos</h2>
+                            <span class="sale-state sale-state--pending">Pendiente de cobro</span>
                         </div>
-                    </div>
-                    <div class="pos-card-body">
-                    <div class="row gy-4">
+                    <div class="row gy-3">
 
                         <!-----Producto---->
                         <div class="col-12">
@@ -232,31 +274,15 @@
                             </select>
                         </div>
 
-                        <!-----Stock--->
-                        <div class="d-flex justify-content-end">
-                            <div class="col-12 col-sm-6">
-                                <div class="row">
-                                    <label for="stock" class="col-form-label col-4">
-                                        En stock:</label>
-                                    <div class="col-8">
-                                        <input disabled id="stock"
-                                            type="text" class="form-control">
-                                    </div>
+                        <div class="col-12">
+                            <div class="row g-3 sale-grid-info">
+                                <div class="col-sm-6">
+                                    <label for="stock" class="form-label">En stock</label>
+                                    <input disabled id="stock" type="text" class="form-control">
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-----Precio -->
-                        <div class="d-flex justify-content-end">
-                            <div class="col-12 col-sm-6">
-                                <div class="row">
-                                    <label for="precio" class="col-form-label col-4">
-                                        Precio:</label>
-                                    <div class="col-8">
-                                        <input disabled id="precio"
-                                            type="number" class="form-control"
-                                            step="any">
-                                    </div>
+                                <div class="col-sm-6">
+                                    <label for="precio" class="form-label">Precio</label>
+                                    <input disabled id="precio" type="number" class="form-control" step="any">
                                 </div>
                             </div>
                         </div>
@@ -271,14 +297,14 @@
 
                         <!-----botón para agregar--->
                         <div class="col-12 text-end">
-                            <button id="btn_agregar" class="btn btn-primary pos-quick-btn" type="button">
+                            <button id="btn_agregar" class="btn sale-btn sale-btn-primary" type="button">
                                 <i class="fa-solid fa-plus me-1"></i>Agregar rápido</button>
                         </div>
 
                         <!-----Tabla para el detalle de la venta--->
                         <div class="col-12">
-                            <div class="table-responsive">
-                                <table id="tabla_detalle" class="table table-hover pos-table">
+                            <div class="table-responsive sale-table-wrap">
+                                <table id="tabla_detalle" class="table table-hover sale-table">
                                     <thead class="bg-primary">
                                         <tr>
                                             <th class="text-white">Producto</th>
@@ -323,7 +349,7 @@
                                             </th>
                                         </tr>
                                         <tr>
-                                            <th colspan="4" class="pos-total">Total</th>
+                                            <th colspan="4" class="sale-total-amount">Total</th>
                                             <th colspan="2">
                                                 <input type="hidden" name="total" value="0" id="inputTotal">
                                                 <span id="total">0</span>
@@ -338,7 +364,7 @@
                         <!--Boton para cancelar venta--->
                         <div class="col-12">
                             <button id="cancelar" type="button"
-                                class="btn btn-danger pos-quick-btn"
+                                class="btn btn-danger sale-btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#exampleModal">
                                 Cancelar venta
@@ -346,21 +372,20 @@
                         </div>
 
                     </div>
-                </div>
+                </section>
                 </div>
             </div>
 
             <!----Finalizar venta-->
             <div class="col-12">
-                <div class="pos-card">
-                    <div class="pos-card-header">
-                        <span>Finalizar venta</span>
-                        <span class="pos-status pos-status--paid">Cobrado</span>
-                    </div>
+                <div class="sale-shell">
+                    <section class="sale-section">
+                        <div class="sale-section-header">
+                            <h2 class="sale-section-title">Finalizar venta</h2>
+                            <span class="sale-state sale-state--paid">Cobrado</span>
+                        </div>
 
-                    <div class="pos-card-body">
-
-                    <div class="row gy-4">
+                    <div class="row gy-3">
 
                         <div class="col-md-6">
                             <label for="dinero_recibido" class="form-label">
@@ -379,13 +404,12 @@
 
                         <!--Botones--->
                         <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-success pos-quick-btn" id="guardar">
+                            <button type="submit" class="btn btn-success sale-btn" id="guardar">
                                 <i class="fa-solid fa-circle-check me-1"></i>Cobrar venta</button>
                         </div>
                     </div>
+                    </section>
                 </div>
-                </div>
-
             </div>
 
         </div>
