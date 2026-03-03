@@ -20,13 +20,11 @@
         <li class="breadcrumb-item active">Crear proveedor</li>
     </ol>
 
-    <div class="card text-bg-light">
+    <div class="card">
         <form action="{{ route('proveedores.store') }}" method="post">
             @csrf
-            <div class="card-body">
+            <div class="card-body text-bg-light">
                 <div class="row g-3">
-
-                    <!----Tipo de persona----->
                     <div class="col-md-6">
                         <label for="tipo" class="form-label">Tipo de proveedor:</label>
                         <select class="form-select" name="tipo" id="tipo">
@@ -40,10 +38,9 @@
                         @enderror
                     </div>
 
-                    <!-------Razón social------->
                     <div class="col-12" id="box-razon-social">
-                        <label id="label-natural" for="razon_social" class="form-label">Nombres y apellidos:</label>
-                        <label id="label-juridica" for="razon_social" class="form-label">Nombre de la empresa:</label>
+                        <label id="label-fisica" for="razon_social" class="form-label">Nombres y apellidos:</label>
+                        <label id="label-moral" for="razon_social" class="form-label">Nombre de la empresa:</label>
 
                         <input required type="text" name="razon_social" id="razon_social" class="form-control" value="{{old('razon_social')}}">
 
@@ -52,7 +49,6 @@
                         @enderror
                     </div>
 
-                    <!------Dirección---->
                     <div class="col-12">
                         <label for="direccion" class="form-label">Dirección:</label>
                         <input type="text" name="direccion" id="direccion" class="form-control" value="{{old('direccion')}}">
@@ -61,48 +57,52 @@
                         @enderror
                     </div>
 
-                    <!------Email---->
                     <div class="col-md-6">
                         <x-forms.input id="email" type='email' labelText='Correo eléctronico' />
                     </div>
 
-                    <!------Telefono---->
                     <div class="col-md-6">
                         <x-forms.input id="telefono" type='number' />
                     </div>
 
-
-                    <!--------------Documento------->
                     <div class="col-md-6">
-                        <label for="documento_id" class="form-label">Tipo de documento:</label>
-                        <select class="form-select" name="documento_id" id="documento_id">
-                            <option value="" selected disabled>Seleccione una opción</option>
-                            @foreach ($documentos as $item)
-                            <option value="{{$item->id}}" {{ old('documento_id') == $item->id ? 'selected' : '' }}>{{$item->nombre}}</option>
-                            @endforeach
-                        </select>
-                        @error('documento_id')
+                        <label for="rfc" class="form-label">RFC:</label>
+                        <input type="text" name="rfc" id="rfc" maxlength="13" class="form-control" value="{{ old('rfc') }}">
+                        @error('rfc')
                         <small class="text-danger">{{'*'.$message}}</small>
                         @enderror
                     </div>
 
                     <div class="col-md-6">
-                        <label for="numero_documento" class="form-label">Numero de documento:</label>
-                        <input required type="text" name="numero_documento" id="numero_documento" class="form-control" value="{{old('numero_documento')}}">
-                        @error('numero_documento')
+                        <label for="regimen_fiscal" class="form-label">Régimen fiscal (SAT):</label>
+                        <input type="text" name="regimen_fiscal" id="regimen_fiscal" maxlength="3" class="form-control" value="{{ old('regimen_fiscal') }}">
+                        @error('regimen_fiscal')
+                        <small class="text-danger">{{'*'.$message}}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="codigo_postal_fiscal" class="form-label">Código postal fiscal:</label>
+                        <input type="text" name="codigo_postal_fiscal" id="codigo_postal_fiscal" maxlength="5" class="form-control" value="{{ old('codigo_postal_fiscal') }}">
+                        @error('codigo_postal_fiscal')
+                        <small class="text-danger">{{'*'.$message}}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="uso_cfdi" class="form-label">Uso CFDI (SAT):</label>
+                        <input type="text" name="uso_cfdi" id="uso_cfdi" maxlength="4" class="form-control" value="{{ old('uso_cfdi') }}">
+                        @error('uso_cfdi')
                         <small class="text-danger">{{'*'.$message}}</small>
                         @enderror
                     </div>
                 </div>
-
             </div>
             <div class="card-footer text-center">
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </div>
         </form>
     </div>
-
-
 </div>
 @endsection
 
@@ -111,13 +111,12 @@
     $(document).ready(function() {
         $('#tipo').on('change', function() {
             let selectValue = $(this).val();
-            //natural //juridica
-            if (selectValue == 'NATURAL') {
-                $('#label-juridica').hide();
-                $('#label-natural').show();
+            if (selectValue == 'FISICA') {
+                $('#label-moral').hide();
+                $('#label-fisica').show();
             } else {
-                $('#label-natural').hide();
-                $('#label-juridica').show();
+                $('#label-fisica').hide();
+                $('#label-moral').show();
             }
 
             $('#box-razon-social').show();

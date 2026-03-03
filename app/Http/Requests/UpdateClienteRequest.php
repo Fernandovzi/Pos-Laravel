@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateClienteRequest extends FormRequest
 {
@@ -22,13 +23,16 @@ class UpdateClienteRequest extends FormRequest
     public function rules(): array
     {
         $cliente = $this->route('cliente');
+
         return [
             'razon_social' => 'required|max:255',
             'direccion' => 'nullable|max:255',
             'telefono' => 'nullable|max:15',
             'email' => 'nullable|max:255|email',
-            'documento_id' => 'required|integer|exists:documentos,id',
-            'numero_documento' => 'required|max:20|unique:personas,numero_documento,' . $cliente->persona->id
+            'rfc' => ['nullable', 'string', 'size:13', 'regex:/^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/', Rule::unique('personas', 'rfc')->ignore($cliente->persona->id)],
+            'regimen_fiscal' => 'nullable|string|size:3',
+            'codigo_postal_fiscal' => 'nullable|string|size:5',
+            'uso_cfdi' => 'nullable|string|size:4',
         ];
     }
 }
