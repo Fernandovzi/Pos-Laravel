@@ -2,7 +2,7 @@
     <div class="container-fluid px-4">
         <div class="d-flex align-items-center justify-content-between small">
             <div class="text-muted">
-                &copy; BlueCrow 2026 - Laravel v.{{app()->version()}} - PHP v.{{phpversion()}}
+                &copy; BlueCrow 2026
             </div>
         </div>
     </div>

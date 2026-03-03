@@ -16,7 +16,7 @@
     <div class="row">
         <!----Clientes--->
         <div class="col-xl-3 col-md-6">
-            <div class="card bg-primary text-white mb-4">
+            <div class="card border-primary mb-3 text-primary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
@@ -34,15 +34,15 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ route('clientes.index') }}">Ver más</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <a class="small text-primary stretched-link" href="{{ route('clientes.index') }}">Ver más</a>
+                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
 
         <!----Compra--->
         <div class="col-xl-3 col-md-6">
-            <div class="card bg-secondary text-white mb-4">
+            <div class="card border-primary mb-3 text-primary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
@@ -60,15 +60,15 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ route('compras.index') }}">Ver más</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <a class="small text-primary stretched-link" href="{{ route('compras.index') }}">Ver más</a>
+                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
 
         <!----Producto--->
         <div class="col-xl-3 col-md-6">
-            <div class="card bg-success text-white mb-4">
+            <div class="card border-primary mb-3 text-primary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
@@ -86,15 +86,15 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ route('productos.index') }}">Ver más</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <a class="small text-primary stretched-link" href="{{ route('productos.index') }}">Ver más</a>
+                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
 
         <!----Users--->
         <div class="col-xl-3 col-md-6">
-            <div class="card bg-info text-white mb-4">
+            <div class="card border-primary mb-3 text-primary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
@@ -112,24 +112,12 @@
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ route('users.index') }}">Ver más</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <a class="small text-primary stretched-link" href="{{ route('users.index') }}">Ver más</a>
+                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
         </div>
 
-    </div>
-
-    <div class="row">
-        <div class="col-xl-12">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i>
-                    5 Productos con el stock más bajo
-                </div>
-                <div class="card-body"><canvas id="productosChart" width="100%" height="30"></canvas></div>
-            </div>
-        </div>
     </div>
 
     <div class="row">
@@ -212,33 +200,5 @@
         }
     });
 
-
-    let datosProductos = @json($productosStockBajo);
-
-    const nombres = datosProductos.map(obj => obj.nombre);
-    const stock = datosProductos.map(i => i.cantidad);
-
-    const productosChart = document.getElementById('productosChart');
-
-    new Chart(productosChart, {
-        type: 'horizontalBar',
-        data: {
-            labels: nombres,
-            datasets: [{
-                label: 'stock',
-                backgroundColor: "rgba(2,117,216,1)",
-                borderColor: "#fff",
-                data: stock,
-                borderWidth: 2,
-                hoverBorderColor: '#aaa',
-                base: 0
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            },
-        }
-    });
 </script>
 @endpush
