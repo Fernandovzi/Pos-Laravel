@@ -29,21 +29,7 @@ class MonedaSeeder extends Seeder
                 'nombre_completo' => 'Peso mexicano',
                 'simbolo' => '$'
             ],
-            [
-                'estandar_iso' => 'PEN',
-                'nombre_completo' => 'Sol peruano',
-                'simbolo' => 'S/'
-            ],
-            [
-                'estandar_iso' => 'ARS',
-                'nombre_completo' => 'Peso Argentino',
-                'simbolo' => '$'
-            ],
-            [
-                'estandar_iso' => 'CLP',
-                'nombre_completo' => 'Peso Chileno',
-                'simbolo' => '$'
-            ],
+
         ]);
     }
 }

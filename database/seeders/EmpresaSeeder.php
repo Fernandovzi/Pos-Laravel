@@ -14,12 +14,12 @@ class EmpresaSeeder extends Seeder
     public function run(): void
     {
         Empresa::insert([
-            'nombre' => 'SK SAC',
-            'propietario' => 'Sak Code',
-            'ruc' => '1089674538',
-            'porcentaje_impuesto' => '15',
-            'abreviatura_impuesto' => 'IGV',
-            'direccion' => 'Av. Los Pinos n°789',
+            'nombre' => 'Prueba',
+            'propietario' => 'Fernandovzi',
+            'ruc' => 'XAXX010101000',
+            'porcentaje_impuesto' => '0',
+            'abreviatura_impuesto' => '%',
+            'direccion' => 'Av. Siempre Viva 742 Col. Jardines del Sol C.P. 45000 Guadalajara, Jalisco México',
             'moneda_id' => 1
         ]);
     }
