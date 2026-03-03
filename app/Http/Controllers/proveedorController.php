@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\TipoPersonaEnum;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdateProveedoreRequest;
-use App\Models\Documento;
 use App\Models\Persona;
 use App\Models\Proveedore;
+use App\Models\SatRegimenFiscal;
+use App\Models\SatUsoCfdi;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -24,12 +25,14 @@ class proveedorController extends Controller
         $this->middleware('permission:editar-proveedore', ['only' => ['edit', 'update']]);
         $this->middleware('permission:eliminar-proveedore', ['only' => ['destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $proveedores = Proveedore::with('persona.documento')->latest()->get();
+        $proveedores = Proveedore::with('persona')->latest()->get();
+
         return view('proveedore.index', compact('proveedores'));
     }
 
@@ -38,9 +41,11 @@ class proveedorController extends Controller
      */
     public function create(): View
     {
-        $documentos = Documento::all();
         $optionsTipoPersona = TipoPersonaEnum::cases();
-        return view('proveedore.create', compact('documentos', 'optionsTipoPersona'));
+        $regimenesFiscales = SatRegimenFiscal::where('estado', 1)->orderBy('clave')->get();
+        $usosCfdi = SatUsoCfdi::where('estado', 1)->orderBy('clave')->get();
+
+        return view('proveedore.create', compact('optionsTipoPersona', 'regimenesFiscales', 'usosCfdi'));
     }
 
     /**
@@ -79,9 +84,11 @@ class proveedorController extends Controller
      */
     public function edit(Proveedore $proveedore): View
     {
-        $proveedore->load('persona.documento');
-        $documentos = Documento::all();
-        return view('proveedore.edit', compact('proveedore', 'documentos'));
+        $proveedore->load('persona');
+        $regimenesFiscales = SatRegimenFiscal::where('estado', 1)->orderBy('clave')->get();
+        $usosCfdi = SatUsoCfdi::where('estado', 1)->orderBy('clave')->get();
+
+        return view('proveedore.edit', compact('proveedore', 'regimenesFiscales', 'usosCfdi'));
     }
 
     /**
@@ -95,7 +102,6 @@ class proveedorController extends Controller
 
             return redirect()->route('proveedores.index')->with('success', 'Proveedor editado');
         } catch (Throwable $e) {
-
             Log::error('Error al editar al proveedor', ['error' => $e->getMessage()]);
 
             return redirect()->route('proveedores.index')->with('error', 'Ups, algo falló');
@@ -116,7 +122,7 @@ class proveedorController extends Controller
 
             ActivityLogService::log($message, 'Proveedores', [
                 'persona_id' => $id,
-                'estado' => $nuevoEstado
+                'estado' => $nuevoEstado,
             ]);
 
             return redirect()->route('proveedores.index')->with('success', $message);

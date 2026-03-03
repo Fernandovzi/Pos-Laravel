@@ -107,9 +107,7 @@
 
         <!-- CLIENTE -->
         <div>Cliente: {{ strtoupper($venta->cliente->persona->razon_social) }}</div>
-        <div>{{ $venta->cliente->persona->documento->nombre }}:
-            {{ $venta->cliente->persona->numero_documento }}
-        </div>
+        <div>RFC: {{ $venta->cliente->persona->rfc ?? 'N/D' }}</div>
         <div>Fecha: {{ date('d/m/Y H:i', strtotime($venta->fecha_hora)) }}</div>
 
         <div class="divider"></div>
