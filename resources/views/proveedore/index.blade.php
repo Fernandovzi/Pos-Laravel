@@ -54,8 +54,8 @@
                             {{$item->persona->direccion}}
                         </td>
                         <td>
-                            <p class="fw-semibold mb-1">{{$item->persona->documento->nombre}}</p>
-                            <p class="text-muted mb-0">{{$item->persona->numero_documento}}</p>
+                            <p class="fw-semibold mb-1">RFC</p>
+                            <p class="text-muted mb-0">{{$item->persona->rfc ?? 'N/D'}}</p>
                         </td>
                         <td>
                             {{$item->persona->tipo->value}}

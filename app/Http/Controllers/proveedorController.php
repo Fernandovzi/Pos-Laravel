@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\TipoPersonaEnum;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdateProveedoreRequest;
-use App\Models\Documento;
 use App\Models\Persona;
 use App\Models\Proveedore;
 use App\Services\ActivityLogService;
@@ -29,7 +28,7 @@ class proveedorController extends Controller
      */
     public function index(): View
     {
-        $proveedores = Proveedore::with('persona.documento')->latest()->get();
+        $proveedores = Proveedore::with('persona')->latest()->get();
         return view('proveedore.index', compact('proveedores'));
     }
 
@@ -38,9 +37,8 @@ class proveedorController extends Controller
      */
     public function create(): View
     {
-        $documentos = Documento::all();
         $optionsTipoPersona = TipoPersonaEnum::cases();
-        return view('proveedore.create', compact('documentos', 'optionsTipoPersona'));
+        return view('proveedore.create', compact('optionsTipoPersona'));
     }
 
     /**
@@ -79,9 +77,8 @@ class proveedorController extends Controller
      */
     public function edit(Proveedore $proveedore): View
     {
-        $proveedore->load('persona.documento');
-        $documentos = Documento::all();
-        return view('proveedore.edit', compact('proveedore', 'documentos'));
+        $proveedore->load('persona');
+        return view('proveedore.edit', compact('proveedore'));
     }
 
     /**

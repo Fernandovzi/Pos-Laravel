@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\TipoPersonaEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class StorePersonaRequest extends FormRequest
@@ -29,8 +30,10 @@ class StorePersonaRequest extends FormRequest
             'telefono' => 'nullable|max:15',
             'tipo' => ['required', new Enum(TipoPersonaEnum::class)],
             'email' => 'nullable|max:255|email',
-            'documento_id' => 'required|integer|exists:documentos,id',
-            'numero_documento' => 'required|max:20|unique:personas,numero_documento'
+            'rfc' => ['nullable', 'string', 'size:13', 'regex:/^[A-Z&Ñ]{3,4}[0-9]{6}[A-Z0-9]{3}$/', Rule::unique('personas', 'rfc')],
+            'regimen_fiscal' => 'nullable|string|size:3',
+            'codigo_postal_fiscal' => 'nullable|string|size:5',
+            'uso_cfdi' => 'nullable|string|size:4',
         ];
     }
 }

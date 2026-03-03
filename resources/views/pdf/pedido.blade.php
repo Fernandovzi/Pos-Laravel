@@ -5,7 +5,7 @@
     <h2>{{ $empresa->nombre ?? 'Empresa' }}</h2>
     <h3>Pedido {{ $pedido->folio }}</h3>
     <p><strong>Cliente:</strong> {{ $pedido->cliente->persona->razon_social }}</p>
-    <p><strong>Documento:</strong> {{ $pedido->cliente->persona->documento->nombre }} {{ $pedido->cliente->persona->numero_documento }}</p>
+    <p><strong>RFC:</strong> {{ $pedido->cliente->persona->rfc ?? 'N/D' }}</p>
     <p><strong>Persona que recoge:</strong> {{ $pedido->persona_recojo }}</p>
     <p><strong>Fecha:</strong> {{ $pedido->fecha_format }}</p>
     <p><strong>Estado:</strong> {{ $pedido->estado->value }}</p>

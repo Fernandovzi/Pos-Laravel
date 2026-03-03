@@ -6,7 +6,6 @@ use App\Enums\TipoPersonaEnum;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use App\Models\Cliente;
-use App\Models\Documento;
 use App\Models\Persona;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
@@ -29,7 +28,7 @@ class clienteController extends Controller
      */
     public function index(): View
     {
-        $clientes = Cliente::with('persona.documento')->latest()->get();
+        $clientes = Cliente::with('persona')->latest()->get();
         return view('cliente.index', compact('clientes'));
     }
 
@@ -38,9 +37,8 @@ class clienteController extends Controller
      */
     public function create(): View
     {
-        $documentos = Documento::all();
         $optionsTipoPersona = TipoPersonaEnum::cases();
-        return view('cliente.create', compact('documentos', 'optionsTipoPersona'));
+        return view('cliente.create', compact('optionsTipoPersona'));
     }
 
     /**
@@ -77,9 +75,8 @@ class clienteController extends Controller
      */
     public function edit(Cliente $cliente): View
     {
-        $cliente->load('persona.documento');
-        $documentos = Documento::all();
-        return view('cliente.edit', compact('cliente', 'documentos'));
+        $cliente->load('persona');
+        return view('cliente.edit', compact('cliente'));
     }
 
     /**
