@@ -28,13 +28,15 @@ class Cliente extends Model
         return $this->hasMany(Pedido::class);
     }
 
-     /**
-     * Obtener la razon social, tipo y número de documento del cliente
-     * @return string
+    /**
+     * Obtener la razón social y RFC (si existe) del cliente.
      */
     public function getNombreDocumentoAttribute(): string
     {
-        return $this->persona->razon_social . ' - ' . $this->persona->documento->nombre . ': ' . $this->persona->numero_documento;
+        if (!empty($this->persona->rfc)) {
+            return $this->persona->razon_social . ' - RFC: ' . $this->persona->rfc;
+        }
+
+        return $this->persona->razon_social;
     }
-    
 }

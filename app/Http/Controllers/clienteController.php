@@ -6,8 +6,9 @@ use App\Enums\TipoPersonaEnum;
 use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use App\Models\Cliente;
-use App\Models\Documento;
 use App\Models\Persona;
+use App\Models\SatRegimenFiscal;
+use App\Models\SatUsoCfdi;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -24,12 +25,14 @@ class clienteController extends Controller
         $this->middleware('permission:editar-cliente', ['only' => ['edit', 'update']]);
         $this->middleware('permission:eliminar-cliente', ['only' => ['destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
-        $clientes = Cliente::with('persona.documento')->latest()->get();
+        $clientes = Cliente::with('persona')->latest()->get();
+
         return view('cliente.index', compact('clientes'));
     }
 
@@ -38,9 +41,11 @@ class clienteController extends Controller
      */
     public function create(): View
     {
-        $documentos = Documento::all();
         $optionsTipoPersona = TipoPersonaEnum::cases();
-        return view('cliente.create', compact('documentos', 'optionsTipoPersona'));
+        $regimenesFiscales = SatRegimenFiscal::where('estado', 1)->orderBy('clave')->get();
+        $usosCfdi = SatUsoCfdi::where('estado', 1)->orderBy('clave')->get();
+
+        return view('cliente.create', compact('optionsTipoPersona', 'regimenesFiscales', 'usosCfdi'));
     }
 
     /**
@@ -60,6 +65,7 @@ class clienteController extends Controller
         } catch (Throwable $e) {
             DB::rollBack();
             Log::error('Error al crear al cliente', ['error' => $e->getMessage()]);
+
             return redirect()->route('clientes.index')->with('error', 'Ups, algo falló');
         }
     }
@@ -77,9 +83,11 @@ class clienteController extends Controller
      */
     public function edit(Cliente $cliente): View
     {
-        $cliente->load('persona.documento');
-        $documentos = Documento::all();
-        return view('cliente.edit', compact('cliente', 'documentos'));
+        $cliente->load('persona');
+        $regimenesFiscales = SatRegimenFiscal::where('estado', 1)->orderBy('clave')->get();
+        $usosCfdi = SatUsoCfdi::where('estado', 1)->orderBy('clave')->get();
+
+        return view('cliente.edit', compact('cliente', 'regimenesFiscales', 'usosCfdi'));
     }
 
     /**
@@ -94,6 +102,7 @@ class clienteController extends Controller
             return redirect()->route('clientes.index')->with('success', 'Cliente editado');
         } catch (Throwable $e) {
             Log::error('Error al editar al cliente', ['error' => $e->getMessage()]);
+
             return redirect()->route('clientes.index')->with('error', 'Ups, algo falló');
         }
     }
@@ -112,12 +121,13 @@ class clienteController extends Controller
 
             ActivityLogService::log($message, 'Clientes', [
                 'persona_id' => $id,
-                'estado' => $nuevoEstado
+                'estado' => $nuevoEstado,
             ]);
 
             return redirect()->route('clientes.index')->with('success', $message);
         } catch (Throwable $e) {
             Log::error('Error al eliminar/restaurar al cliente', ['error' => $e->getMessage()]);
+
             return redirect()->route('clientes.index')->with('error', 'Ups, algo falló');
         }
     }

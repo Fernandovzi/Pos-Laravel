@@ -98,7 +98,7 @@ class PedidoController extends Controller
      */
     public function show(Pedido $pedido): View
     {
-        $pedido->load(['cliente.persona.documento', 'productos', 'user']);
+        $pedido->load(['cliente.persona', 'productos', 'user']);
         $empresa = Empresa::first();
 
         return view('pedido.show', compact('pedido', 'empresa'));
@@ -131,7 +131,7 @@ class PedidoController extends Controller
      */
     public function exportPdf(Pedido $pedido): Response
     {
-        $pedido->load(['cliente.persona.documento', 'productos', 'user']);
+        $pedido->load(['cliente.persona', 'productos', 'user']);
         $empresa = Empresa::first();
 
         $pdf = Pdf::loadView('pdf.pedido', compact('pedido', 'empresa'));
