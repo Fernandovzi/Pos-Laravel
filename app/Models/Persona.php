@@ -14,8 +14,18 @@ class Persona extends Model
     protected $guarded = ['id'];
 
     protected $casts = [
-        'tipo' => TipoPersonaEnum::class
+        'tipo' => TipoPersonaEnum::class,
     ];
+
+    public function regimenFiscalCatalogo(): BelongsTo
+    {
+        return $this->belongsTo(SatRegimenFiscal::class, 'regimen_fiscal', 'clave');
+    }
+
+    public function usoCfdiCatalogo(): BelongsTo
+    {
+        return $this->belongsTo(SatUsoCfdi::class, 'uso_cfdi', 'clave');
+    }
 
     public function proveedore(): HasOne
     {

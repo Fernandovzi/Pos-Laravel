@@ -7,6 +7,8 @@ use App\Http\Requests\StorePersonaRequest;
 use App\Http\Requests\UpdateProveedoreRequest;
 use App\Models\Persona;
 use App\Models\Proveedore;
+use App\Models\SatRegimenFiscal;
+use App\Models\SatUsoCfdi;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -23,12 +25,14 @@ class proveedorController extends Controller
         $this->middleware('permission:editar-proveedore', ['only' => ['edit', 'update']]);
         $this->middleware('permission:eliminar-proveedore', ['only' => ['destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): View
     {
         $proveedores = Proveedore::with('persona')->latest()->get();
+
         return view('proveedore.index', compact('proveedores'));
     }
 
@@ -38,7 +42,10 @@ class proveedorController extends Controller
     public function create(): View
     {
         $optionsTipoPersona = TipoPersonaEnum::cases();
-        return view('proveedore.create', compact('optionsTipoPersona'));
+        $regimenesFiscales = SatRegimenFiscal::where('estado', 1)->orderBy('clave')->get();
+        $usosCfdi = SatUsoCfdi::where('estado', 1)->orderBy('clave')->get();
+
+        return view('proveedore.create', compact('optionsTipoPersona', 'regimenesFiscales', 'usosCfdi'));
     }
 
     /**
@@ -78,7 +85,10 @@ class proveedorController extends Controller
     public function edit(Proveedore $proveedore): View
     {
         $proveedore->load('persona');
-        return view('proveedore.edit', compact('proveedore'));
+        $regimenesFiscales = SatRegimenFiscal::where('estado', 1)->orderBy('clave')->get();
+        $usosCfdi = SatUsoCfdi::where('estado', 1)->orderBy('clave')->get();
+
+        return view('proveedore.edit', compact('proveedore', 'regimenesFiscales', 'usosCfdi'));
     }
 
     /**
@@ -92,7 +102,6 @@ class proveedorController extends Controller
 
             return redirect()->route('proveedores.index')->with('success', 'Proveedor editado');
         } catch (Throwable $e) {
-
             Log::error('Error al editar al proveedor', ['error' => $e->getMessage()]);
 
             return redirect()->route('proveedores.index')->with('error', 'Ups, algo falló');
@@ -113,7 +122,7 @@ class proveedorController extends Controller
 
             ActivityLogService::log($message, 'Proveedores', [
                 'persona_id' => $id,
-                'estado' => $nuevoEstado
+                'estado' => $nuevoEstado,
             ]);
 
             return redirect()->route('proveedores.index')->with('success', $message);

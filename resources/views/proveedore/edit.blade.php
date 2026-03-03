@@ -64,7 +64,14 @@
 
                     <div class="col-md-6">
                         <label for="regimen_fiscal" class="form-label">Régimen fiscal (SAT):</label>
-                        <input type="text" name="regimen_fiscal" id="regimen_fiscal" maxlength="3" class="form-control" value="{{old('regimen_fiscal', $proveedore->persona->regimen_fiscal)}}">
+                        <select class="form-select" name="regimen_fiscal" id="regimen_fiscal">
+                            <option value="">Seleccione una opción</option>
+                            @foreach ($regimenesFiscales as $item)
+                            <option value="{{ $item->clave }}" {{ old('regimen_fiscal', $proveedore->persona->regimen_fiscal) == $item->clave ? 'selected' : '' }}>
+                                {{ $item->clave }} - {{ $item->descripcion }}
+                            </option>
+                            @endforeach
+                        </select>
                         @error('regimen_fiscal')
                         <small class="text-danger">{{'*'.$message}}</small>
                         @enderror
@@ -80,7 +87,14 @@
 
                     <div class="col-md-6">
                         <label for="uso_cfdi" class="form-label">Uso CFDI (SAT):</label>
-                        <input type="text" name="uso_cfdi" id="uso_cfdi" maxlength="4" class="form-control" value="{{old('uso_cfdi', $proveedore->persona->uso_cfdi)}}">
+                        <select class="form-select" name="uso_cfdi" id="uso_cfdi">
+                            <option value="">Seleccione una opción</option>
+                            @foreach ($usosCfdi as $item)
+                            <option value="{{ $item->clave }}" {{ old('uso_cfdi', $proveedore->persona->uso_cfdi) == $item->clave ? 'selected' : '' }}>
+                                {{ $item->clave }} - {{ $item->descripcion }}
+                            </option>
+                            @endforeach
+                        </select>
                         @error('uso_cfdi')
                         <small class="text-danger">{{'*'.$message}}</small>
                         @enderror
