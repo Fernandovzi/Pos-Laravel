@@ -117,14 +117,14 @@ class Kardex extends Model
     }
 
     /**
-     * Obtener el precio de Venta según el costo del Producto
+     * Obtener el costo de inicialización del producto
      */
     public function costoInicializacion(int $producto_id): float
     {
         $costoUltimoRegistro = $this->where('producto_id', $producto_id)
             ->latest('id')
             ->first()
-            ->costo;
+            ->costo_unitario;
 
         return $costoUltimoRegistro;
     }
