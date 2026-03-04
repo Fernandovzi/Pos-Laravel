@@ -34,7 +34,7 @@ class InventarioObserver
         $kardex = new Kardex();
 
         $producto->update([
-            'costo' => $kardex->costoInicializacion($producto)
+            'costo' => $kardex->costoInicializacion($producto->id)
         ]);
 
 
