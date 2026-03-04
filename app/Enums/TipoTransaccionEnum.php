@@ -9,4 +9,5 @@ enum TipoTransaccionEnum: string
     case Ajuste = 'AJUSTE';
     case Apertura = 'APERTURA';
     case Pedido = 'PEDIDO';
+    case CancelacionPedido = 'CANCELACION_PEDIDO';
 }

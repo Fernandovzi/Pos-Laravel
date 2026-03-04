@@ -18,7 +18,7 @@
                 <thead>
                     <tr>
                         <th>Folio</th>
-                        <th>Cliente</th>
+                        <th>Proveedor</th>
                         <th>Persona de recojo</th>
                         <th>Estado</th>
                         <th>Total</th>
@@ -29,7 +29,7 @@
                     @foreach($pedidos as $pedido)
                     <tr>
                         <td>{{ $pedido->folio }}</td>
-                        <td>{{ $pedido->cliente->nombre_documento }}</td>
+                        <td>{{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</td>
                         <td>{{ $pedido->persona_recojo }}</td>
                         <td>{{ $pedido->estado->value }}</td>
                         <td>{{ number_format($pedido->total, 2) }}</td>

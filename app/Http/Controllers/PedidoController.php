@@ -5,12 +5,12 @@ namespace App\Http\Controllers;
 use App\Enums\EstadoPedidoEnum;
 use App\Enums\TipoTransaccionEnum;
 use App\Http\Requests\StorePedidoRequest;
-use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Models\Inventario;
 use App\Models\Kardex;
 use App\Models\Pedido;
 use App\Models\Producto;
+use App\Models\Proveedore;
 use App\Services\ActivityLogService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
@@ -25,7 +25,7 @@ class PedidoController extends Controller
      */
     public function index(): View
     {
-        $pedidos = Pedido::with(['cliente.persona', 'user'])->latest()->get();
+        $pedidos = Pedido::with(['proveedore.persona', 'cliente.persona', 'user'])->latest()->get();
 
         return view('pedido.index', compact('pedidos'));
     }
@@ -44,10 +44,10 @@ class PedidoController extends Controller
             ->orderBy('productos.nombre')
             ->get();
 
-        $clientes = Cliente::whereHas('persona', fn ($query) => $query->where('estado', 1))->get();
+        $proveedores = Proveedore::whereHas('persona', fn ($query) => $query->where('estado', 1))->get();
         $empresa = Empresa::first();
 
-        return view('pedido.create', compact('productos', 'clientes', 'empresa'));
+        return view('pedido.create', compact('productos', 'proveedores', 'empresa'));
     }
 
     /**
@@ -98,7 +98,7 @@ class PedidoController extends Controller
      */
     public function show(Pedido $pedido): View
     {
-        $pedido->load(['cliente.persona', 'productos', 'user']);
+        $pedido->load(['proveedore.persona', 'cliente.persona', 'productos', 'user']);
         $empresa = Empresa::first();
 
         return view('pedido.show', compact('pedido', 'empresa'));
@@ -117,7 +117,16 @@ class PedidoController extends Controller
             $pedido->load('productos');
 
             foreach ($pedido->productos as $producto) {
-                Inventario::where('producto_id', $producto->id)->increment('cantidad', $producto->pivot->cantidad);
+                $cantidad = (int) $producto->pivot->cantidad;
+                Inventario::where('producto_id', $producto->id)->increment('cantidad', $cantidad);
+
+                $ultimoKardex = Kardex::where('producto_id', $producto->id)->latest('id')->firstOrFail();
+                (new Kardex())->crearRegistro([
+                    'folio' => $pedido->folio,
+                    'producto_id' => $producto->id,
+                    'cantidad' => $cantidad,
+                    'costo_unitario' => $ultimoKardex->costo_unitario,
+                ], TipoTransaccionEnum::CancelacionPedido);
             }
 
             $pedido->update(['estado' => EstadoPedidoEnum::Cancelado]);
@@ -131,7 +140,7 @@ class PedidoController extends Controller
      */
     public function exportPdf(Pedido $pedido): Response
     {
-        $pedido->load(['cliente.persona', 'productos', 'user']);
+        $pedido->load(['proveedore.persona', 'cliente.persona', 'productos', 'user']);
         $empresa = Empresa::first();
 
         $pdf = Pdf::loadView('pdf.pedido', compact('pedido', 'empresa'));
