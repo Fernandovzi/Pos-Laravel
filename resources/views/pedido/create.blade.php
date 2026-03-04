@@ -9,11 +9,11 @@
         @csrf
         <div class="row g-3">
             <div class="col-md-6">
-                <label class="form-label">Cliente</label>
-                <select name="cliente_id" class="form-control" required>
+                <label class="form-label">Proveedor</label>
+                <select name="proveedore_id" class="form-control" required>
                     <option value="">Seleccione</option>
-                    @foreach($clientes as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->nombre_documento }}</option>
+                    @foreach($proveedores as $proveedor)
+                    <option value="{{ $proveedor->id }}">{{ $proveedor->nombre_documento }}</option>
                     @endforeach
                 </select>
             </div>
@@ -35,7 +35,8 @@
         <h5>Productos</h5>
         <div class="row g-2 align-items-end" id="selector-producto">
             <div class="col-md-6">
-                <label class="form-label">Producto</label>
+                <label class="form-label">Producto (búsqueda por nombre)</label>
+                <input type="text" id="buscarProducto" class="form-control mb-2" placeholder="Escriba el nombre del producto..." oninput="filtrarProductos()">
                 <select id="producto" class="form-control">
                     <option value="">Seleccione</option>
                     @foreach($productos as $producto)
@@ -48,6 +49,10 @@
             <div class="col-md-2">
                 <label class="form-label">Cantidad</label>
                 <input type="number" min="1" id="cantidad" class="form-control" value="1">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">Stock</label>
+                <input type="text" id="stockProducto" class="form-control" readonly>
             </div>
             <div class="col-md-2">
                 <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar</button>
@@ -84,6 +89,29 @@
 
 <script>
 const porcentajeImpuesto = Number(@json($empresa->porcentaje_impuesto ?? 0));
+
+document.getElementById('producto').addEventListener('change', actualizarStockProducto);
+
+function filtrarProductos() {
+    const texto = document.getElementById('buscarProducto').value.toLowerCase().trim();
+    const select = document.getElementById('producto');
+
+    [...select.options].forEach((option, index) => {
+        if (index === 0) {
+            option.hidden = false;
+            return;
+        }
+
+        const nombre = option.textContent.toLowerCase();
+        option.hidden = texto !== '' && !nombre.includes(texto);
+    });
+}
+
+function actualizarStockProducto() {
+    const select = document.getElementById('producto');
+    const option = select.options[select.selectedIndex];
+    document.getElementById('stockProducto').value = option?.dataset?.stock ?? '';
+}
 
 function agregarProducto() {
     const select = document.getElementById('producto');

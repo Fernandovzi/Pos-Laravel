@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('cliente_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('proveedore_id')->nullable()->constrained('proveedores')->nullOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('folio')->unique();
             $table->string('persona_recojo');
