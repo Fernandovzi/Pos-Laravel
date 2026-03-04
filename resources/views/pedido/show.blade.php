@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid px-4">
     <h1 class="mt-4">Pedido {{ $pedido->folio }}</h1>
-    <p><b>Cliente:</b> {{ $pedido->cliente->nombre_documento }}</p>
+    <p><b>Proveedor:</b> {{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</p>
     <p><b>Persona que recoge:</b> {{ $pedido->persona_recojo }}</p>
     <p><b>Estado:</b> {{ $pedido->estado->value }}</p>
     <p><b>Fecha:</b> {{ $pedido->fecha_format }}</p>

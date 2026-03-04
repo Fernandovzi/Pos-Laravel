@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\EstadoPedidoEnum;
 use App\Observers\PedidoObserver;
+use App\Models\Proveedore;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,6 +40,11 @@ class Pedido extends Model
     public function cliente(): BelongsTo
     {
         return $this->belongsTo(Cliente::class);
+    }
+
+    public function proveedore(): BelongsTo
+    {
+        return $this->belongsTo(Proveedore::class);
     }
 
     public function user(): BelongsTo

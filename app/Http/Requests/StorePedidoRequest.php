@@ -14,7 +14,7 @@ class StorePedidoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cliente_id' => ['required', 'exists:clientes,id'],
+            'proveedore_id' => ['required', 'exists:proveedores,id'],
             'persona_recojo' => ['required', 'string', 'max:255'],
             'observaciones' => ['nullable', 'string', 'max:1000'],
             'fecha_entrega_estimada' => ['nullable', 'date'],
