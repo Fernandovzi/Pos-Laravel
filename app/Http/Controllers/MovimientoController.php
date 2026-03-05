@@ -19,28 +19,27 @@ class MovimientoController extends Controller
     {
         $this->middleware('check_movimiento_caja_user', ['only' => ['index', 'create', 'store']]);
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request): View
     {
-        $caja = Caja::findOrfail($request->caja_id);
-        return view('movimiento.index', compact('caja'));
+        $caja = Caja::with('movimientos')->findOrFail($request->caja_id);
+
+        $totalesPorMetodo = $caja->movimientos
+            ->filter(fn ($movimiento) => $movimiento->tipo?->value === 'VENTA')
+            ->groupBy(fn ($movimiento) => $movimiento->metodo_pago?->value)
+            ->map(fn ($movimientos) => round((float) $movimientos->sum('monto'), 2));
+
+        return view('movimiento.index', compact('caja', 'totalesPorMetodo'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Request $request): View
     {
         $caja_id = $request->get('caja_id');
-        $optionsMetodoPago = MetodoPagoEnum::cases();
+        $optionsMetodoPago = MetodoPagoEnum::cashRegisterMethods();
+
         return view('movimiento.create', compact('optionsMetodoPago', 'caja_id'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreMovimientoRequest $request): RedirectResponse
     {
         try {
@@ -55,33 +54,21 @@ class MovimientoController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
         //
