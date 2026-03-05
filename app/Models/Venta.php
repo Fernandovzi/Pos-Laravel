@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\MetodoPagoEnum;
 use App\Observers\VentaObsever;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 #[ObservedBy(VentaObsever::class)]
 class Venta extends Model
@@ -16,6 +18,10 @@ class Venta extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'metodo_pago' => MetodoPagoEnum::class,
+    ];
 
     public function caja(): BelongsTo
     {
@@ -42,6 +48,11 @@ class Venta extends Model
         return $this->belongsToMany(Producto::class)
             ->withTimestamps()
             ->withPivot('cantidad', 'precio_venta');
+    }
+
+    public function pagos(): HasMany
+    {
+        return $this->hasMany(VentaPago::class);
     }
 
      /**

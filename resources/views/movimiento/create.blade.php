@@ -33,7 +33,7 @@
                     id="metodo_pago"
                     class="form-select">
                     @foreach ($optionsMetodoPago as $item)
-                    <option value="{{$item->value}}">{{$item->name}}</option>
+                    <option value="{{$item->value}}">{{$item->label()}}</option>
                     @endforeach
                 </select>
                 @error('metodo_pago')

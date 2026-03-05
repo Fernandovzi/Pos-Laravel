@@ -12,29 +12,32 @@ use Illuminate\Support\Facades\Log;
 
 class CreateMovimientoVentaCajaListener
 {
-    /**
-     * Create the event listener.
-     */
     public function __construct()
     {
         //
     }
 
     /**
-     * Handle the event.
+     * Registra un movimiento por cada pago de la venta para mantener el corte por método.
      */
     public function handle(CreateVentaEvent $event): void
     {
-        $caja_id = Caja::where('user_id', Auth::id())->where('estado', 1)->first()->id;
+        $caja = Caja::where('user_id', Auth::id())->where('estado', 1)->first();
+
+        if (!$caja) {
+            return;
+        }
 
         try {
-            Movimiento::create([
-                'tipo' => TipoMovimientoEnum::Venta,
-                'descripcion' => 'Venta n° ' . $event->venta->numero_comprobante,
-                'monto' => $event->venta->total,
-                'metodo_pago' => $event->venta->metodo_pago,
-                'caja_id' => $caja_id
-            ]);
+            foreach ($event->venta->pagos as $pago) {
+                Movimiento::create([
+                    'tipo' => TipoMovimientoEnum::Venta,
+                    'descripcion' => 'Venta n° ' . $event->venta->numero_comprobante,
+                    'monto' => $pago->monto,
+                    'metodo_pago' => $pago->metodo_pago,
+                    'caja_id' => $caja->id,
+                ]);
+            }
         } catch (Exception $e) {
             Log::error(
                 'Error en el Listener CreateMovimientoVentaCajaListener',
