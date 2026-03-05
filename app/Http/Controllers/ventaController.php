@@ -30,15 +30,11 @@ class ventaController extends Controller
         $this->middleware('permission:ver-venta|crear-venta|mostrar-venta|eliminar-venta', ['only' => ['index']]);
         $this->middleware('permission:crear-venta', ['only' => ['create', 'store']]);
         $this->middleware('permission:mostrar-venta', ['only' => ['show']]);
-        //$this->middleware('permission:eliminar-venta', ['only' => ['destroy']]);
         $this->middleware('check-caja-aperturada-user', ['only' => ['create', 'store']]);
         $this->middleware('check-show-venta-user', ['only' => ['show']]);
         $this->empresaService = $empresaService;
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): View
     {
         $ventas = Venta::with(['comprobante', 'cliente.persona', 'user'])
@@ -49,15 +45,12 @@ class ventaController extends Controller
         return view('venta.index', compact('ventas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(ComprobanteService $comprobanteService): View
     {
         $productos = $this->obtenerProductosDisponibles();
         $clientes = $this->obtenerClientesActivos();
         $comprobantes = $comprobanteService->obtenerComprobantes();
-        $optionsMetodoPago = MetodoPagoEnum::cases();
+        $optionsMetodoPago = MetodoPagoEnum::salesMethods();
         $empresa = $this->empresaService->obtenerEmpresa();
 
         return view('venta.create', compact(
@@ -70,13 +63,13 @@ class ventaController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Registra la venta, su detalle y los pagos múltiples asociados.
      */
     public function store(StoreVentaRequest $request): RedirectResponse
     {
         try {
             $venta = DB::transaction(function () use ($request) {
-                $venta = Venta::create($request->validated());
+                $venta = Venta::create($request->safe()->except('pagos', 'arrayidproducto', 'arraycantidad', 'arrayprecioventa'));
                 $detalleVenta = $this->obtenerDetalleVenta($request);
 
                 $pivotData = $detalleVenta
@@ -101,6 +94,9 @@ class ventaController extends Controller
                     );
                 });
 
+                // Guardar el desglose de pagos para soportar pago mixto y referencias por método.
+                $venta->pagos()->createMany($request->validated('pagos'));
+
                 CreateVentaEvent::dispatch($venta);
 
                 return $venta;
@@ -120,48 +116,29 @@ class ventaController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Venta $venta): View
     {
         $empresa = $this->empresaService->obtenerEmpresa();
+        $venta->load('pagos');
 
         return view('venta.show', compact('venta', 'empresa'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        /* Venta::where('id', $id)
-            ->update([
-                'estado' => 0
-            ]);
-
-        return redirect()->route('ventas.index')->with('success', 'Venta eliminada');*/
+        //
     }
 
-    /**
-     * Recupera solo productos activos y con stock disponible para la venta.
-     */
     private function obtenerProductosDisponibles(): Collection
     {
         return Producto::join('inventario as i', function ($join) {
@@ -183,9 +160,6 @@ class ventaController extends Controller
             ->get();
     }
 
-    /**
-     * Recupera clientes activos incluyendo la persona para evitar consultas N+1.
-     */
     private function obtenerClientesActivos(): Collection
     {
         return Cliente::with('persona')
@@ -195,11 +169,6 @@ class ventaController extends Controller
             ->get();
     }
 
-    /**
-     * Construye la estructura normalizada del detalle de venta.
-     *
-     * @return Collection<int, array{producto_id:int, cantidad:float|int, precio_venta:float|int}>
-     */
     private function obtenerDetalleVenta(StoreVentaRequest $request): Collection
     {
         $idsProductos = $request->validated('arrayidproducto');
