@@ -24,22 +24,22 @@
                         <label class="form-label">Fecha y hora</label>
                         <input type="datetime-local" class="form-control" name="fecha_hora" value="{{ now()->format('Y-m-d\TH:i') }}" required>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <label class="form-label">Producto</label>
                         <select id="producto_id" class="form-select">
                             <option value="">Seleccione</option>
                             @foreach($productos as $producto)
-                            <option value="{{ $producto->id }}">{{ $producto->codigo }} - {{ $producto->nombre }}</option>
+                            <option
+                                value="{{ $producto->id }}"
+                                data-costo="{{ $producto->costo ?? $producto->precio ?? 0 }}">
+                                {{ $producto->codigo }} - {{ $producto->nombre }}
+                            </option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <label class="form-label">Cantidad</label>
                         <input type="number" min="1" id="cantidad" class="form-control">
-                    </div>
-                    <div class="col-md-2">
-                        <label class="form-label">Costo unitario</label>
-                        <input type="number" min="0.01" step="0.01" id="precio_compra" class="form-control">
                     </div>
                     <div class="col-md-1 d-grid">
                         <label class="form-label">&nbsp;</label>
@@ -51,7 +51,7 @@
                     <table class="table" id="detalle">
                         <thead>
                             <tr>
-                                <th>Producto</th><th>Cantidad</th><th>Costo unitario</th><th>Subtotal</th><th></th>
+                                <th>Producto</th><th>Cantidad</th><th>Costo usado</th><th>Subtotal</th><th></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -76,10 +76,15 @@ $('#agregar').on('click', function () {
     const productoId = producto.val();
     const productoTexto = producto.text();
     const cantidad = Number($('#cantidad').val());
-    const precio = Number($('#precio_compra').val());
+    const precio = Number(producto.data('costo') ?? 0);
 
-    if (!productoId || cantidad <= 0 || precio <= 0) {
-        alert('Completa producto, cantidad y costo unitario.');
+    if (!productoId || cantidad <= 0) {
+        alert('Completa producto y cantidad.');
+        return;
+    }
+
+    if (precio <= 0) {
+        alert('El producto no tiene costo/precio configurado.');
         return;
     }
 
@@ -92,7 +97,7 @@ $('#agregar').on('click', function () {
             ${productoTexto}
         </td>
         <td><input type="hidden" name="arraycantidad[]" value="${cantidad}">${cantidad}</td>
-        <td><input type="hidden" name="arraypreciocompra[]" value="${precio.toFixed(2)}">${precio.toFixed(2)}</td>
+        <td>${precio.toFixed(2)}</td>
         <td>${subtotal}</td>
         <td>
             <input type="hidden" name="arrayfechavencimiento[]" value="">
@@ -105,7 +110,6 @@ $('#agregar').on('click', function () {
 
     $('#producto_id').val('');
     $('#cantidad').val('');
-    $('#precio_compra').val('');
 });
 
 $(document).on('click', '.eliminar', function () {

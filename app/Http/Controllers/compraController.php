@@ -62,12 +62,25 @@ class compraController extends Controller
         try {
             $arrayProductoId = $request->array('arrayidproducto');
             $arrayCantidad = $request->array('arraycantidad');
-            $arrayPrecio = $request->array('arraypreciocompra');
             $arrayFechaVencimiento = $request->array('arrayfechavencimiento');
 
+            $productos = Producto::query()
+                ->whereIn('id', $arrayProductoId)
+                ->get(['id', 'costo', 'precio'])
+                ->keyBy('id');
+
             $subtotal = 0;
-            foreach ($arrayCantidad as $index => $cantidad) {
-                $subtotal += ((int) $cantidad) * ((float) $arrayPrecio[$index]);
+            $precios = [];
+            foreach ($arrayProductoId as $index => $productoId) {
+                $producto = $productos->get((int) $productoId);
+                $precioProducto = (float) ($producto?->costo ?? $producto?->precio ?? 0);
+
+                if ($precioProducto <= 0) {
+                    throw new \DomainException('El producto seleccionado no tiene costo/precio configurado.');
+                }
+
+                $precios[$index] = $precioProducto;
+                $subtotal += ((int) $arrayCantidad[$index]) * $precioProducto;
             }
 
             $compra = Compra::create([
@@ -82,7 +95,7 @@ class compraController extends Controller
                 $compra->productos()->syncWithoutDetaching([
                     $productoId => [
                         'cantidad' => $arrayCantidad[$index],
-                        'precio_compra' => $arrayPrecio[$index],
+                        'precio_compra' => $precios[$index],
                         'fecha_vencimiento' => $arrayFechaVencimiento[$index] ?? null,
                     ],
                 ]);
@@ -91,7 +104,7 @@ class compraController extends Controller
                     $compra,
                     $productoId,
                     $arrayCantidad[$index],
-                    $arrayPrecio[$index],
+                    $precios[$index],
                     $arrayFechaVencimiento[$index] ?? null
                 );
             }
@@ -103,7 +116,7 @@ class compraController extends Controller
         } catch (Throwable $e) {
             DB::rollBack();
             Log::error('Error al registrar producción interna', ['error' => $e->getMessage()]);
-            return redirect()->route('compras.index')->with('error', 'Ups, algo falló');
+            return redirect()->back()->withInput()->with('error', $e->getMessage() ?: 'Ups, algo falló');
         }
     }
 
