@@ -5,22 +5,15 @@ namespace App\Http\Requests;
 use App\Enums\MetodoPagoEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
+use Illuminate\Validation\Validator;
 
 class StoreMovimientoRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -30,5 +23,14 @@ class StoreMovimientoRequest extends FormRequest
             'caja_id' => 'required',
             'tipo' => 'required'
         ];
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator): void {
+            if (!collect(MetodoPagoEnum::cashRegisterMethods())->map->value->contains($this->input('metodo_pago'))) {
+                $validator->errors()->add('metodo_pago', 'Método de pago no permitido para caja.');
+            }
+        });
     }
 }
