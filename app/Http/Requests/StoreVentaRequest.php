@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use App\Enums\MetodoPagoEnum;
+use App\Models\Cliente;
+use App\Models\Comprobante;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\Validation\Validator;
@@ -60,11 +62,9 @@ class StoreVentaRequest extends FormRequest
                 $validator->errors()->add('pagos', 'La suma de los pagos debe ser igual al total de la venta.');
             }
 
-
             if (collect($pagos)->pluck('metodo_pago')->contains(MetodoPagoEnum::PagoMixto->value)) {
                 $validator->errors()->add('pagos', 'Pago mixto solo se usa como método principal de la venta, no como tipo de pago individual.');
             }
-
 
             $metodosPermitidosVenta = collect(MetodoPagoEnum::salesMethods())->map->value;
             if (!$metodosPermitidosVenta->contains($this->input('metodo_pago'))) {
@@ -89,6 +89,44 @@ class StoreVentaRequest extends FormRequest
             if ($metodos->count() === 1 && $this->input('metodo_pago') !== $metodos->first()) {
                 $validator->errors()->add('metodo_pago', 'El método principal debe coincidir con el único método de pago registrado.');
             }
+
+            $this->validarRequisitosFactura($validator);
         });
+    }
+
+    /**
+     * Si el comprobante es factura, valida datos fiscales mínimos del cliente.
+     */
+    private function validarRequisitosFactura(Validator $validator): void
+    {
+        $comprobante = Comprobante::find($this->input('comprobante_id'));
+
+        if (!$comprobante || !str_contains(strtoupper($comprobante->nombre), 'FACTURA')) {
+            return;
+        }
+
+        $cliente = Cliente::with('persona')->find($this->input('cliente_id'));
+        $persona = $cliente?->persona;
+
+        if (!$persona) {
+            $validator->errors()->add('cliente_id', 'No se encontró la información fiscal del cliente para facturar.');
+            return;
+        }
+
+        if (blank($persona->rfc)) {
+            $validator->errors()->add('cliente_id', 'Para facturar, el cliente debe tener RFC.');
+        }
+
+        if (blank($persona->regimen_fiscal)) {
+            $validator->errors()->add('cliente_id', 'Para facturar, el cliente debe tener régimen fiscal.');
+        }
+
+        if (blank($persona->uso_cfdi)) {
+            $validator->errors()->add('cliente_id', 'Para facturar, el cliente debe tener uso CFDI.');
+        }
+
+        if (blank($persona->codigo_postal_fiscal)) {
+            $validator->errors()->add('cliente_id', 'Para facturar, el cliente debe tener código postal fiscal.');
+        }
     }
 }

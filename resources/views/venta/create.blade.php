@@ -32,30 +32,30 @@
             <div class="card-header">1) Datos generales</div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <label class="form-label">Cliente</label>
-                        <select name="cliente_id" class="form-control selectpicker" data-live-search="true" title="Selecciona">
+                        <select name="cliente_id" id="cliente_id" class="form-control selectpicker" data-live-search="true" title="Selecciona">
                             @foreach ($clientes as $item)
-                            <option value="{{$item->id}}">{{$item->nombre_documento}}</option>
+                            <option
+                                value="{{$item->id}}"
+                                data-rfc="{{$item->persona->rfc ?? ''}}"
+                                data-regimen="{{$item->persona->regimen_fiscal ?? ''}}"
+                                data-uso-cfdi="{{$item->persona->uso_cfdi ?? ''}}"
+                                data-cp-fiscal="{{$item->persona->codigo_postal_fiscal ?? ''}}"
+                            >
+                                {{$item->nombre_documento}}
+                            </option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-6">
                         <label class="form-label">Comprobante</label>
-                        <select name="comprobante_id" class="form-control selectpicker" title="Selecciona">
+                        <select name="comprobante_id" id="comprobante_id" class="form-control selectpicker" title="Selecciona">
                             @foreach ($comprobantes as $item)
-                            <option value="{{$item->id}}">{{$item->nombre}}</option>
+                            <option value="{{$item->id}}" data-nombre="{{$item->nombre}}">{{$item->nombre}}</option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="col-lg-4">
-                        <label class="form-label">Método principal</label>
-                        <select required name="metodo_pago" id="metodo_pago" class="form-control selectpicker" title="Selecciona">
-                            @foreach ($optionsMetodoPago as $item)
-                            <option value="{{$item->value}}">{{$item->label()}}</option>
-                            @endforeach
-                        </select>
-                        <small class="sale-help">Se ajusta automáticamente a "Pago mixto" cuando agregas más de un método en pagos.</small>
+                        <small class="sale-help">Si seleccionas Factura, se validará RFC, régimen fiscal, uso CFDI y código postal fiscal del cliente.</small>
                     </div>
                 </div>
             </div>
@@ -112,11 +112,16 @@
         <input type="hidden" name="impuesto" id="inputImpuesto" value="0">
         <input type="hidden" name="total" id="inputTotal" value="0">
 
+        {{-- Mantener la lógica sin mostrar estos campos al usuario --}}
+        <input type="hidden" name="metodo_pago" id="metodo_pago" value="">
+        <input type="hidden" name="monto_recibido" id="monto_recibido" value="0">
+        <input type="hidden" name="vuelto_entregado" id="vuelto" value="0">
+
         <div class="card sale-card mb-3">
             <div class="card-header">3) Pagos</div>
             <div class="card-body">
                 <div class="row g-3 align-items-end">
-                    <div class="col-lg-3">
+                    <div class="col-lg-4">
                         <label class="form-label">Método de pago</label>
                         <select id="pago_metodo" class="form-control selectpicker" title="Selecciona método">
                             @foreach ($optionsMetodoPago as $item)
@@ -126,16 +131,16 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">Monto</label>
-                        <input type="number" step="any" id="pago_monto" class="form-control">
-                    </div>
                     <div class="col-lg-5">
                         <label class="form-label">Referencia / autorización (tarjeta o SPEI)</label>
                         <input type="text" id="pago_referencia" class="form-control" placeholder="Ej: auth 12345 / folio SPEI">
                     </div>
-                    <div class="col-lg-2">
-                        <button id="btn_agregar_pago" type="button" class="btn btn-success w-100">Agregar pago</button>
+                    <div class="col-lg-3">
+                        <label class="form-label">Monto</label>
+                        <input type="number" step="any" id="pago_monto" class="form-control">
+                    </div>
+                    <div class="col-12 text-end">
+                        <button id="btn_agregar_pago" type="button" class="btn btn-success">Agregar pago</button>
                     </div>
                 </div>
 
@@ -152,16 +157,8 @@
                     <div class="col-md-4"><div class="sale-total-box">Pendiente<br><span class="value" id="box_pendiente">0.00</span></div></div>
                 </div>
 
-                <div class="row g-3 mt-1">
-                    <div class="col-md-6">
-                        <label class="form-label">Monto recibido (efectivo)</label>
-                        <input type="number" step="any" id="dinero_recibido" name="monto_recibido" class="form-control" value="0">
-                        <small class="sale-help">Opcional. Si no se captura, se toma el monto pagado en efectivo.</small>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Cambio</label>
-                        <input readonly type="number" step="any" name="vuelto_entregado" id="vuelto" class="form-control" value="0">
-                    </div>
+                <div class="mt-3">
+                    <small class="sale-help">El monto se captura una sola vez por cada registro de pago. La suma de pagos debe coincidir con el total.</small>
                 </div>
             </div>
         </div>
@@ -195,7 +192,7 @@ $(function() {
     $('#producto_id').change(mostrarValores);
     $('#btn_agregar').click(agregarProducto);
     $('#btn_agregar_pago').click(agregarPago);
-    $('#dinero_recibido').on('input', calcularCambio);
+    $('#comprobante_id, #cliente_id').on('changed.bs.select', validarRequisitosFactura);
     $('form').on('submit', validarPagosAntesDeEnviar);
     renderResumenPagos();
 });
@@ -254,7 +251,7 @@ function renderTotales() {
     $('#inputTotal').val(total);
     $('#inputSubtotal').val(sumas);
     renderResumenPagos();
-    calcularCambio();
+    sincronizarCamposOcultos();
 }
 
 function agregarPago() {
@@ -287,7 +284,7 @@ function renderPagos() {
 
     sincronizarMetodoPrincipal();
     renderResumenPagos();
-    calcularCambio();
+    sincronizarCamposOcultos();
 }
 
 function eliminarPago(index) {
@@ -297,8 +294,29 @@ function eliminarPago(index) {
 
 function sincronizarMetodoPrincipal() {
     const metodos = [...new Set(pagos.map(p => p.metodo_pago))];
-    if (metodos.length > 1) $('#metodo_pago').selectpicker('val', 'PAGO_MIXTO');
-    if (metodos.length === 1) $('#metodo_pago').selectpicker('val', metodos[0]);
+
+    if (metodos.length > 1) {
+        $('#metodo_pago').val('PAGO_MIXTO');
+        return;
+    }
+
+    if (metodos.length === 1) {
+        $('#metodo_pago').val(metodos[0]);
+        return;
+    }
+
+    $('#metodo_pago').val('');
+}
+
+function sincronizarCamposOcultos() {
+    const sumaPagos = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
+    const efectivo = pagos
+        .filter(p => p.metodo_pago === 'EFECTIVO')
+        .reduce((acc, p) => acc + Number(p.monto), 0);
+
+    // Mantener lógica backend: campos requeridos aunque no visibles en la UI.
+    $('#monto_recibido').val(round(sumaPagos));
+    $('#vuelto').val(round(Math.max(0, efectivo - Math.min(efectivo, total))));
 }
 
 function renderResumenPagos() {
@@ -310,28 +328,58 @@ function renderResumenPagos() {
     $('#box_pendiente').text((pendiente > 0 ? pendiente : 0).toFixed(2));
 }
 
-function calcularCambio() {
-    const recibido = parseFloat($('#dinero_recibido').val()) || 0;
-    const totalEfectivo = pagos.filter(p => p.metodo_pago === 'EFECTIVO').reduce((acc, p) => acc + Number(p.monto), 0);
-    const base = recibido > 0 ? recibido : totalEfectivo;
-    const cambio = base > 0 ? round(base - totalEfectivo) : 0;
-    $('#vuelto').val(cambio >= 0 ? cambio : 0);
+function validarRequisitosFactura() {
+    const comprobanteSel = $('#comprobante_id option:selected');
+    const clienteSel = $('#cliente_id option:selected');
+    const nombreComprobante = (comprobanteSel.data('nombre') || '').toString().toUpperCase();
+
+    if (!nombreComprobante.includes('FACTURA')) {
+        return true;
+    }
+
+    const rfc = (clienteSel.data('rfc') || '').toString().trim();
+    const regimen = (clienteSel.data('regimen') || '').toString().trim();
+    const usoCfdi = (clienteSel.data('uso-cfdi') || '').toString().trim();
+    const cpFiscal = (clienteSel.data('cp-fiscal') || '').toString().trim();
+
+    const faltantes = [];
+    if (!rfc) faltantes.push('RFC');
+    if (!regimen) faltantes.push('Régimen fiscal');
+    if (!usoCfdi) faltantes.push('Uso CFDI');
+    if (!cpFiscal) faltantes.push('Código postal fiscal');
+
+    if (faltantes.length > 0) {
+        showModal(`Para FACTURA faltan datos del cliente: ${faltantes.join(', ')}`);
+        return false;
+    }
+
+    return true;
 }
 
 function validarPagosAntesDeEnviar(e) {
     const sumaPagos = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
+
+    if (!validarRequisitosFactura()) {
+        e.preventDefault();
+        return;
+    }
+
     if (total <= 0) {
         e.preventDefault();
         return showModal('Agregue al menos un producto.');
     }
+
     if (pagos.length === 0) {
         e.preventDefault();
         return showModal('Debe agregar al menos un pago.');
     }
+
     if (Math.abs(round(sumaPagos) - round(total)) > 0.01) {
         e.preventDefault();
         return showModal('La suma de pagos debe ser igual al total.');
     }
+
+    sincronizarCamposOcultos();
 }
 
 function limpiarCampos() {

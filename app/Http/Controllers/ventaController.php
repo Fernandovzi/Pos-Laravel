@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -104,8 +105,7 @@ class ventaController extends Controller
 
             ActivityLogService::log('Creación de una venta', 'Ventas', $request->validated());
 
-            return redirect()->route('movimientos.index', ['caja_id' => $venta->caja_id])
-                ->with('success', 'Venta registrada');
+            return redirect()->route('export.pdf-comprobante-venta', ['id' => Crypt::encrypt($venta->id)]);
         } catch (Throwable $e) {
             Log::error('Error al crear la venta', [
                 'error' => $e->getMessage(),
