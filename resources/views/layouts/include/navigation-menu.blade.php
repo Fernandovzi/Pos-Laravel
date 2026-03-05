@@ -58,12 +58,12 @@
                     :href="route('cajas.index')" />
                 @endcan
 
-                <!----Compras---->
+                <!----Producción Interna---->
                 @can('ver-compra')
                 <x-nav.link-collapsed
                     id="collapseCompras"
                     icon="fa-solid fa-store"
-                    content="Compras">
+                    content="Producción Interna">
                     @can('ver-compra')
                     <x-nav.link-collapsed-item :href="route('compras.index')" content="Ver" />
                     @endcan

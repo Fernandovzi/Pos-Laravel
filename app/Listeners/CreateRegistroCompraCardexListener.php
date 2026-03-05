@@ -28,7 +28,7 @@ class CreateRegistroCompraCardexListener
                 'cantidad' => $event->cantidad,
                 'costo_unitario' => $event->precio_compra
             ],
-            TipoTransaccionEnum::Compra
+            TipoTransaccionEnum::ProduccionInterna
         );
     }
 }
