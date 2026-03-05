@@ -145,7 +145,7 @@
         <div class="divider"></div>
 
         <!-- EXTRA -->
-        <div>Pago: {{ $venta->metodo_pago }}</div>
+        <div>Pago: {{ $venta->metodo_pago?->label() }}</div>
         <div>Cajero: {{ $venta->user->empleado->razon_social ?? $venta->user->name }}</div>
 
         <div class="divider"></div>
