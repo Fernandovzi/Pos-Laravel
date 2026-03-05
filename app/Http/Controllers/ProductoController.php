@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use App\Models\Categoria;
-use App\Models\Marca;
 use App\Models\Presentacione;
 use App\Models\Producto;
 use App\Models\Proveedore;
@@ -35,7 +34,6 @@ class ProductoController extends Controller
     {
         $productos = Producto::with([
             'categoria.caracteristica',
-            //'marca.caracteristica',
             'proveedore.persona',
             'presentacione.caracteristica'
         ])
@@ -50,13 +48,6 @@ class ProductoController extends Controller
      */
     public function create(): View
     {
-        // $marcas = Marca::join('caracteristicas as c', 'marcas.caracteristica_id', '=', 'c.id')
-        //     ->select('marcas.id as id', 'c.nombre as nombre')
-        //     ->where('c.estado', 1)
-        //     ->get();
-
-
-
         $categorias = Categoria::join('caracteristicas as c', 'categorias.caracteristica_id', '=', 'c.id')
             ->select('categorias.id as id', 'c.nombre as nombre')
             ->where('c.estado', 1)

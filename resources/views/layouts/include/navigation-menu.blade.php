@@ -22,13 +22,6 @@
                     icon='fa-solid fa-box-archive'
                     :href="route('presentaciones.index')" />
                 @endcan
-
-                @can('ver-marca')
-                <x-nav.nav-link content='Marcas'
-                    icon='fa-solid fa-bullhorn'
-                    :href="route('marcas.index')" />
-                @endcan
-
                 @can('ver-producto')
                 <x-nav.nav-link content='Productos'
                     icon='fa-brands fa-shopify'
