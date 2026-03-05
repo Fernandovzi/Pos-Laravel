@@ -17,11 +17,6 @@ class Caracteristica extends Model
         return $this->hasOne(Categoria::class);
     }
 
-    public function marca(): HasOne
-    {
-        return $this->hasOne(Marca::class);
-    }
-
     public function presentacione(): HasOne
     {
         return $this->hasOne(Presentacione::class);

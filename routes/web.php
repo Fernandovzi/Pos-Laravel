@@ -15,7 +15,6 @@ use App\Http\Controllers\InventarioControlller;
 use App\Http\Controllers\KardexController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\logoutController;
-use App\Http\Controllers\marcaController;
 use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\presentacioneController;
@@ -44,7 +43,6 @@ Route::get('/', [homeController::class, 'index'])->name('panel');
 Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('categorias', categoriaController::class)->except('show');
     Route::resource('presentaciones', presentacioneController::class)->except('show');
-    Route::resource('marcas', marcaController::class)->except('show');
     Route::resource('productos', ProductoController::class)->except('show', 'destroy');
     Route::resource('clientes', clienteController::class)->except('show');
     Route::resource('proveedores', proveedorController::class)->except('show');

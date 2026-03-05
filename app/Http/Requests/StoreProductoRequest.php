@@ -26,7 +26,6 @@ class StoreProductoRequest extends FormRequest
             'nombre' => 'required|unique:productos,nombre|max:255',
             'descripcion' => 'nullable|max:255',
             'img_path' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
-            //'marca_id' => 'nullable|integer|exists:marcas,id',
             'proveedore_id' => 'required|exists:proveedores,id',
             'presentacione_id' => 'required|integer|exists:presentaciones,id',
             'categoria_id' => 'nullable|integer|exists:categorias,id',
@@ -38,7 +37,6 @@ class StoreProductoRequest extends FormRequest
     public function attributes()
     {
         return [
-            //'marca_id' => 'marca',
             'proveedore_id' => 'proveedor',
             'presentacione_id' => 'presentación',
             'categoria_id' => 'categoría'

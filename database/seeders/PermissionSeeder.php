@@ -56,11 +56,6 @@ class PermissionSeeder extends Seeder
             'ver-inventario',
             'crear-inventario',
 
-            //Marca
-            'ver-marca',
-            'crear-marca',
-            'editar-marca',
-            'eliminar-marca',
 
             //Movimientos
             'ver-movimiento',

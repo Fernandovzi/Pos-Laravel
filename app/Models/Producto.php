@@ -42,11 +42,6 @@ class Producto extends Model
         return $this->belongsTo(Categoria::class);
     }
 
-    // public function marca(): BelongsTo
-    // {
-    //     return $this->belongsTo(Marca::class);
-    // }
-
     public function proveedore(): BelongsTo
     {
         return $this->belongsTo(Proveedore::class, 'proveedore_id');
