@@ -31,7 +31,7 @@ class VentasExport implements FromCollection, WithMapping, WithHeadings, ShouldA
             $venta->user->name,
             $venta->comprobante->nombre,
             $venta->numero_comprobante,
-            $venta->metodo_pago,
+            $venta->metodo_pago?->label(),
             Carbon::parse($venta->fecha_hora)->format('d/m/Y'),
             Carbon::parse($venta->fecha_hora)->format('h:i A'),
             $venta->subtotal,

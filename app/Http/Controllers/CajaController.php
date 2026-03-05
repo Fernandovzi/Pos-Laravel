@@ -19,7 +19,8 @@ class CajaController extends Controller
      */
     public function index(): View
     {
-        $cajas = Caja::where('user_id', Auth::id())
+        $cajas = Caja::with('movimientos')
+            ->where('user_id', Auth::id())
             ->latest()
             ->get();
 
