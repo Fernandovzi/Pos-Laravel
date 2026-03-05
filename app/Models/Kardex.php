@@ -53,7 +53,7 @@ class Kardex extends Model
 
         $saldo = $ultimoRegistro ? $ultimoRegistro->saldo : $data['cantidad'];
 
-        if ($tipo == TipoTransaccionEnum::Compra || $tipo == TipoTransaccionEnum::CancelacionPedido) {
+        if ($tipo == TipoTransaccionEnum::ProduccionInterna || $tipo == TipoTransaccionEnum::CancelacionPedido) {
             $entrada = $data['cantidad'];
             $saldo += $entrada;
         } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Ajuste || $tipo == TipoTransaccionEnum::Pedido) {
@@ -86,8 +86,8 @@ class Kardex extends Model
             case TipoTransaccionEnum::Apertura:
                 $descripcion = 'Apertura del producto';
                 break;
-            case TipoTransaccionEnum::Compra:
-                $descripcion = 'Entrada de producto por la compra n°' . $data['compra_id'];
+            case TipoTransaccionEnum::ProduccionInterna:
+                $descripcion = 'Entrada por Producción Interna n°' . $data['compra_id'];
                 break;
             case TipoTransaccionEnum::Venta:
                 $descripcion = 'Salida de producto por la venta n°' . $data['venta_id'];
