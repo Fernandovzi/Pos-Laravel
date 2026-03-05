@@ -34,7 +34,7 @@
                         <td>{{ $pedido->estado->value }}</td>
                         <td>{{ number_format($pedido->total, 2) }}</td>
                         <td class="d-flex gap-2">
-                            <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-sm btn-info">Ver</a>
+                            <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-primary">Ver</a>
                             <a href="{{ route('pedidos.pdf', $pedido) }}" class="btn btn-sm btn-secondary" target="_blank">PDF</a>
                             @if($pedido->estado->value === 'APARTADO')
                             <form action="{{ route('pedidos.destroy', $pedido) }}" method="POST" onsubmit="return confirm('¿Cancelar pedido y liberar stock?')">
