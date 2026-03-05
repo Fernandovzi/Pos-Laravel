@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum TipoTransaccionEnum: string
 {
-    case Compra = 'COMPRA';
+    case ProduccionInterna = 'PRODUCCION_INTERNA';
     case Venta = 'VENTA';
     case Ajuste = 'AJUSTE';
     case Apertura = 'APERTURA';
