@@ -44,6 +44,10 @@
                         <th>Saldo inicial</th>
                         <th>Saldo final</th>
                         <th>Estado</th>
+                        <th>Efectivo</th>
+                        <th>Débito</th>
+                        <th>Crédito</th>
+                        <th>Transferencia</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -83,6 +87,13 @@
                             <span class="badge rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
                                 {{$item->estado == 1 ? 'aperturada' : 'cerrada'}}</span>
                         </td>
+                        @php
+                            $ventas = $item->movimientos->filter(fn($mov) => $mov->tipo->value === 'VENTA');
+                        @endphp
+                        <td>{{$ventas->where('metodo_pago.value', 'EFECTIVO')->sum('monto')}}</td>
+                        <td>{{$ventas->where('metodo_pago.value', 'TARJETA_DEBITO')->sum('monto')}}</td>
+                        <td>{{$ventas->where('metodo_pago.value', 'TARJETA_CREDITO')->sum('monto')}}</td>
+                        <td>{{$ventas->where('metodo_pago.value', 'TRANSFERENCIA_SPEI')->sum('monto')}}</td>
                         <td>
                             <div class="btn-group" role="group">
                                 @can('ver-movimiento')
