@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Registrar Entrada por Producción Interna</h1>
+    <h1 class="mt-4 text-center">Producción Interna</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('compras.index') }}">Producción Interna</a></li>

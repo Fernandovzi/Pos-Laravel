@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Entradas por Producción Interna</h1>
+    <h1 class="mt-4 text-center">Producción Interna</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Producción Interna</li>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="card mb-4">
-        <div class="card-header">Listado de producciones internas</div>
+        <div class="card-header">Producciones</div>
         <div class="card-body table-responsive">
             <table class="table table-striped">
                 <thead>

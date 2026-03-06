@@ -63,7 +63,7 @@
                 <x-nav.link-collapsed
                     id="collapseCompras"
                     icon="fa-solid fa-store"
-                    content="Producción Interna">
+                    content="Producción">
                     @can('ver-compra')
                     <x-nav.link-collapsed-item :href="route('compras.index')" content="Ver" />
                     @endcan
