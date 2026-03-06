@@ -14,7 +14,7 @@ use App\Models\Proveedore;
 use App\Services\ActivityLogService;
 use App\Services\ProductoService;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
