@@ -56,7 +56,15 @@ class Kardex extends Model
         if ($tipo == TipoTransaccionEnum::ProduccionInterna || $tipo == TipoTransaccionEnum::CancelacionPedido) {
             $entrada = $data['cantidad'];
             $saldo += $entrada;
-        } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Ajuste || $tipo == TipoTransaccionEnum::Pedido) {
+        } elseif ($tipo == TipoTransaccionEnum::Ajuste) {
+            if (($data['tipo_movimiento'] ?? 'SALIDA') === 'ENTRADA') {
+                $entrada = $data['cantidad'];
+                $saldo += $entrada;
+            } else {
+                $salida = $data['cantidad'];
+                $saldo -= $salida;
+            }
+        } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Pedido) {
             $salida = $data['cantidad'];
             $saldo -= $salida;
         }
@@ -93,7 +101,12 @@ class Kardex extends Model
                 $descripcion = 'Salida de producto por la venta n°' . $data['venta_id'];
                 break;
             case TipoTransaccionEnum::Ajuste:
-                $descripcion = 'Ajuste de producto';
+                $movimiento = strtolower($data['tipo_movimiento'] ?? 'salida');
+                $descripcion = 'Ajuste de inventario (' . $movimiento . ')';
+
+                if (!empty($data['descripcion_ajuste'])) {
+                    $descripcion .= ': ' . $data['descripcion_ajuste'];
+                }
                 break;
             case TipoTransaccionEnum::Pedido:
                 $descripcion = 'Salida temporal por pedido folio ' . $data['folio'];
