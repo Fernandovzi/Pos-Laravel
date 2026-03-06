@@ -1,158 +1,95 @@
-# Punto de Venta para una tienda
+# POS Laravel
 
-## Dependencias
+Sistema de punto de venta desarrollado con Laravel para la gestión de inventario, ventas, pedidos y control operativo de tienda.
 
--  Se debe tener instalado [XAMPP](https://www.apachefriends.org/es/download.html "XAMPP") (versión **PHP** **8.2** o superior)
+## Características principales
 
--  Se debe tener instalado [Composer](https://getcomposer.org/download/ "Composer")
+- Gestión de productos y categorías.
+- Control de inventario con movimientos en kardex.
+- Módulo de ventas.
+- Módulo de pedidos/apartados con folio diario automático.
+- Generación de comprobantes en PDF.
+- Administración de usuarios y permisos.
 
-  
+## Requisitos
 
-## Como instalar en Local
+- PHP 8.2 o superior.
+- Composer.
+- MySQL o MariaDB.
+- Node.js y npm (si se compilan assets frontend).
 
-1.  Clone  o  descargue  el  repositorio  a  una  carpeta  en  Local
+## Instalación en entorno local
 
-  
-
-1.  Abra  el  repositorio  en  su  editor  de  código  favorito  (**Visual  Studio  Code**)
-
-  
-
-1.  Ejecute  la  aplicación  **XAMPP**  e  inice  los  módulos  de  **Apache**  y  **MySQL**
-
-  
-
-1.  Abra  una  nueva  terminal  en  su  editor
-
-  
-
-1.  Compruebe  de  que  tiene  instalado  todas  dependencias  correctamente,  ejecute  los  siguientes  comandos:  **(Ambos  comandos  deberán  ejecutarse  correctamente  -  ejecutar  en  la  terminal)**
+1. Clonar el repositorio:
 
 ```bash
-
-php  -v
-
+git clone <url-del-repositorio>
+cd Pos-Laravel
 ```
 
-```bash
-
-composer  -v
-
-```
-
-  
-
-1.  Ahora  ejecute  los  comandos  para  la  configuración  del  proyecto  (**ejecutar  en  la  terminal**):
-
-  
-
--  Este comando nos va a instalar todas la dependencias de composer
+2. Instalar dependencias de PHP:
 
 ```bash
-
 composer install
-
 ```
 
--  En el directorio raíz encontrará el arhivo **.env.example**, dupliquelo, al archivo duplicado cambiar de nombre como **.env**, este archivo se debe modificar según las configuraciones de nuestro proyecto. Ahí se muestran como debería quedar
+3. Copiar archivo de entorno y configurar variables:
 
 ```bash
+cp .env.example .env
+```
 
+Editar `.env` con los datos de base de datos, por ejemplo:
+
+```env
 DB_CONNECTION=mysql
-
 DB_HOST=127.0.0.1
-
 DB_PORT=3306
-
-DB_DATABASE=dbsistemaventas
-
+DB_DATABASE=pos_laravel
 DB_USERNAME=root
-
 DB_PASSWORD=
-
 ```
 
--  Ejecutar el comando para crear la Key de seguridad
+4. Generar clave de aplicación:
 
 ```bash
-
 php artisan key:generate
-
 ```
 
--  Ingrese al administrador de [PHP MyAdmin](http://localhost/phpmyadmin/) y cree una nueva base de datos, el nombre es opcional, pero por defecto nombrarla **dbsistemaventas**
-
-  
-
--  Correr la migraciones del proyecto
+5. Ejecutar migraciones y seeders:
 
 ```bash
-
-php artisan migrate
-
+php artisan migrate --seed
 ```
 
--  Ejecute los seeders, esto creará un usuario administrador, puede revisar las credenciales en el archivo (**database/seeders/UserSeeder**)
+6. Crear enlace simbólico de storage:
 
 ```bash
-
-php artisan db:seed
-
-```
-
--  Corra comando para crear el enlace simbólico
-
-```bash
-
 php artisan storage:link
-
-```
--  Si quiere ejecutar los trabajos (modo de desarrollo)
-
-```bash
-
-php artisan queue:listen
-
 ```
 
-  -  Ejecute el proyecto (en otra terminal)
+7. Iniciar servidor de desarrollo:
 
 ```bash
-
 php artisan serve
-
 ```
 
-## Notas
+8. (Opcional) Ejecutar worker de colas en otra terminal:
 
--  Obtenga más información sobre este proyecto [aquí](https://universityproyectx.blogspot.com/2022/10/sistema-de-ventas-web-minersa-srl.html).
-
-- [FAQ sobre el proyecto](https://universityproyectx.blogspot.com/2023/06/faq-sobre-el-sistema-de-ventas-de.html)
-
-  
-
-## Licencia
-
--  Este proyecto está licenciado bajo la Licencia MIT. Para más información, consulta el archivo [LICENSE](LICENSE).
-
--  Obtenga más información sobre esta licencia [MIT license](https://opensource.org/licenses/MIT).
-
-  
-
-------------
-
-![Img](https://github.com/SakNoelCode/Imagenes_Proyectos/blob/master/sistema-ventas-captura.png)
+```bash
+php artisan queue:listen
+```
 
 ## Módulo de pedidos (apartados)
 
-Se agregó un nuevo módulo para **apartar productos** con control de inventario temporal y trazabilidad:
+Incluye un módulo para apartar productos con control de inventario temporal y trazabilidad:
 
-- Crea pedidos con folio automático diario (`PED-YYYYMMDD-####`).
-- Registra la persona que recogerá el pedido.
-- Al guardar, descuenta stock del inventario en forma temporal.
-- Registra el movimiento en kardex con tipo `PEDIDO`.
-- Permite cancelar pedidos apartados para liberar stock.
-- Genera PDF del pedido con folio, cliente, detalle de productos e importes.
+- Folio automático diario (`PED-YYYYMMDD-####`).
+- Registro de persona que recogerá el pedido.
+- Descuento temporal de inventario al crear pedido.
+- Registro automático de movimiento en kardex con tipo `PEDIDO`.
+- Cancelación de pedidos para liberar stock.
+- Generación de PDF con detalle del pedido.
 
 ### Rutas principales
 
@@ -163,3 +100,6 @@ Se agregó un nuevo módulo para **apartar productos** con control de inventario
 - `DELETE /admin/pedidos/{pedido}`
 - `GET /admin/pedidos/{pedido}/pdf`
 
+## Licencia
+
+Este proyecto está licenciado bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
