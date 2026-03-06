@@ -56,6 +56,9 @@ class PermissionSeeder extends Seeder
             'ver-inventario',
             'crear-inventario',
 
+            //Ajustes de inventario
+            'ver-ajuste-inventario',
+            'crear-ajuste-inventario',
 
             //Movimientos
             'ver-movimiento',

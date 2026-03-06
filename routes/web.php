@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\AjusteInventarioController;
 use App\Http\Controllers\CajaController;
 use App\Http\Controllers\categoriaController;
 use App\Http\Controllers\clienteController;
@@ -53,6 +54,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('profile', profileController::class)->only('index', 'update');
     Route::resource('activityLog', ActivityLogController::class)->only('index');
     Route::resource('inventario', InventarioControlller::class)->only('index', 'create', 'store');
+    Route::resource('ajustes-inventario', AjusteInventarioController::class)->only('index', 'create', 'store');
     Route::resource('kardex', KardexController::class)->only('index');
     Route::resource('empresa', EmpresaController::class)->only('index', 'update');
     Route::resource('empleados', EmpleadoController::class)->except('show');
