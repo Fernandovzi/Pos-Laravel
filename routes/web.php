@@ -45,6 +45,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('categorias', categoriaController::class)->except('show');
     Route::resource('presentaciones', presentacioneController::class)->except('show');
     Route::resource('productos', ProductoController::class)->except('show', 'destroy');
+    Route::get('/productos/exportar/control-excel', [ProductoController::class, 'exportControlExcel'])->name('productos.export.control-excel');
     Route::resource('clientes', clienteController::class)->except('show');
     Route::resource('proveedores', proveedorController::class)->except('show');
     Route::resource('compras', compraController::class)->except('edit', 'update', 'destroy');
