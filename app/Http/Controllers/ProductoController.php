@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\EstadoPedidoEnum;
+use App\Exports\ProductoControlExport;
 use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use App\Models\Categoria;
+use App\Models\Pedido;
 use App\Models\Presentacione;
 use App\Models\Producto;
 use App\Models\Proveedore;
 use App\Services\ActivityLogService;
 use App\Services\ProductoService;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\BinaryFileResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Throwable;
 
 class ProductoController extends Controller
@@ -42,6 +47,24 @@ class ProductoController extends Controller
             ->get();
 
         return view('producto.index', compact('productos'));
+    }
+
+    public function exportControlExcel(): BinaryFileResponse
+    {
+        $productos = Producto::with([
+            'categoria.caracteristica',
+            'proveedore.persona',
+            'inventario',
+        ])->orderBy('nombre')->get();
+
+        $pedidosNoCancelados = Pedido::with(['proveedore.persona', 'productos'])
+            ->where('estado', '!=', EstadoPedidoEnum::Cancelado)
+            ->latest()
+            ->get();
+
+        $filename = 'control-inventario-maleri-' . now()->format('Ymd_His') . '.xlsx';
+
+        return Excel::download(new ProductoControlExport($productos, $pedidosNoCancelados), $filename);
     }
 
     /**

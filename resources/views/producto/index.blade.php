@@ -19,13 +19,17 @@
         <li class="breadcrumb-item active">Productos</li>
     </ol>
 
-    @can('crear-producto')
-    <div class="mb-4">
-        <a href="{{route('productos.create')}}">
-            <button type="button" class="btn btn-primary">Añadir nuevo registro</button>
+    <div class="mb-4 d-flex flex-wrap gap-2">
+        @can('crear-producto')
+        <a href="{{ route('productos.create') }}" class="btn btn-primary">
+            Añadir nuevo registro
+        </a>
+        @endcan
+
+        <a href="{{ route('productos.export.control-excel') }}" class="btn btn-success">
+            Exportar Excel de control
         </a>
     </div>
-    @endcan
 
     <div class="card shadow-sm border-0">
         <div class="card-header">
