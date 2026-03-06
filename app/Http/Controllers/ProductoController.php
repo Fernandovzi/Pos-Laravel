@@ -35,7 +35,8 @@ class ProductoController extends Controller
         $productos = Producto::with([
             'categoria.caracteristica',
             'proveedore.persona',
-            'presentacione.caracteristica'
+            'presentacione.caracteristica',
+            'inventario'
         ])
             ->latest()
             ->get();

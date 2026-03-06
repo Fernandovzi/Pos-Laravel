@@ -28,23 +28,15 @@
                     :href="route('productos.index')" />
                 @endcan
 
-                @can('ver-inventario')
-                <x-nav.nav-link content='Inventario'
-                    icon='fa-solid fa-book'
-                    :href="route('inventario.index')" />
-                @endcan
-
                 @can('ver-kardex')
                 <x-nav.nav-link content='Kardex'
                     icon='fa-solid fa-file'
                     :href="route('kardex.index')" />
                 @endcan
 
-                @can('ver-ajuste-inventario')
                 <x-nav.nav-link content='Ajustes de inventario'
                     icon='fa-solid fa-sliders'
                     :href="route('ajustes-inventario.index')" />
-                @endcan
 
                 @can('ver-cliente')
                 <x-nav.nav-link content='Clientes'
