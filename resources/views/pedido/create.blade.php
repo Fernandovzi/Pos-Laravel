@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4">
-    <h1 class="mt-4">Nuevo pedido</h1>
+    <h1 class="mt-4 text-center">Nuevo pedido</h1>
     <form action="{{ route('pedidos.store') }}" method="POST">
         @csrf
         <div class="row g-3">
@@ -35,9 +35,12 @@
         <h5>Productos</h5>
         <div class="row g-2 align-items-end" id="selector-producto">
             <div class="col-md-6">
-                <label class="form-label">Producto (búsqueda por nombre)</label>
-                <input type="text" id="buscarProducto" class="form-control mb-2" placeholder="Escriba el nombre del producto..." oninput="filtrarProductos()">
-                <select id="producto" class="form-control">
+                <label class="form-label">Producto</label>
+                <div class="input-group mb-2">
+                    <input type="text" id="buscarProducto" class="form-control" placeholder="Escriba el nombre o código del producto...">
+                    <button type="button" class="btn btn-outline-primary" id="btnBuscarProducto">Buscar</button>
+                </div>
+                <select id="producto" class="form-select">
                     <option value="">Seleccione</option>
                     @foreach($productos as $producto)
                     <option value="{{ $producto->id }}" data-stock="{{ $producto->cantidad }}" data-precio="{{ $producto->precio }}" data-texto="{{ $producto->codigo }} - {{ $producto->nombre }} {{ $producto->sigla }}">
@@ -55,12 +58,12 @@
                 <input type="text" id="stockProducto" class="form-control" readonly>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar</button>
+                <button type="button" class="btn btn-primary w-100" onclick="agregarProducto()">Agregar</button>
             </div>
         </div>
 
         <div class="table-responsive mt-3">
-            <table class="table table-bordered" id="tabla-productos">
+            <table class="table table-bordered align-middle" id="tabla-productos">
                 <thead>
                     <tr>
                         <th>Producto</th>
@@ -91,6 +94,13 @@
 const porcentajeImpuesto = Number(@json($empresa->porcentaje_impuesto ?? 0));
 
 document.getElementById('producto').addEventListener('change', actualizarStockProducto);
+document.getElementById('btnBuscarProducto').addEventListener('click', filtrarProductos);
+document.getElementById('buscarProducto').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        filtrarProductos();
+    }
+});
 
 function filtrarProductos() {
     const texto = document.getElementById('buscarProducto').value.toLowerCase().trim();

@@ -27,7 +27,7 @@
     </div>
     @endcan
 
-    <div class="card">
+    <div class="card shadow-sm border-0">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             Tabla productos
@@ -42,6 +42,7 @@
                         <th>Utilidad</th>
                         <th>Vendedor</th>
                         <th>Categoría</th>
+                        <th>Existencia</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
@@ -70,6 +71,9 @@
                         </td>
                         <td>
                             {{$item->categoria->caracteristica->nombre ?? 'Sin categoría'}}
+                        </td>
+                        <td>
+                            {{ $item->inventario?->cantidad ?? 0 }}
                         </td>
                         <td>
                             <span class="badge rounded-pill text-bg-{{ $item->estado ? 'success' : 'danger' }}">
@@ -107,23 +111,6 @@
                                         </li>
                                         @endcan
                                     </ul>
-                                </div>
-                                <div>
-                                    <!----Separador----->
-                                    <div class="vr"></div>
-                                </div>
-                                <div>
-                                    <!------Inicializar producto---->
-                                    @can('crear-inventario')
-                                    <form action="{{route('inventario.create')}}" method="get">
-                                        <input type="hidden" name="producto_id" value="{{$item->id}}">
-                                        <button title="Inicializar"
-                                            class="btn btn-datatable btn-icon btn-transparent-dark"
-                                            type="submit">
-                                            <i class="fa-solid fa-rotate"></i>
-                                        </button>
-                                    </form>
-                                    @endcan
                                 </div>
                             </div>
                         </td>
