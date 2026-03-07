@@ -1,5 +1,5 @@
 <div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+    <nav class="sb-sidenav accordion sb-sidenav-dark modern-sidenav" id="sidenavAccordion">
         <div class="sb-sidenav-menu">
             <div class="nav">
 
@@ -130,8 +130,8 @@
             </div>
         </div>
         <div class="sb-sidenav-footer">
-            <div class="small">Bienvenido:</div>
-            {{ auth()->user()->name }}
+            <div class="small text-uppercase">Usuario activo</div>
+            <div class="fw-semibold">{{ auth()->user()->name }}</div>
         </div>
     </nav>
 </div>

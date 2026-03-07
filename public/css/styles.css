@@ -11290,70 +11290,189 @@ body {
 
 /* Unified modern POS theme */
 :root {
-    --pos-bg: #f5f7fb;
+    --pos-bg: #f3f6fb;
     --pos-surface: #ffffff;
     --pos-surface-soft: #f8fafc;
-    --pos-primary: rgb(2, 117, 216);
-    --pos-primary-dark: rgb(2, 117, 216);
-    --pos-text: #1f2937;
+    --pos-primary: #3b82f6;
+    --pos-primary-dark: #2563eb;
+    --pos-text: #111827;
     --pos-muted: #6b7280;
     --pos-border: #e5e7eb;
-    --pos-shadow: 0 8px 24px rgba(15, 23, 42, 0.07);
+    --pos-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
     --pos-radius: 14px;
 }
 
 body.sb-nav-fixed {
-    background: var(--pos-bg);
+    background: linear-gradient(180deg, #f8faff 0%, var(--pos-bg) 38%);
     color: var(--pos-text);
 }
 
 .sb-topnav.navbar {
     min-height: 72px;
-    background: #1f2430 !important;
-    box-shadow: 0 6px 16px rgba(2, 6, 23, 0.25);
+    background: rgba(17, 24, 39, 0.95) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 10px 24px rgba(2, 6, 23, 0.22);
 }
 
 .sb-topnav .navbar-brand {
+    width: auto;
+    min-width: 225px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
     color: #f9fafb !important;
     font-weight: 700;
     letter-spacing: 0.2px;
 }
 
+.brand-mark {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    color: #ffffff;
+}
+
+.brand-name {
+    max-width: 210px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.topbar-action,
+.topbar-icon-link,
+.topbar-profile-link {
+    border-radius: 12px;
+    color: #d1d5db !important;
+    transition: all 0.2s ease;
+}
+
+.topbar-action {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.topbar-action:hover,
+.topbar-icon-link:hover,
+.topbar-profile-link:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff !important;
+}
+
+.topbar-icon-link {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.topbar-icon-link .badge {
+    position: absolute;
+    top: 6px;
+    right: 4px;
+    padding: 0.2rem 0.42rem;
+    font-size: 0.66rem;
+}
+
+.topbar-profile-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.3rem 0.65rem !important;
+}
+
+.topbar-profile-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #3b82f6, #9333ea);
+}
+
+.topbar-profile-name {
+    max-width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.86rem;
+    color: #f3f4f6;
+}
+
 #layoutSidenav #layoutSidenav_nav {
-    background: #1b2029;
+    background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
 }
 
 .sb-sidenav {
     border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.sb-sidenav .sb-sidenav-menu {
+    padding-top: 0.5rem;
+}
+
 .sb-sidenav .sb-sidenav-menu .nav .nav-link {
-    margin: 0.2rem 0.7rem;
-    border-radius: 10px;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    padding: 0.7rem 0.9rem;
-    color: #cfd8e3;
+    margin: 0.18rem 0.65rem;
+    border-radius: 12px;
+    min-height: 46px;
+    padding: 0.68rem 0.9rem;
+    color: #cbd5e1;
+    font-weight: 500;
     transition: all 0.2s ease;
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
+    width: 24px;
+    text-align: center;
+    color: #94a3b8;
 }
 
 .sb-sidenav .sb-sidenav-menu .nav .nav-link:hover,
 .sb-sidenav .sb-sidenav-menu .nav .nav-link.active {
-    background: rgba(24, 92, 240, 0.301);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.28), rgba(99, 102, 241, 0.28));
     color: #ffffff;
+    transform: translateX(2px);
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .nav-link:hover .sb-nav-link-icon,
+.sb-sidenav .sb-sidenav-menu .nav .nav-link.active .sb-nav-link-icon {
+    color: #e2e8f0;
+}
+
+.sb-sidenav .sb-sidenav-menu .nav .sb-sidenav-menu-nested {
+    margin-left: 0.8rem;
+    margin-right: 0.4rem;
+    padding-left: 0.8rem;
+    border-left: 1px dashed rgba(148, 163, 184, 0.35);
 }
 
 .sb-sidenav .sb-sidenav-menu-heading {
-    color: #95a0af;
-    font-size: 0.72rem;
+    color: #94a3b8;
+    font-size: 0.68rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 1rem;
+    letter-spacing: 0.11em;
+    margin-top: 0.95rem;
+    padding-top: 1rem !important;
 }
 
 #layoutSidenav_content {
-    background: var(--pos-bg);
+    background: transparent;
 }
 
 .pos-main {
@@ -11431,8 +11550,8 @@ body.sb-nav-fixed {
 
 .form-control:focus,
 .form-select:focus {
-    border-color: rgba(2, 117, 216, 0.5);
-    box-shadow: 0 0 0 0.2rem rgba(255, 108, 55, 0.15);
+    border-color: rgba(59, 130, 246, 0.52);
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.15);
 }
 
 .input-group > .form-control,
@@ -11442,17 +11561,14 @@ body.sb-nav-fixed {
     min-height: 44px;
 }
 
-.navbar .input-group .form-control {
-    min-width: 280px;
-}
-
 .badge.bg-danger {
-    background-color: #446cef !important;
+    background-color: #3b82f6 !important;
 }
 
 .sb-sidenav-footer {
-    background: #131720;
-    color: #d1d5db;
+    background: rgba(15, 23, 42, 0.95);
+    color: #cbd5e1;
+    border-top: 1px solid rgba(148, 163, 184, 0.22);
 }
 
 main h1,
@@ -11463,8 +11579,15 @@ main h4 {
     font-weight: 700;
 }
 
+.main-card,
+.card {
+    border-radius: var(--pos-radius);
+}
 
-/* Global interface consistency */
-.main-card, .card { border-radius: var(--pos-radius); }
-.breadcrumb { margin-top: .5rem; }
-.table-responsive { border-radius: var(--pos-radius); }
+.breadcrumb {
+    margin-top: .5rem;
+}
+
+.table-responsive {
+    border-radius: var(--pos-radius);
+}
