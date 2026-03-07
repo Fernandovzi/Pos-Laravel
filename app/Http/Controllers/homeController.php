@@ -23,7 +23,9 @@ class homeController extends Controller
             ->where('estado', 'APARTADO')
             ->count();
 
-        $ventasTotales = DB::table('ventas')->sum('total');
+        $ventasDelDia = DB::table('ventas')
+            ->whereDate('created_at', Carbon::today())
+            ->count();
 
         $produccionInternaPorDia = DB::table('kardex')
             ->selectRaw('DATE(created_at) as fecha, SUM(COALESCE(entrada, 0)) as total')
@@ -37,7 +39,7 @@ class homeController extends Controller
             'productosRegistrados',
             'existenciaTotalProductos',
             'pedidosApartados',
-            'ventasTotales',
+            'ventasDelDia',
             'produccionInternaPorDia'
         ));
     }
