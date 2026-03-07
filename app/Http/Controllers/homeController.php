@@ -15,22 +15,32 @@ class homeController extends Controller
             return view('welcome');
         }
 
-        $totalVentasPorDia = DB::table('ventas')
-            ->selectRaw('DATE(created_at) as fecha, SUM(total) as total')
+        $productosRegistrados = DB::table('productos')->count();
+
+        $existenciaTotalProductos = DB::table('inventario')->sum('cantidad');
+
+        $pedidosApartados = DB::table('pedidos')
+            ->where('estado', 'APARTADO')
+            ->count();
+
+        $ventasDelDia = DB::table('ventas')
+            ->whereDate('created_at', Carbon::today())
+            ->count();
+
+        $produccionInternaPorDia = DB::table('kardex')
+            ->selectRaw('DATE(created_at) as fecha, SUM(COALESCE(entrada, 0)) as total')
+            ->where('tipo_transaccion', 'PRODUCCION_INTERNA')
             ->where('created_at', '>=', Carbon::now()->subDays(7))
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('fecha', 'asc')
             ->get()->toArray();
 
-        $productosStockBajo = DB::table('productos')
-            ->join('inventario', 'productos.id', '=', 'inventario.producto_id')
-            ->where('inventario.cantidad', '>', 0)
-            ->orderBy('inventario.cantidad', 'asc')
-            ->select('productos.nombre', 'inventario.cantidad')
-            ->limit(5)
-            ->get();
-
-
-        return view('panel.index', compact('totalVentasPorDia','productosStockBajo'));
+        return view('panel.index', compact(
+            'productosRegistrados',
+            'existenciaTotalProductos',
+            'pedidosApartados',
+            'ventasDelDia',
+            'produccionInternaPorDia'
+        ));
     }
 }

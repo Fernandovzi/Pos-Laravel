@@ -14,74 +14,15 @@
         <li class="breadcrumb-item active">Panel</li>
     </ol>
     <div class="row">
-        <!----Clientes--->
         <div class="col-xl-3 col-md-6">
             <div class="card border-primary mb-3 text-primary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
-                            <i class="fa-solid fa-people-group"></i><span class="m-1">Clientes</span>
+                            <i class="fa-brands fa-shopify"></i><span class="m-1">Productos registrados</span>
                         </div>
                         <div class="col-4">
-                            <?php
-
-                            use App\Models\Cliente;
-
-                            $clientes = count(Cliente::all());
-                            ?>
-                            <p class="text-center fw-bold fs-4">{{$clientes}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-primary stretched-link" href="{{ route('clientes.index') }}">Ver más</a>
-                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-
-        <!----Compra--->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-primary mb-3 text-primary">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-8">
-                            <i class="fa-solid fa-store"></i><span class="m-1">Compras</span>
-                        </div>
-                        <div class="col-4">
-                            <?php
-
-                            use App\Models\Compra;
-
-                            $compras = count(Compra::all());
-                            ?>
-                            <p class="text-center fw-bold fs-4">{{$compras}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-primary stretched-link" href="{{ route('compras.index') }}">Ver más</a>
-                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-
-        <!----Producto--->
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-primary mb-3 text-primary">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-8">
-                            <i class="fa-brands fa-shopify"></i><span class="m-1">Productos</span>
-                        </div>
-                        <div class="col-4">
-                            <?php
-
-                            use App\Models\Producto;
-
-                            $productos = count(Producto::all());
-                            ?>
-                            <p class="text-center fw-bold fs-4">{{$productos}}</p>
+                            <p class="text-center fw-bold fs-4">{{ $productosRegistrados }}</p>
                         </div>
                     </div>
                 </div>
@@ -92,27 +33,58 @@
             </div>
         </div>
 
-        <!----Users--->
         <div class="col-xl-3 col-md-6">
             <div class="card border-primary mb-3 text-primary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
-                            <i class="fa-solid fa-user"></i><span class="m-1">Usuarios</span>
+                            <i class="fa-solid fa-boxes-stacked"></i><span class="m-1">Existencia total de Productos</span>
                         </div>
                         <div class="col-4">
-                            <?php
-
-                            use App\Models\User;
-
-                            $users = count(User::all());
-                            ?>
-                            <p class="text-center fw-bold fs-4">{{$users}}</p>
+                            <p class="text-center fw-bold fs-4">{{ (int) $existenciaTotalProductos }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-primary stretched-link" href="{{ route('users.index') }}">Ver más</a>
+                    <a class="small text-primary stretched-link" href="{{ route('inventario.index') }}">Ver más</a>
+                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-primary mb-3 text-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <i class="fa-solid fa-cart-plus"></i><span class="m-1">Pedidos apartados</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-center fw-bold fs-4">{{ $pedidosApartados }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-primary stretched-link" href="{{ route('pedidos.index') }}">Ver más</a>
+                    <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-primary mb-3 text-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-8">
+                            <i class="fa-solid fa-cash-register"></i><span class="m-1">Número de ventas del día</span>
+                        </div>
+                        <div class="col-4">
+                            <p class="text-center fw-bold fs-4">{{ $ventasDelDia }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-primary stretched-link" href="{{ route('ventas.index') }}">Ver más</a>
                     <div class="small text-primary"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -125,7 +97,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-area me-1"></i>
-                    Ventas en los últimos 7 días
+                    Productos cargados por producción interna (últimos 7 días)
                 </div>
                 <div class="card-body"><canvas id="ventasChart" width="100%" height="30"></canvas></div>
             </div>
@@ -141,13 +113,13 @@
 <script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
 
 <script>
-    let datosVenta = @json($totalVentasPorDia);
+    let datosProduccion = @json($produccionInternaPorDia);
 
-    const fechas = datosVenta.map(venta => {
-        const [year, month, day] = venta.fecha.split('-');
+    const fechas = datosProduccion.map(registro => {
+        const [year, month, day] = registro.fecha.split('-');
         return `${day}/${month}/${year}`;
     });
-    const montos = datosVenta.map(venta => parseFloat(venta.total));
+    const cantidades = datosProduccion.map(registro => parseInt(registro.total, 10));
 
     const ventasChart = document.getElementById('ventasChart');
 
@@ -156,7 +128,7 @@
         data: {
             labels: fechas,
             datasets: [{
-                label: "Ventas",
+                label: "Producción interna",
                 lineTension: 0.3,
                 backgroundColor: "rgba(2,117,216,0.2)",
                 borderColor: "rgba(2,117,216,1)",
@@ -167,7 +139,7 @@
                 pointHoverBackgroundColor: "rgba(2,117,216,1)",
                 pointHitRadius: 50,
                 pointBorderWidth: 2,
-                data: montos,
+                data: cantidades,
             }],
         },
         options: {
@@ -180,14 +152,12 @@
                         display: false
                     },
                     ticks: {
-                        //maxTicksLimit: 7
                     }
                 }],
                 yAxes: [{
                     ticks: {
                         min: 0,
-                        //max: 40000,
-                        // maxTicksLimit: 5
+                        precision: 0,
                     },
                     gridLines: {
                         color: "rgba(0, 0, 0, .125)",
