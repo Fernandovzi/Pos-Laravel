@@ -18,8 +18,7 @@
 
 <body>
 
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-md bg-body-secondary">
+    <nav class="navbar navbar-expand-md bg-body-secondary sticky-top border-bottom border-secondary-subtle">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('panel') }}">
                 <img src="{{ asset('assets/img/icon.png') }}" alt="Logo" width="30" height="30"
@@ -38,7 +37,7 @@
                         <a class="nav-link active" href="{{ route('panel') }}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Acerca del sistema</a>
+                        <a class="nav-link" href="#catalogo">Catálogo POS</a>
                     </li>
                 </ul>
 
@@ -49,85 +48,177 @@
         </div>
     </nav>
 
-    <!-- Carrusel -->
-    <div id="carouselExample" class="carousel slide carousel-fade">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{{ asset('assets/img/img_carrusel_1.png') }}" class="d-block w-100"
-                    alt="Gestión de ventas">
+    <header class="container py-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-7">
+                <span class="badge rounded-pill text-bg-info-subtle text-info border border-info-subtle mb-3">Punto de venta</span>
+                <h1 class="display-6 fw-bold mb-3">Catálogo de productos estructurado para operación POS</h1>
+                <p class="text-body-secondary mb-0">Visualiza información clave por producto: identificación, categoría, precio, inventario,
+                    unidad de medida, código de barras y estatus operativo en una sola vista.</p>
             </div>
-            <div class="carousel-item">
-                <img src="{{ asset('assets/img/img_carrusel_2.png') }}" class="d-block w-100"
-                    alt="Control de inventarios">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('assets/img/img_carrusel_3.png') }}" class="d-block w-100"
-                    alt="Control total de tu negocio">
-            </div>
-        </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
-            data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
-            data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-    </div>
-
-    <!-- Ventajas -->
-    <div class="container-md">
-        <div class="row my-4 g-5">
-            <div class="col-lg-6">
-                <div class="card border-0">
-                    <div class="card-header text-center text-info fs-5 fw-semibold">
-                        Con un sistema de ventas
-                    </div>
-                    <div class="card-body">
-                        <ul class="text-light">
-                            <li>Acceso al sistema 24/7 desde cualquier dispositivo.</li>
-                            <li>Automatización de inventarios, ventas y reportes.</li>
-                            <li>Información clara para tomar mejores decisiones.</li>
-                            <li>Escalabilidad conforme crece tu negocio.</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="card border-0">
-                    <div class="card-header text-center text-info fs-5 fw-semibold">
-                        Sin un sistema de ventas
-                    </div>
-                    <div class="card-body">
-                        <ul class="text-light">
-                            <li>Dependencia de horarios y procesos manuales.</li>
-                            <li>Mayor riesgo de errores y pérdida de información.</li>
-                            <li>Dificultad para analizar el desempeño del negocio.</li>
-                            <li>Crecimiento limitado y menos control.</li>
-                        </ul>
+            <div class="col-lg-5">
+                <div class="card bg-body-secondary border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="h6 text-uppercase text-info mb-3">Resumen rápido</h2>
+                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary-subtle">
+                            <span class="text-body-secondary">Productos activos</span>
+                            <strong>8</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2 border-bottom border-secondary-subtle">
+                            <span class="text-body-secondary">Productos inactivos</span>
+                            <strong>2</strong>
+                        </div>
+                        <div class="d-flex justify-content-between py-2">
+                            <span class="text-body-secondary">Categorías registradas</span>
+                            <strong>5</strong>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </header>
 
-    <!-- Llamado a la acción -->
-    <section class="container-fluid bg-body-secondary text-center">
-        <div class="container p-5">
-            <h2 class="text-light mb-4">
-                Dale un nuevo enfoque a tu negocio
-                <span class="text-info">y usa la tecnología a tu favor</span>
-            </h2>
-            <a href="{{ route('login.index') }}" class="btn btn-primary">Comenzar ahora</a>
+    <main class="container pb-5" id="catalogo">
+        <div class="card border-0 shadow-sm overflow-hidden">
+            <div class="card-header bg-body-secondary d-flex flex-wrap gap-2 justify-content-between align-items-center py-3">
+                <h2 class="h5 mb-0">Catálogo de productos</h2>
+                <span class="text-body-secondary small">Formato recomendado para control de inventario y venta</span>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">ID / Código</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Categoría</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col" class="text-end">Precio de venta</th>
+                            <th scope="col" class="text-center">Stock</th>
+                            <th scope="col">Unidad</th>
+                            <th scope="col">Código de barras</th>
+                            <th scope="col" class="text-center">Estatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PRD-001</td>
+                            <td>Café molido premium</td>
+                            <td>Abarrotes</td>
+                            <td>Bolsa sellada de 500 g, tueste medio.</td>
+                            <td class="text-end">$145.00</td>
+                            <td class="text-center">62</td>
+                            <td>pieza</td>
+                            <td>7501001001001</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-002</td>
+                            <td>Leche entera</td>
+                            <td>Lácteos</td>
+                            <td>Presentación tetrapack de 1 litro.</td>
+                            <td class="text-end">$28.50</td>
+                            <td class="text-center">120</td>
+                            <td>litro</td>
+                            <td>7501001001002</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-003</td>
+                            <td>Manzana roja</td>
+                            <td>Frutas y verduras</td>
+                            <td>Producto fresco de temporada.</td>
+                            <td class="text-end">$42.00</td>
+                            <td class="text-center">35</td>
+                            <td>kg</td>
+                            <td>-</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-004</td>
+                            <td>Detergente líquido</td>
+                            <td>Limpieza</td>
+                            <td>Botella de 900 ml, aroma floral.</td>
+                            <td class="text-end">$58.90</td>
+                            <td class="text-center">48</td>
+                            <td>litro</td>
+                            <td>7501001001004</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-005</td>
+                            <td>Pan integral</td>
+                            <td>Panadería</td>
+                            <td>Paquete de 680 g con 18 rebanadas.</td>
+                            <td class="text-end">$46.00</td>
+                            <td class="text-center">0</td>
+                            <td>pieza</td>
+                            <td>7501001001005</td>
+                            <td class="text-center"><span class="badge text-bg-secondary">Inactivo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-006</td>
+                            <td>Agua purificada</td>
+                            <td>Bebidas</td>
+                            <td>Garrafa retornable de 20 litros.</td>
+                            <td class="text-end">$42.00</td>
+                            <td class="text-center">17</td>
+                            <td>pieza</td>
+                            <td>7501001001006</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-007</td>
+                            <td>Azúcar estándar</td>
+                            <td>Abarrotes</td>
+                            <td>Bolsa de 1 kg refinada.</td>
+                            <td class="text-end">$32.00</td>
+                            <td class="text-center">80</td>
+                            <td>kg</td>
+                            <td>-</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-008</td>
+                            <td>Yogur griego natural</td>
+                            <td>Lácteos</td>
+                            <td>Envase de 900 g sin azúcar añadida.</td>
+                            <td class="text-end">$89.00</td>
+                            <td class="text-center">15</td>
+                            <td>pieza</td>
+                            <td>7501001001008</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-009</td>
+                            <td>Aceite vegetal</td>
+                            <td>Abarrotes</td>
+                            <td>Botella de 850 ml para cocina diaria.</td>
+                            <td class="text-end">$54.50</td>
+                            <td class="text-center">22</td>
+                            <td>litro</td>
+                            <td>7501001001009</td>
+                            <td class="text-center"><span class="badge text-bg-success">Activo</span></td>
+                        </tr>
+                        <tr>
+                            <td>PRD-010</td>
+                            <td>Chocolate en polvo</td>
+                            <td>Bebidas</td>
+                            <td>Tarro de 400 g para preparar bebidas calientes.</td>
+                            <td class="text-end">$73.00</td>
+                            <td class="text-center">0</td>
+                            <td>pieza</td>
+                            <td>7501001001010</td>
+                            <td class="text-center"><span class="badge text-bg-secondary">Inactivo</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </section>
+    </main>
 
-    <!-- Footer -->
-    <footer class="text-center text-white">
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    <footer class="text-center text-white mt-auto">
+        <div class="text-center p-3 bg-body-secondary">
             © {{ date('Y') }} Sistema de Ventas · Todos los derechos reservados
         </div>
     </footer>
