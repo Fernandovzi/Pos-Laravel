@@ -6,13 +6,18 @@ use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Producto;
 
 class homeController extends Controller
 {
     public function index(): View
     {
         if (!Auth::check()) {
-            return view('welcome');
+            $productosCatalogo = Producto::with(['categoria.caracteristica', 'presentacione.caracteristica', 'inventario'])
+                ->orderBy('nombre')
+                ->get();
+
+            return view('welcome', compact('productosCatalogo'));
         }
 
         $productosRegistrados = DB::table('productos')->count();
