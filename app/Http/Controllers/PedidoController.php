@@ -118,18 +118,26 @@ class PedidoController extends Controller
 
             foreach ($pedido->productos as $producto) {
                 $cantidad = (int) $producto->pivot->cantidad;
-                Inventario::where('producto_id', $producto->id)->increment('cantidad', $cantidad);
 
-                $ultimoKardex = Kardex::where('producto_id', $producto->id)->latest('id')->firstOrFail();
+                $inventario = Inventario::where('producto_id', $producto->id)
+                    ->lockForUpdate()
+                    ->firstOrFail();
+
+                $inventario->increment('cantidad', $cantidad);
+
+                $ultimoKardex = Kardex::where('producto_id', $producto->id)->latest('id')->first();
                 (new Kardex())->crearRegistro([
                     'folio' => $pedido->folio,
                     'producto_id' => $producto->id,
                     'cantidad' => $cantidad,
-                    'costo_unitario' => $ultimoKardex->costo_unitario,
+                    'tipo_movimiento' => 'ENTRADA',
+                    'costo_unitario' => $ultimoKardex?->costo_unitario ?? $producto->costo,
                 ], TipoTransaccionEnum::CancelacionPedido);
             }
 
             $pedido->update(['estado' => EstadoPedidoEnum::Cancelado]);
+
+            ActivityLogService::log('Cancelación de pedido', 'Pedidos', ['pedido_id' => $pedido->id, 'folio' => $pedido->folio]);
         });
 
         return redirect()->route('pedidos.index')->with('success', 'Pedido cancelado y stock liberado.');
