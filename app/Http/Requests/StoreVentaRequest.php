@@ -40,6 +40,30 @@ class StoreVentaRequest extends FormRequest
         ];
     }
 
+    /**
+     * Normaliza entradas para reducir errores de formato y evitar datos vacíos.
+     */
+    protected function prepareForValidation(): void
+    {
+        $pagos = collect((array) $this->input('pagos', []))
+            ->map(function (array $pago): array {
+                return [
+                    'metodo_pago' => $pago['metodo_pago'] ?? null,
+                    'monto' => $pago['monto'] ?? null,
+                    'referencia' => isset($pago['referencia']) ? trim((string) $pago['referencia']) : null,
+                ];
+            })
+            ->values()
+            ->all();
+
+        $this->merge([
+            'pagos' => $pagos,
+            'arrayidproducto' => array_values((array) $this->input('arrayidproducto', [])),
+            'arraycantidad' => array_values((array) $this->input('arraycantidad', [])),
+            'arrayprecioventa' => array_values((array) $this->input('arrayprecioventa', [])),
+        ]);
+    }
+
     public function withValidator(Validator $validator): void
     {
         $validator->after(function (Validator $validator): void {
@@ -56,7 +80,7 @@ class StoreVentaRequest extends FormRequest
 
             $pagos = $this->input('pagos', []);
             $totalVenta = (float) $this->input('total', 0);
-            $sumaPagos = collect($pagos)->sum(fn ($pago) => (float) ($pago['monto'] ?? 0));
+            $sumaPagos = collect($pagos)->sum(fn($pago) => (float) ($pago['monto'] ?? 0));
 
             if (abs($sumaPagos - $totalVenta) > 0.01) {
                 $validator->errors()->add('pagos', 'La suma de los pagos debe ser igual al total de la venta.');
@@ -110,6 +134,7 @@ class StoreVentaRequest extends FormRequest
 
         if (!$persona) {
             $validator->errors()->add('cliente_id', 'No se encontró la información fiscal del cliente para facturar.');
+
             return;
         }
 

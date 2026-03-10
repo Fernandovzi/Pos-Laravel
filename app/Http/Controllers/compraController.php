@@ -12,6 +12,7 @@ use App\Services\EmpresaService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -58,65 +59,54 @@ class compraController extends Controller
 
     public function store(StoreCompraRequest $request): RedirectResponse
     {
-        DB::beginTransaction();
         try {
-            $arrayProductoId = $request->array('arrayidproducto');
-            $arrayCantidad = $request->array('arraycantidad');
-            $arrayFechaVencimiento = $request->array('arrayfechavencimiento');
+            $compra = DB::transaction(function () use ($request): Compra {
+                $detalleCompra = $this->buildDetalleCompra($request);
+                $subtotal = $detalleCompra->sum(fn (array $detalle): float => $detalle['cantidad'] * $detalle['precio_compra']);
 
-            $productos = Producto::query()
-                ->whereIn('id', $arrayProductoId)
-                ->get(['id', 'costo', 'precio'])
-                ->keyBy('id');
-
-            $subtotal = 0;
-            $precios = [];
-            foreach ($arrayProductoId as $index => $productoId) {
-                $producto = $productos->get((int) $productoId);
-                $precioProducto = (float) ($producto?->costo ?? $producto?->precio ?? 0);
-
-                if ($precioProducto <= 0) {
-                    throw new \DomainException('El producto seleccionado no tiene costo/precio configurado.');
-                }
-
-                $precios[$index] = $precioProducto;
-                $subtotal += ((int) $arrayCantidad[$index]) * $precioProducto;
-            }
-
-            $compra = Compra::create([
-                'user_id' => Auth::id(),
-                'fecha_hora' => $request->string('fecha_hora'),
-                'subtotal' => $subtotal,
-                'impuesto' => 0,
-                'total' => $subtotal,
-            ]);
-
-            foreach ($arrayProductoId as $index => $productoId) {
-                $compra->productos()->syncWithoutDetaching([
-                    $productoId => [
-                        'cantidad' => $arrayCantidad[$index],
-                        'precio_compra' => $precios[$index],
-                        'fecha_vencimiento' => $arrayFechaVencimiento[$index] ?? null,
-                    ],
+                $compra = Compra::create([
+                    'user_id' => Auth::id(),
+                    'fecha_hora' => $request->validated('fecha_hora'),
+                    'subtotal' => $subtotal,
+                    'impuesto' => 0,
+                    'total' => $subtotal,
                 ]);
 
-                CreateCompraDetalleEvent::dispatch(
-                    $compra,
-                    $productoId,
-                    $arrayCantidad[$index],
-                    $precios[$index],
-                    $arrayFechaVencimiento[$index] ?? null
+                // Un único sync evita múltiples roundtrips al motor SQL.
+                $compra->productos()->syncWithoutDetaching(
+                    $detalleCompra
+                        ->mapWithKeys(fn (array $detalle): array => [
+                            $detalle['producto_id'] => [
+                                'cantidad' => $detalle['cantidad'],
+                                'precio_compra' => $detalle['precio_compra'],
+                                'fecha_vencimiento' => $detalle['fecha_vencimiento'],
+                            ],
+                        ])
+                        ->all()
                 );
-            }
 
-            DB::commit();
-            ActivityLogService::log('Registro de entrada por producción interna', 'Producción Interna', $request->all());
+                $detalleCompra->each(function (array $detalle) use ($compra): void {
+                    CreateCompraDetalleEvent::dispatch(
+                        $compra,
+                        $detalle['producto_id'],
+                        $detalle['cantidad'],
+                        $detalle['precio_compra'],
+                        $detalle['fecha_vencimiento']
+                    );
+                });
+
+                return $compra;
+            });
+
+            ActivityLogService::log('Registro de entrada por producción interna', 'Producción Interna', $request->validated());
 
             return redirect()->route('compras.index')->with('success', 'Entrada por producción interna registrada.');
         } catch (Throwable $e) {
-            DB::rollBack();
-            Log::error('Error al registrar producción interna', ['error' => $e->getMessage()]);
-            return redirect()->back()->withInput()->with('error', $e->getMessage() ?: 'Ups, algo falló');
+            Log::error('Error al registrar producción interna', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return redirect()->back()->withInput()->with('error', 'No fue posible registrar la entrada. Verifica los datos e inténtalo nuevamente.');
         }
     }
 
@@ -129,4 +119,37 @@ class compraController extends Controller
     public function edit(string $id) {}
     public function update(Request $request, string $id) {}
     public function destroy(string $id) {}
+
+    /**
+     * Construye el detalle de compra con precios resueltos desde catálogo.
+     */
+    private function buildDetalleCompra(StoreCompraRequest $request): Collection
+    {
+        $productoIds = $request->validated('arrayidproducto');
+        $cantidades = $request->validated('arraycantidad');
+        $fechasVencimiento = $request->validated('arrayfechavencimiento', []);
+
+        $productos = Producto::query()
+            ->whereIn('id', $productoIds)
+            ->get(['id', 'costo', 'precio'])
+            ->keyBy('id');
+
+        return collect($productoIds)
+            ->values()
+            ->map(function ($productoId, int $index) use ($productos, $cantidades, $fechasVencimiento): array {
+                $producto = $productos->get((int) $productoId);
+                $precioCompra = (float) ($producto?->costo ?? $producto?->precio ?? 0);
+
+                if ($precioCompra <= 0) {
+                    throw new \DomainException('El producto seleccionado no tiene costo/precio configurado.');
+                }
+
+                return [
+                    'producto_id' => (int) $productoId,
+                    'cantidad' => (int) $cantidades[$index],
+                    'precio_compra' => $precioCompra,
+                    'fecha_vencimiento' => $fechasVencimiento[$index] ?? null,
+                ];
+            });
+    }
 }
