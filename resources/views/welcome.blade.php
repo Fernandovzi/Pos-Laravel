@@ -5,9 +5,9 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Catálogo POS moderno para clientes con búsqueda, filtros y vista rápida." />
+    <meta name="description" content="Catálogo" />
     <meta name="author" content="BlueCrow" />
-    <title>BlueCrow | Catálogo POS</title>
+    <title>BlueCrow</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -117,8 +117,8 @@
     <nav class="navbar navbar-expand-md sticky-top" style="background-color: rgba(15,23,42,.88); border-bottom: 1px solid rgba(148,163,184,.16);">
         <div class="container-fluid px-4">
             <a class="navbar-brand text-light" href="{{ route('panel') }}">
-                <img src="{{ asset('assets/img/icon.png') }}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
-                BlueCrow POS
+                <img src="{{ asset('/favicon.ico') }}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
+                BlueCrow
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
                 <span class="navbar-toggler-icon"></span>
@@ -137,15 +137,14 @@
         <section class="hero p-4 p-lg-5 mb-4 mb-lg-5">
             <div class="row g-4 align-items-center">
                 <div class="col-lg-8">
+                    <h1 class="display-6 fw-bold mb-2">Maleri</h1>
                     <span class="badge rounded-pill text-bg-info-subtle text-info border border-info-subtle mb-2">Catálogo para clientes</span>
-                    <h1 class="display-6 fw-bold mb-2">Encuentra y vende más rápido</h1>
-                    <p class="muted mb-0">Interfaz estilo e-commerce adaptada a POS: búsqueda instantánea, filtros por categoría, ordenamiento, vista rápida y paginación para catálogos extensos.</p>
+                    <p class="muted mb-0">Fine&Fashion Jewlery 🧿#maleri_joyeria</p>
                 </div>
                 <div class="col-lg-4">
                     <div class="featured-card">
-                        <p class="small text-uppercase text-info mb-2">Productos registrados</p>
+                        <p class="small text-uppercase text-info mb-2">Productos:</p>
                         <h2 class="mb-1">{{ $productos->count() }}</h2>
-                        <p class="muted small mb-0">Catálogo actualizado desde base de datos</p>
                     </div>
                 </div>
             </div>
@@ -155,7 +154,6 @@
             <section class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                     <h2 class="h4 mb-0">Productos destacados</h2>
-                    <span class="muted small">Selección automática de productos activos</span>
                 </div>
                 <div class="row g-3">
                     @foreach ($destacados as $item)
@@ -305,7 +303,7 @@
     </div>
 
     <footer class="text-center text-white mt-4">
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.25);">© {{ date('Y') }} Sistema de Ventas · Todos los derechos reservados</div>
+        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.25);">&copy;  BlueCrow {{ date('Y') }}</div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
