@@ -47,23 +47,21 @@ class roleController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required'
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name',
+            'permission' => 'required|array|min:1',
+            'permission.*' => 'integer|exists:permissions,id',
         ]);
 
         try {
-            DB::beginTransaction();
-            //Crear rol
-            $rol = Role::create(['name' => $request->name]);
-            //Asignar permisos
-            $rol->syncPermissions(array_map(fn($value) => (int)$value, $request->permission));
+            DB::transaction(function () use ($validated): void {
+                $rol = Role::create(['name' => $validated['name']]);
+                $rol->syncPermissions($validated['permission']);
+            });
 
-            DB::commit();
-            ActivityLogService::log('Creación de rol', 'Roles', $request->all());
+            ActivityLogService::log('Creación de rol', 'Roles', $validated);
             return redirect()->route('roles.index')->with('success', 'Rol registrado');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error('Error al crear el rol', ['error' => $e->getMessage()]);
             return redirect()->route('roles.index')->with('error', 'Ups, algo falló');
         }
@@ -91,23 +89,21 @@ class roleController extends Controller
      */
     public function update(Request $request, Role $role): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|unique:roles,name,' . $role->id,
-            'permission' => 'required'
+        $validated = $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name,' . $role->id,
+            'permission' => 'required|array|min:1',
+            'permission.*' => 'integer|exists:permissions,id',
         ]);
 
         try {
-            DB::beginTransaction();
-            //Actualizar rol
-            $role->update(['name' => $request->name]);
-            //Actualizar permisos
-            $role->syncPermissions(array_map(fn($value) => (int)$value, $request->permission));
+            DB::transaction(function () use ($validated, $role): void {
+                $role->update(['name' => $validated['name']]);
+                $role->syncPermissions($validated['permission']);
+            });
 
-            DB::commit();
-            ActivityLogService::log('Edición de rol', 'Roles', $request->all());
+            ActivityLogService::log('Edición de rol', 'Roles', $validated);
             return redirect()->route('roles.index')->with('success', 'rol editado');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error('Error al editar el rol', ['error' => $e->getMessage()]);
             return redirect()->route('roles.index')->with('error', 'Ups, algo falló');
         }

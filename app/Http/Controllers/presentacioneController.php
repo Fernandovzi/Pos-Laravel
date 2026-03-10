@@ -45,15 +45,15 @@ class presentacioneController extends Controller
     public function store(StoreCaracteristicaRequest $request): RedirectResponse
     {
         try {
-            DB::beginTransaction();
-            $caracteristica = Caracteristica::create($request->validated());
-            $caracteristica->presentacione()->create(['sigla' => $request->sigla]);
-            DB::commit();
+            DB::transaction(function () use ($request): void {
+                $caracteristica = Caracteristica::create($request->validated());
+                $caracteristica->presentacione()->create(['sigla' => $request->validated('sigla')]);
+            });
+
             ActivityLogService::log('Creación de presentación', 'Presentaciones', $request->validated());
 
             return redirect()->route('presentaciones.index')->with('success', 'Presentación registrada');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error("Error al crear la presentacion", ['error' => $e->getMessage()]);
             return redirect()->route('presentaciones.index')->with('error', 'Ups algo falló');
         }

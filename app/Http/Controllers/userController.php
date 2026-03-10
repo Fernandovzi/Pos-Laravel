@@ -9,9 +9,7 @@ use App\Models\User;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 use Throwable;
@@ -54,17 +52,19 @@ class userController extends Controller
      */
     public function store(StoreUserRequest $request): RedirectResponse
     {
-        DB::beginTransaction();
         try {
-            $request->merge(['password' =>  Hash::make($request->password)]);
-            $user = User::create($request->all());
-            $user->assignRole($request->role);
+            DB::transaction(function () use ($request): void {
+                $validated = $request->validated();
+                $role = $validated['role'];
+                unset($validated['role']);
 
-            DB::commit();
+                $user = User::create($validated);
+                $user->assignRole($role);
+            });
+
             ActivityLogService::log('Creación de usuario', 'Usuarios', $request->validated());
             return redirect()->route('users.index')->with('success', 'Usuario registrado');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error('Error al crear el usuario', ['error' => $e->getMessage()]);
             return redirect()->route('users.index')->with('error', 'Ups, algo falló');
         }
@@ -92,23 +92,24 @@ class userController extends Controller
      */
     public function update(UpdateUserRequest $request, User $user): RedirectResponse
     {
-        DB::beginTransaction();
         try {
+            DB::transaction(function () use ($request, $user): void {
+                $validated = $request->validated();
+                $role = $validated['role'];
+                unset($validated['role']);
 
-            /*Comprobar el password y aplicar el Hash*/
-            if (empty($request->password)) {
-                $request = Arr::except($request, array('password'));
-            } else {
-                $request->merge(['password' => Hash::make($request->password)]);
-            }
-            $user->update($request->all());
-            $user->syncRoles([$request->role]);
+                // Si no llega contraseña, no se sobrescribe el valor persistido.
+                if (blank($validated['password'] ?? null)) {
+                    unset($validated['password']);
+                }
 
-            DB::commit();
+                $user->update($validated);
+                $user->syncRoles([$role]);
+            });
+
             ActivityLogService::log('Edición de usuario', 'Usuarios', $request->validated());
             return redirect()->route('users.index')->with('success', 'Usuario editado');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error('Error al editar el usuario', ['error' => $e->getMessage()]);
             return redirect()->route('users.index')->with('error', 'Ups, algo falló');
         }
