@@ -54,16 +54,15 @@ class clienteController extends Controller
     public function store(StorePersonaRequest $request): RedirectResponse
     {
         try {
-            DB::beginTransaction();
-            $persona = Persona::create($request->validated());
-            $persona->cliente()->create([]);
-            DB::commit();
+            DB::transaction(function () use ($request): void {
+                $persona = Persona::create($request->validated());
+                $persona->cliente()->create([]);
+            });
 
             ActivityLogService::log('Creacion de cliente', 'Clientes', $request->validated());
 
             return redirect()->route('clientes.index')->with('success', 'Cliente registrado');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error('Error al crear al cliente', ['error' => $e->getMessage()]);
 
             return redirect()->route('clientes.index')->with('error', 'Ups, algo falló');

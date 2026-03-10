@@ -49,25 +49,25 @@ class InventarioControlller extends Controller
      */
     public function store(StoreInventarioRequest $request, Kardex $kardex): RedirectResponse
     {
-        DB::beginTransaction();
         try {
-            $inventarioData = $request->validated();
-            $producto = Producto::findOrFail($inventarioData['producto_id']);
+            $kardexData = DB::transaction(function () use ($request, $kardex): array {
+                $inventarioData = $request->validated();
+                $producto = Producto::findOrFail($inventarioData['producto_id']);
 
-            $kardexData = [
-                ...$inventarioData,
-                'costo_unitario' => $producto->costo,
-            ];
+                $kardexData = [
+                    ...$inventarioData,
+                    'costo_unitario' => $producto->costo,
+                ];
 
-            $kardex->crearRegistro($kardexData, TipoTransaccionEnum::Apertura);
+                $kardex->crearRegistro($kardexData, TipoTransaccionEnum::Apertura);
+                Inventario::create($inventarioData);
 
-            Inventario::create($inventarioData);
-            DB::commit();
+                return $kardexData;
+            });
+
             ActivityLogService::log('Inicialiación de producto', 'Productos', $kardexData);
             return redirect()->route('productos.index')->with('success', 'Producto inicializado');
         } catch (Throwable $e) {
-            
-            DB::rollBack();
             Log::error('Error al inicializar el producto', ['error' => $e->getMessage()]);
             return redirect()->route('productos.index')->with('error', 'Ups, algo falló');
         }

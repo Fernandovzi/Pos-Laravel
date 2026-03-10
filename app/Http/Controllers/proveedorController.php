@@ -54,17 +54,15 @@ class proveedorController extends Controller
     public function store(StorePersonaRequest $request): RedirectResponse
     {
         try {
-            DB::beginTransaction();
-            $persona = Persona::create($request->validated());
-            $persona->proveedore()->create([]);
-            DB::commit();
+            DB::transaction(function () use ($request): void {
+                $persona = Persona::create($request->validated());
+                $persona->proveedore()->create([]);
+            });
 
             ActivityLogService::log('Creacion de proveedor', 'Proveedores', $request->validated());
 
             return redirect()->route('proveedores.index')->with('success', 'Proveedor registrado');
         } catch (Throwable $e) {
-            DB::rollBack();
-
             Log::error('Error al crear al proveedor', ['error' => $e->getMessage()]);
 
             return redirect()->route('proveedores.index')->with('error', 'Ups, algo falló');

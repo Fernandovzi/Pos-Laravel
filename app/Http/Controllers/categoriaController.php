@@ -47,15 +47,14 @@ class categoriaController extends Controller
     public function store(StoreCaracteristicaRequest $request): RedirectResponse
     {
         try {
-            DB::beginTransaction();
-            $caracteristica = Caracteristica::create($request->validated());
-            $caracteristica->categoria()->create([]);
-            DB::commit();
+            DB::transaction(function () use ($request): void {
+                $caracteristica = Caracteristica::create($request->validated());
+                $caracteristica->categoria()->create([]);
+            });
 
             ActivityLogService::log('Creación de categoría', 'Categorías', $request->validated());
             return redirect()->route('categorias.index')->with('success', 'Categoría registrada');
         } catch (Throwable $e) {
-            DB::rollBack();
             Log::error("Error al crear la categoría", ['error' => $e->getMessage()]);
             return redirect()->route('categorias.index')->with('error', 'Ups, algo falló');
         }
