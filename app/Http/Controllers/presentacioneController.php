@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCaracteristicaRequest;
+use App\Http\Requests\StorePresentacioneRequest;
 use App\Http\Requests\UpdatePresentacioneRequest;
 use App\Models\Caracteristica;
 use App\Models\Presentacione;
@@ -42,7 +42,7 @@ class presentacioneController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCaracteristicaRequest $request): RedirectResponse
+    public function store(StorePresentacioneRequest $request): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request): void {
