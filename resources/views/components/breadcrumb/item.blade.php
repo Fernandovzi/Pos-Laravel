@@ -4,9 +4,9 @@
 'content'
 ])
 
-<li {{ $attributes->merge(['class' => 'breadcrumb-item ' . ($active ? 'active' : '')]) }}>
+<li {{ $attributes->merge(['class' => 'breadcrumb-item ' . ($active ? 'active' : '')]) }} @if($active) aria-current="page" @endif>
     @if ($href)
-    <a href="{{ $href }}">
+    <a href="{{ $href }}" class="breadcrumb-link">
         {{ $content }}
     </a>
     @else

@@ -1,3 +1,5 @@
-<ol class="breadcrumb mb-4">
-    {{$slot}}
-</ol>
+<nav aria-label="breadcrumb" class="page-breadcrumb">
+    <ol class="breadcrumb mb-0">
+        {{$slot}}
+    </ol>
+</nav>
