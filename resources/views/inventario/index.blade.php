@@ -11,7 +11,7 @@
 
 @section('content')
 
-<div class="container-fluid px-4">
+<div class="container-fluid px-4 page-shell">
     <h1 class="mt-4 text-center">Inventario</h1>
 
     <x-breadcrumb.template>

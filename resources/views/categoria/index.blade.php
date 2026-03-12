@@ -12,8 +12,10 @@
 
 @section('content')
 
-<div class="container-fluid px-4">
-    <h1 class="mt-4 text-center">Categorías</h1>
+<div class="container-fluid px-4 page-shell">
+    <div class="page-heading">
+        <h1 class="page-title">Categorías</h1>
+    </div>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
@@ -21,20 +23,20 @@
     </x-breadcrumb.template>
 
     @can('crear-categoria')
-    <div class="mb-4">
+    <div class="page-toolbar mb-4">
         <a href="{{route('categorias.create')}}">
-            <button type="button" class="btn btn-primary">Añadir nuevo registro</button>
+            <button type="button" class="btn btn-primary btn-ui"><i class="fa-solid fa-plus me-2"></i>Añadir nuevo registro</button>
         </a>
     </div>
     @endcan
 
-    <div class="card">
+    <div class="card main-card">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             Tabla categorías
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6 align-middle">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -65,10 +67,10 @@
                                             <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
                                         </svg>
                                     </button>
-                                    <ul class="dropdown-menu text-bg-light" style="font-size: small;">
+                                    <ul class="dropdown-menu text-bg-light">
                                         <!-----Editar categoría--->
                                         @can('editar-categoria')
-                                        <li><a class="dropdown-item" href="{{route('categorias.edit',['categoria'=>$categoria])}}">Editar</a></li>
+                                        <li><a class="dropdown-item" href="{{route('categorias.edit',['categoria'=>$categoria])}}"><i class="fa-regular fa-pen-to-square me-2"></i>Editar</a></li>
                                         @endcan
                                     </ul>
                                 </div>
@@ -111,11 +113,11 @@
                                     {{ $categoria->caracteristica->estado == 1 ? '¿Seguro que quieres eliminar la categoría?' : '¿Seguro que quieres restaurar la categoría?' }}
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-secondary btn-ui" data-bs-dismiss="modal">Cancelar</button>
                                     <form action="{{ route('categorias.destroy',['categoria'=>$categoria->id]) }}" method="post">
                                         @method('DELETE')
                                         @csrf
-                                        <button type="submit" class="btn btn-danger">Confirmar</button>
+                                        <button type="submit" class="btn btn-danger btn-ui"><i class="fa-regular fa-circle-check me-2"></i>Confirmar</button>
                                     </form>
                                 </div>
                             </div>

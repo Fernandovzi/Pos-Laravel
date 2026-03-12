@@ -4,7 +4,7 @@
 'patch' => false,
 'file' => false
 ])
-<div class="card text-bg-light">
+<div class="card form-card">
     <form action="{{ $action }}" method="{{ $method }}" @if($file) enctype="multipart/form-data" @endif>
 
         @if ($patch)
@@ -19,11 +19,11 @@
         </div>
         @endif
 
-        <div class="card-body">
+        <div class="card-body form-card-body">
             {{$slot}}
         </div>
 
-        <div class="card-footer text-center">
+        <div class="card-footer form-card-footer">
             {{$footer}}
         </div>
 
