@@ -11711,3 +11711,42 @@ textarea.form-control {
 .datatable-pagination a {
     border-radius: 8px;
 }
+
+.page-shell > * {
+    margin-bottom: 0;
+}
+
+.page-shell .card + .card,
+.page-shell .row + .card,
+.page-shell .card + .row {
+    margin-top: 1rem;
+}
+
+.page-shell .card .card-body {
+    padding: 1.25rem;
+}
+
+.page-shell .card .card-header + .card-body {
+    padding-top: 1rem;
+}
+
+.page-shell .table-responsive,
+.page-shell .datatable-container {
+    margin-top: .25rem;
+}
+
+@media (max-width: 768px) {
+    .page-shell {
+        gap: .75rem;
+    }
+
+    .form-card-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .form-card-footer .btn,
+    .page-toolbar .btn {
+        width: 100%;
+    }
+}

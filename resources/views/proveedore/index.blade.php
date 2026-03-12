@@ -12,7 +12,7 @@
 
 @section('content')
 
-<div class="container-fluid px-4">
+<div class="container-fluid px-4 page-shell">
     <h1 class="mt-4 text-center">Proveedores</h1>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>

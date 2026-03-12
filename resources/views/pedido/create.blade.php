@@ -3,7 +3,7 @@
 @section('title','Crear pedido')
 
 @section('content')
-<div class="container-fluid px-4">
+<div class="container-fluid px-4 page-shell">
     <h1 class="mt-4 text-center">Nuevo pedido</h1>
     <form action="{{ route('pedidos.store') }}" method="POST">
         @csrf
