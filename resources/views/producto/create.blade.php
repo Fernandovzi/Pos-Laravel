@@ -168,9 +168,6 @@
                                 <small class="text-danger">{{ '*'.$message }}</small>
                                 @enderror
                             </div>
-                            <!----Separador----->
-                            <d class="vr"></d>
-
                         </div>
                     </div>
                     <div class="col-md-6">
