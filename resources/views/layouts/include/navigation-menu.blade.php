@@ -99,7 +99,7 @@
                 </x-nav.link-collapsed>
 
                 @hasrole('administrador')
-                <x-nav.heading>Otros</x-nav.heading>
+                <x-nav.heading>Datos de la empresa</x-nav.heading>
                 @endhasrole
 
                 @can('ver-empresa')
