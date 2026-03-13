@@ -69,8 +69,8 @@
 
             reader.onload = function(e) {
                 imagenPreview.src = e.target.result;
-                imagenPreview.style.display = 'block';
-                imagenDefault.style.display = 'none';
+                imagenPreview.classList.remove('is-hidden');
+                imagenDefault.classList.add('is-hidden');
             }
             reader.readAsDataURL(this.files[0]);
         }
