@@ -25,7 +25,7 @@
         <x-breadcrumb.item active='true' content="Nueva venta" />
     </x-breadcrumb.template>
 
-    <form action="{{ route('ventas.store') }}" method="post">
+    <form action="{{ route('ventas.store') }}" method="post" target="_blank">
         @csrf
 
         <div class="card sale-card mb-3">
