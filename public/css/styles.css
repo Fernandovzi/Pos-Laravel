@@ -11712,6 +11712,48 @@ textarea.form-control {
     border-radius: 8px;
 }
 
+.datatable-wrapper .datatable-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .65rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.datatable-wrapper .datatable-search .datatable-input {
+    min-width: 220px;
+    background: #fff;
+}
+
+.btn-datatable,
+.action-icon-btn {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.table-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+.dropdown-menu-sm {
+    font-size: .84rem;
+}
+
+.notifications-menu {
+    min-width: 300px;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
 .page-shell > * {
     margin-bottom: 0;
 }
