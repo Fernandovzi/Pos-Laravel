@@ -4,9 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <div class="page-heading">
-    <h1 class="page-title">Editar Proveedor</h1>
-</div>
+    <x-ui.page-header title="Editar Proveedor" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('proveedores.index')}}">Proveedores</a></li>

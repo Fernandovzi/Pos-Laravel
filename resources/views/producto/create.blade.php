@@ -12,9 +12,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <div class="page-heading">
-    <h1 class="page-title">Crear Producto</h1>
-</div>
+    <x-ui.page-header title="Crear Producto" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('productos.index')}}">Productos</a></li>

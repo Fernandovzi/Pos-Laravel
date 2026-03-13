@@ -8,9 +8,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <div class="page-heading">
-    <h1 class="page-title">Crear Rol</h1>
-</div>
+    <x-ui.page-header title="Crear Rol" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('roles.index')}}">Roles</a></li>
