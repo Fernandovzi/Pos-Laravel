@@ -4,13 +4,12 @@ namespace App\Models;
 
 use App\Enums\EstadoPedidoEnum;
 use App\Observers\PedidoObserver;
-use App\Models\Proveedore;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(PedidoObserver::class)]
 class Pedido extends Model
@@ -21,20 +20,29 @@ class Pedido extends Model
 
     protected $casts = [
         'estado' => EstadoPedidoEnum::class,
-        'fecha_apartado' => 'datetime',
-        'fecha_entrega_estimada' => 'datetime',
     ];
 
     /**
-     * Genera el folio incremental diario para pedidos.
+     * Genera el folio incremental para pedidos con prefijo P.
      */
     public static function generarFolio(): string
     {
-        $prefijo = 'PED-' . now()->format('Ymd');
-        $ultimo = static::query()->where('folio', 'like', $prefijo . '-%')->latest('id')->first();
-        $secuencia = $ultimo ? ((int) substr($ultimo->folio, -4)) + 1 : 1;
+        return DB::transaction(function () {
+            $ultimoConsecutivo = static::query()
+                ->lockForUpdate()
+                ->where('folio', 'like', 'P%')
+                ->selectRaw('MAX(CAST(SUBSTRING(folio, 2) AS UNSIGNED)) as consecutivo')
+                ->value('consecutivo');
 
-        return sprintf('%s-%04d', $prefijo, $secuencia);
+            $nuevoConsecutivo = ($ultimoConsecutivo ?? 0) + 1;
+
+            return 'P' . str_pad((string) $nuevoConsecutivo, 5, '0', STR_PAD_LEFT);
+        });
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function cliente(): BelongsTo
@@ -44,23 +52,13 @@ class Pedido extends Model
 
     public function proveedore(): BelongsTo
     {
-        return $this->belongsTo(Proveedore::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Proveedore::class, 'proveedore_id');
     }
 
     public function productos(): BelongsToMany
     {
         return $this->belongsToMany(Producto::class)
-            ->withPivot('cantidad', 'precio')
-            ->withTimestamps();
-    }
-
-    public function getFechaFormatAttribute(): string
-    {
-        return Carbon::parse($this->fecha_apartado)->format('d/m/Y H:i');
+            ->withTimestamps()
+            ->withPivot('cantidad', 'precio');
     }
 }

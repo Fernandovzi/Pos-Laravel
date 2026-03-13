@@ -20,7 +20,7 @@ class VentaObsever
 
         $venta->user_id = Auth::id();
         $venta->caja_id = $caja->id;
-        $venta->numero_comprobante = $venta->generarNumeroVenta($caja->id, $tipoComprobante);
+        $venta->numero_comprobante = $venta->generarNumeroVenta($tipoComprobante);
         $venta->fecha_hora = Carbon::now()->toDateTimeString();
     }
 
