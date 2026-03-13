@@ -15,27 +15,18 @@
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Categorías" />
 
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item active='true' content="Categorías" />
-    </x-breadcrumb.template>
+    <x-ui.breadcrumbs :items="[['href' => route('panel'), 'label' => 'Inicio'], ['label' => 'Categorías', 'active' => true]]" />
 
     @can('crear-categoria')
     <div class="page-toolbar mb-4">
         <a href="{{route('categorias.create')}}">
-            <button type="button" class="btn btn-primary btn-ui"><i class="fa-solid fa-plus me-2"></i>Añadir nuevo registro</button>
+            <x-ui.button variant="primary" icon="fa-solid fa-plus">Añadir nuevo registro</x-ui.button>
         </a>
     </div>
     @endcan
 
-    <div class="card main-card">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Tabla categorías
-        </div>
-        <div class="card-body">
-            <table id="datatablesSimple" class="table table-striped fs-6 align-middle">
-                <thead>
+    <x-ui.table title="Tabla categorías" id="datatablesSimple">
+<thead>
                     <tr>
                         <th>Nombre</th>
                         <th>Descripción</th>
@@ -124,9 +115,7 @@
                     @endforeach
                 </tbody>
             </table>
-
-        </div>
-    </div>
+</x-ui.table>
 
 </div>
 @endsection
