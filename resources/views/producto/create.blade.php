@@ -177,10 +177,9 @@
                             src="{{ asset('assets/img/maleri.png') }}"
                             alt="Imagen por defecto">
                         <img id="img-preview"
-                            class="img-fluid img-thumbnail img-formulario"
+                            class="img-fluid img-thumbnail img-formulario is-hidden"
                             src=""
-                            alt="Ha cargado un archivo no compatible"
-                            style="display: none;">
+                            alt="Ha cargado un archivo no compatible">
                     </div>
                 </div>
                 <div class="card-footer text-center">
@@ -206,8 +205,8 @@
 
             reader.onload = function(e) {
                 imagenPreview.src = e.target.result;
-                imagenPreview.style.display = 'block';
-                imagenDefault.style.display = 'none';
+                imagenPreview.classList.remove('is-hidden');
+                imagenDefault.classList.add('is-hidden');
             }
             reader.readAsDataURL(this.files[0]);
         }

@@ -11712,6 +11712,111 @@ textarea.form-control {
     border-radius: 8px;
 }
 
+.datatable-wrapper .datatable-top {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .65rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.datatable-wrapper .datatable-search .datatable-input {
+    min-width: 220px;
+    background: #fff;
+}
+
+.btn-datatable,
+.action-icon-btn {
+    width: 36px;
+    height: 36px;
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.table-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+}
+
+.dropdown-menu-sm {
+    font-size: .84rem;
+}
+
+.notifications-menu {
+    min-width: 300px;
+}
+
+.is-hidden {
+    display: none !important;
+}
+
+
+
+.table tbody td,
+.table tbody th {
+    vertical-align: middle;
+}
+
+.table td.text-end,
+.table th.text-end {
+    text-align: right;
+}
+
+.btn:disabled,
+.btn.disabled {
+    opacity: .6;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+.btn-danger {
+    background-color: #ef4444;
+    border-color: #ef4444;
+}
+
+.btn-danger:hover,
+.btn-danger:focus,
+.btn-danger:active {
+    background-color: #dc2626 !important;
+    border-color: #dc2626 !important;
+}
+
+.page-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+}
+
+.page-toolbar .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+}
+
+.login-error-message {
+    color: #dc2626;
+    font-size: 12px;
+}
+
+.catalog-topbar {
+    background-color: rgba(15, 23, 42, .88);
+    border-bottom: 1px solid rgba(148, 163, 184, .16);
+}
+
+.catalog-featured-thumb {
+    object-fit: cover;
+}
+
+.catalog-footer {
+    background-color: rgba(0, 0, 0, 0.25);
+}
 .page-shell > * {
     margin-bottom: 0;
 }
