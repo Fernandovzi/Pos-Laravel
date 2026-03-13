@@ -13,7 +13,9 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Empleados</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Empleados</h1>
+</div>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
@@ -21,9 +23,9 @@
     </x-breadcrumb.template>
 
     @can('crear-empleado')
-    <div class="mb-4">
+    <div class="page-toolbar mb-4">
         <a href="{{route('empleados.create')}}">
-            <button type="button" class="btn btn-primary">Añadir nuevo registro</button>
+            <button type="button" class="btn btn-primary btn-ui">Añadir nuevo registro</button>
         </a>
     </div>
     @endcan

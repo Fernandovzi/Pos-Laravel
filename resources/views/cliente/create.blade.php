@@ -8,7 +8,9 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Crear Cliente</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Crear Cliente</h1>
+</div>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('clientes.index')}}">Clientes</a></li>

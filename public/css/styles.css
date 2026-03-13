@@ -11941,3 +11941,71 @@ textarea.form-control {
         width: 100%;
     }
 }
+
+
+/* Cross-module form and table normalization */
+.page-shell .card > form .card-body,
+.page-shell form .card-body.text-bg-light {
+    background: var(--pos-surface);
+}
+
+.page-shell form .row > [class*="col-"] {
+    margin-bottom: .15rem;
+}
+
+.page-shell form label.form-label {
+    font-size: .84rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: .4rem;
+}
+
+.page-shell form .form-control,
+.page-shell form .form-select {
+    border-radius: 12px;
+    min-height: 44px;
+    border-color: var(--pos-border);
+}
+
+.page-shell form .card-footer,
+.page-shell form .form-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: .75rem;
+    padding: 1rem 1.4rem;
+    background: var(--pos-surface-soft);
+}
+
+.page-shell form .card-footer.text-center {
+    justify-content: flex-end !important;
+}
+
+.page-shell form .card-footer .btn {
+    min-width: 126px;
+}
+
+.page-shell .btn-group .btn {
+    min-height: 38px;
+    border-radius: 10px;
+}
+
+.page-shell .table > :not(caption) > * > * {
+    padding: .72rem .75rem;
+}
+
+.page-shell .table td:last-child,
+.page-shell .table th:last-child {
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .page-shell form .card-footer,
+    .page-shell form .form-card-footer {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .page-shell form .card-footer .btn {
+        width: 100%;
+    }
+}

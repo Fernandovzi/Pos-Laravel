@@ -11,16 +11,18 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Presentaciones</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Presentaciones</h1>
+</div>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Presentaciones</li>
     </ol>
 
     @can('crear-presentacione')
-    <div class="mb-4">
+    <div class="page-toolbar mb-4">
         <a href="{{route('presentaciones.create')}}">
-            <button type="button" class="btn btn-primary">Añadir nuevo registro</button>
+            <button type="button" class="btn btn-primary btn-ui">Añadir nuevo registro</button>
         </a>
     </div>
     @endcan
