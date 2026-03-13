@@ -11,16 +11,16 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Presentaciones</h1>
+    <x-ui.page-header title="Presentaciones" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Presentaciones</li>
     </ol>
 
     @can('crear-presentacione')
-    <div class="mb-4">
+    <div class="page-toolbar mb-4">
         <a href="{{route('presentaciones.create')}}">
-            <button type="button" class="btn btn-primary">Añadir nuevo registro</button>
+            <button type="button" class="btn btn-primary btn-ui">Añadir nuevo registro</button>
         </a>
     </div>
     @endcan
@@ -65,7 +65,7 @@
                                             <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
                                         </svg>
                                     </button>
-                                    <ul class="dropdown-menu text-bg-light" style="font-size: small;">
+                                    <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
                                         <!-----Editar presentacione--->
                                         @can('editar-presentacione')
                                         <li><a class="dropdown-item" href="{{route('presentaciones.edit',['presentacione'=>$item])}}">Editar</a></li>

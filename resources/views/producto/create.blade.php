@@ -3,11 +3,6 @@
 @section('title','Crear Producto')
 
 @push('css')
-<style>
-    #descripcion {
-        resize: none;
-    }
-</style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 
@@ -17,7 +12,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Crear Producto</h1>
+    <x-ui.page-header title="Crear Producto" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('productos.index')}}">Productos</a></li>
@@ -177,10 +172,9 @@
                             src="{{ asset('assets/img/maleri.png') }}"
                             alt="Imagen por defecto">
                         <img id="img-preview"
-                            class="img-fluid img-thumbnail img-formulario"
+                            class="img-fluid img-thumbnail img-formulario is-hidden"
                             src=""
-                            alt="Ha cargado un archivo no compatible"
-                            style="display: none;">
+                            alt="Ha cargado un archivo no compatible">
                     </div>
                 </div>
                 <div class="card-footer text-center">
@@ -206,8 +200,8 @@
 
             reader.onload = function(e) {
                 imagenPreview.src = e.target.result;
-                imagenPreview.style.display = 'block';
-                imagenDefault.style.display = 'none';
+                imagenPreview.classList.remove('is-hidden');
+                imagenDefault.classList.add('is-hidden');
             }
             reader.readAsDataURL(this.files[0]);
         }

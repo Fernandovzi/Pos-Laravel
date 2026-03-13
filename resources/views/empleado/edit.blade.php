@@ -7,7 +7,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Crear Empleado</h1>
+    <x-ui.page-header title="Editar Empleado" />
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
@@ -47,7 +47,7 @@
 
                 <img src="" alt="Ha cargado un archivo no compatible"
                     id="img-preview"
-                    class="img-fluid img-thumbnail" style="display: none;">
+                    class="img-fluid img-thumbnail is-hidden">
             </div>
 
 
@@ -75,8 +75,8 @@
 
             reader.onload = function(e) {
                 imagenPreview.src = e.target.result;
-                imagenPreview.style.display = 'block';
-                imagenDefault.style.display = 'none';
+                imagenPreview.classList.remove('is-hidden');
+                imagenDefault.classList.add('is-hidden');
             }
             reader.readAsDataURL(this.files[0]);
         }

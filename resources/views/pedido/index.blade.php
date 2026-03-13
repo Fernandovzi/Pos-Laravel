@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4">Pedidos</h1>
+    <x-ui.page-header title="Pedidos" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Pedidos</li>

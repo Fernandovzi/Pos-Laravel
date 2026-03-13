@@ -13,7 +13,7 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Productos</h1>
+    <x-ui.page-header title="Productos" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Productos</li>
@@ -98,7 +98,7 @@
                                             <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
                                         </svg>
                                     </button>
-                                    <ul class="dropdown-menu text-bg-light" style="font-size: small;">
+                                    <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
                                         <!-----Editar Producto--->
                                         @can('editar-producto')
                                         <li><a class="dropdown-item" href="{{route('productos.edit',['producto' => $item])}}">

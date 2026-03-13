@@ -4,7 +4,8 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4">Pedido {{ $pedido->folio }}</h1>
+    <x-ui.page-header :title="'Pedido '.$pedido->folio" />
+
     <p><b>Proveedor:</b> {{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</p>
     <p><b>Persona que recoge:</b> {{ $pedido->persona_recojo }}</p>
     <p><b>Estado:</b> {{ $pedido->estado->value }}</p>

@@ -138,6 +138,14 @@
         }
 
         .qr {
+            display: block;
+        }
+
+        .qr-inline {
+            display: inline-block;
+        }
+
+        .qr {
             width: 120px;
             height: 120px;
             border: 1px solid #dbe2ea;
@@ -348,7 +356,7 @@
                 @if($qrSat)
                 <img src="{{ $qrSat }}" class="qr" alt="Código QR SAT">
                 @else
-                <div class="qr" style="display:inline-block;">QR SAT</div>
+                <div class="qr qr-inline">QR SAT</div>
                 @endif
             </div>
         </div>

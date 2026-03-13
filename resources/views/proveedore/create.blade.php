@@ -4,16 +4,11 @@
 
 @push('css')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-<style>
-    #box-razon-social {
-        display: none;
-    }
-</style>
 @endpush
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Crear Proveedor</h1>
+    <x-ui.page-header title="Crear Proveedor" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('proveedores.index')}}">Proveedor</a></li>
@@ -38,7 +33,7 @@
                         @enderror
                     </div>
 
-                    <div class="col-12" id="box-razon-social">
+                    <div class="col-12 field-toggle-hidden" id="box-razon-social">
                         <label id="label-fisica" for="razon_social" class="form-label">Nombres y apellidos:</label>
                         <label id="label-moral" for="razon_social" class="form-label">Nombre de la empresa:</label>
 

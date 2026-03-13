@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="container px-4 page-shell">
-    <h1 class="mt-4">Nuevo pedido</h1>
+    <x-ui.page-header title="Nuevo pedido" />
     <form action="{{ route('pedidos.store') }}" method="POST">
         @csrf
         <div class="row g-3">

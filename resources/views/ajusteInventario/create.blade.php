@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Crear ajuste de inventario</h1>
+    <x-ui.page-header title="Crear ajuste de inventario" />
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
