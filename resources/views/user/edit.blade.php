@@ -7,9 +7,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <div class="page-heading">
-    <h1 class="page-title">Editar Usuario</h1>
-</div>
+    <x-ui.page-header title="Editar Usuario" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('users.index')}}">Usuarios</a></li>

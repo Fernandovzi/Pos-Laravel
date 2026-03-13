@@ -4,9 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <div class="page-heading">
-        <h1 class="page-title">Crear Categoría</h1>
-    </div>
+    <x-ui.page-header title="Crear Categoría" />
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
