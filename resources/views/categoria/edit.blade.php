@@ -2,17 +2,13 @@
 
 @section('title','Editar categoría')
 
-@push('css')
-<style>
-    #descripcion {
-        resize: none;
-    }
-</style>
-@endpush
+
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Editar Categoría</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Editar Categoría</h1>
+</div>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />

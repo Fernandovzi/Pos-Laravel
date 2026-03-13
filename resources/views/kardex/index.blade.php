@@ -14,7 +14,9 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Kardex</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Kardex</h1>
+</div>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
@@ -52,7 +54,7 @@
             Tabla kardex del producto
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
                         <th>Fecha y Hora</th>

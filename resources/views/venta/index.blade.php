@@ -7,29 +7,26 @@
 @endpush
 @push('css')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    .row-not-space {
-        width: 110px;
-    }
-</style>
 @endpush
 
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Ventas</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Ventas</h1>
+</div>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Ventas</li>
     </ol>
 
     @can('crear-venta')
-    <div class="mb-4">
+    <div class="page-toolbar mb-4">
         <a href="{{route('ventas.create')}}">
-            <button type="button" class="btn btn-primary">Crear venta</button>
+            <button type="button" class="btn btn-primary btn-ui">Crear venta</button>
         </a>
          <a href="{{ route('export.excel-ventas-all') }}">
-            <button type="button" class="btn btn-success">Exportar en excel</button>
+            <button type="button" class="btn btn-success btn-ui">Exportar en excel</button>
         </a>
     </div>
     @endcan

@@ -13,7 +13,9 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Cajas</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Cajas</h1>
+</div>
 
     <x-breadcrumb.template>
         <x-breadcrumb.item :href="route('panel')" content="Inicio" />
@@ -21,9 +23,9 @@
     </x-breadcrumb.template>
 
     @can('aperturar-caja')
-    <div class="mb-4">
+    <div class="page-toolbar mb-4">
         <a href="{{route('cajas.create')}}">
-            <button type="button" class="btn btn-primary">Aperturar caja</button>
+            <button type="button" class="btn btn-primary btn-ui">Aperturar caja</button>
         </a>
     </div>
     @endcan
@@ -35,7 +37,7 @@
             Tabla cajas
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
                         <th>Nombre</th>

@@ -8,7 +8,9 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Editar Rol</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Editar Rol</h1>
+</div>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('roles.index')}}">Roles</a></li>

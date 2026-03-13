@@ -114,7 +114,7 @@
         $destacados = $productos->where('estado', 1)->take(3);
     @endphp
 
-    <nav class="navbar navbar-expand-md sticky-top" style="background-color: rgba(15,23,42,.88); border-bottom: 1px solid rgba(148,163,184,.16);">
+    <nav class="navbar navbar-expand-md sticky-top catalog-topbar">
         <div class="container-fluid px-4">
             <a class="navbar-brand text-light" href="{{ route('panel') }}">
                 <img src="{{ asset('/favicon.ico') }}" alt="Logo" width="30" height="30" class="d-inline-block align-text-top">
@@ -160,7 +160,7 @@
                         <div class="col-md-4">
                             <div class="featured-card h-100">
                                 <div class="d-flex align-items-center gap-3">
-                                    <img src="{{ $item->img_path ? asset($item->img_path) : asset('assets/img/maleri.png') }}" alt="{{ $item->nombre }}" width="72" height="72" class="rounded" style="object-fit:cover;">
+                                    <img src="{{ $item->img_path ? asset($item->img_path) : asset('assets/img/maleri.png') }}" alt="{{ $item->nombre }}" width="72" height="72" class="rounded catalog-featured-thumb">
                                     <div>
                                         <p class="mb-1 fw-semibold">{{ $item->nombre }}</p>
                                         <p class="small muted mb-1">{{ $item->categoria?->caracteristica?->nombre ?? 'Sin categoría' }}</p>
@@ -303,7 +303,7 @@
     </div>
 
     <footer class="text-center text-white mt-4">
-        <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.25);">&copy;  BlueCrow {{ date('Y') }}</div>
+        <div class="text-center p-3 catalog-footer">&copy;  BlueCrow {{ date('Y') }}</div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>

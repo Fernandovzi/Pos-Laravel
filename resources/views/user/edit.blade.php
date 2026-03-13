@@ -7,7 +7,9 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Editar Usuario</h1>
+    <div class="page-heading">
+    <h1 class="page-title">Editar Usuario</h1>
+</div>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('users.index')}}">Usuarios</a></li>

@@ -31,7 +31,7 @@
 
                 @if ($errors->any())
                 @foreach ($errors->all() as $item)
-                <div style="color:red; font-size:12px;">{{ $item }}</div>
+                <div class="login-error-message">{{ $item }}</div>
                 @endforeach
                 @endif
 
