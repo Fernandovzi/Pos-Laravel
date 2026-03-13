@@ -47,7 +47,7 @@
 
                 <img src="" alt="Ha cargado un archivo no compatible"
                     id="img-preview"
-                    class="img-fluid img-thumbnail" style="display: none;">
+                    class="img-fluid img-thumbnail is-hidden">
             </div>
 
 

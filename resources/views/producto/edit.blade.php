@@ -208,10 +208,9 @@
                             src="{{ $producto->img_path ? asset($producto->img_path) : asset('assets/img/maleri.png') }}"
                             alt="Imagen por defecto">
                         <img id="img-preview"
-                            class="img-fluid img-thumbnail img-formulario"
+                            class="img-fluid img-thumbnail img-formulario is-hidden"
                             src=""
-                            alt="Ha cargado un archivo no compatible"
-                            style="display: none;">
+                            alt="Ha cargado un archivo no compatible">
 
                     </div>
 
