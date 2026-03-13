@@ -2,9 +2,14 @@
 
 @section('title','Crear pedido')
 
+@push('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+@endpush
+
 @section('content')
-<div class="container-fluid px-4 page-shell">
-    <h1 class="mt-4 text-center">Nuevo pedido</h1>
+<div class="container px-4 page-shell">
+    <h1 class="mt-4">Nuevo pedido</h1>
     <form action="{{ route('pedidos.store') }}" method="POST">
         @csrf
         <div class="row g-3">
@@ -36,15 +41,10 @@
         <div class="row g-2 align-items-end" id="selector-producto">
             <div class="col-md-6">
                 <label class="form-label">Producto</label>
-                <div class="input-group mb-2">
-                    <input type="text" id="buscarProducto" class="form-control" placeholder="Escriba el nombre o código del producto...">
-                    <button type="button" class="btn btn-outline-primary" id="btnBuscarProducto">Buscar</button>
-                </div>
-                <select id="producto" class="form-select">
-                    <option value="">Seleccione</option>
+                <select id="producto" class="form-control selectpicker" data-live-search="true" title="Busque un producto aquí">
                     @foreach($productos as $producto)
                     <option value="{{ $producto->id }}" data-stock="{{ $producto->cantidad }}" data-precio="{{ $producto->precio }}" data-texto="{{ $producto->codigo }} - {{ $producto->nombre }} {{ $producto->sigla }}">
-                        {{ $producto->codigo }} - {{ $producto->nombre }} {{ $producto->sigla }} (Stock: {{ $producto->cantidad }})
+                        {{ $producto->codigo }} - {{ $producto->nombre }} {{ $producto->sigla }}
                     </option>
                     @endforeach
                 </select>
@@ -90,32 +90,12 @@
     </form>
 </div>
 
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
 const porcentajeImpuesto = Number(@json($empresa->porcentaje_impuesto ?? 0));
 
 document.getElementById('producto').addEventListener('change', actualizarStockProducto);
-document.getElementById('btnBuscarProducto').addEventListener('click', filtrarProductos);
-document.getElementById('buscarProducto').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        filtrarProductos();
-    }
-});
-
-function filtrarProductos() {
-    const texto = document.getElementById('buscarProducto').value.toLowerCase().trim();
-    const select = document.getElementById('producto');
-
-    [...select.options].forEach((option, index) => {
-        if (index === 0) {
-            option.hidden = false;
-            return;
-        }
-
-        const nombre = option.textContent.toLowerCase();
-        option.hidden = texto !== '' && !nombre.includes(texto);
-    });
-}
 
 function actualizarStockProducto() {
     const select = document.getElementById('producto');
@@ -166,4 +146,5 @@ function recalcularTotales() {
     document.getElementById('inputTotal').value = total.toFixed(2);
 }
 </script>
+@endpush
 @endsection
