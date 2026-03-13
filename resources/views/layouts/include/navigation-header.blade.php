@@ -23,7 +23,7 @@ $empresa = Empresa::first();
             <i class="fas fa-bell"></i>
             <span class="badge bg-danger rounded-pill">{{ Auth::user()->unreadNotifications->count() }}</span>
         </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown" style="min-width: 300px;">
+        <ul class="dropdown-menu dropdown-menu-end notifications-menu" aria-labelledby="notificationsDropdown">
             @forelse (Auth::user()->unreadNotifications->take(5) as $notification)
             <li>
                 <a href="#" class="dropdown-item">

@@ -2,13 +2,7 @@
 
 @section('title','Crear presentación')
 
-@push('css')
-<style>
-    #descripcion {
-        resize: none;
-    }
-</style>
-@endpush
+
 
 @section('content')
 <div class="container-fluid px-4 page-shell">

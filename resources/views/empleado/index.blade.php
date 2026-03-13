@@ -8,11 +8,6 @@
 
 @push('css')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    .img {
-        width: 80px;
-    }
-</style>
 @endpush
 
 @section('content')
@@ -39,7 +34,7 @@
             Tabla empleados
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
                         <th>Nombres y Apellidos</th>
@@ -59,7 +54,7 @@
                         </td>
                         <td>
                             @if ($item->img_path)
-                            <img class="img-thumbnail img rounded mx-auto d-block"
+                            <img class="img-thumbnail img module-image-sm rounded mx-auto d-block"
                                 src="{{ asset($item->img_path)}}"
                                 alt="{{$item->razon_social}}">
                             @else
@@ -76,7 +71,7 @@
                                             <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
                                         </svg>
                                     </button>
-                                    <ul class="dropdown-menu text-bg-light" style="font-size: small;">
+                                    <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
                                         <!-----Editar -->
                                         @can('editar-empleado')
                                         <li><a class="dropdown-item" href="{{route('empleados.edit',['empleado'=>$item])}}">Editar</a></li>

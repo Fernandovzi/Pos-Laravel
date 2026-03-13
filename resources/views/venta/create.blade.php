@@ -6,13 +6,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    .sale-card { border: 1px solid #e5e7eb; border-radius: 12px; }
-    .sale-card .card-header { background: #f8fafc; font-weight: 700; }
-    .sale-total-box { border: 1px solid #e5e7eb; border-radius: 12px; padding: .75rem; background: #fff; }
-    .sale-total-box .value { font-weight: 700; font-size: 1.1rem; }
-    .sale-help { font-size: .82rem; color: #6b7280; }
-</style>
 @endpush
 
 @section('content')
