@@ -8,11 +8,6 @@
 
 @push('css')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    .img {
-        width: 80px;
-    }
-</style>
 @endpush
 
 @section('content')
@@ -39,7 +34,7 @@
             Tabla empleados
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
                         <th>Nombres y Apellidos</th>
@@ -59,7 +54,7 @@
                         </td>
                         <td>
                             @if ($item->img_path)
-                            <img class="img-thumbnail img rounded mx-auto d-block"
+                            <img class="img-thumbnail img module-image-sm rounded mx-auto d-block"
                                 src="{{ asset($item->img_path)}}"
                                 alt="{{$item->razon_social}}">
                             @else

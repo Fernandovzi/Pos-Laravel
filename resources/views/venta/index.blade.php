@@ -7,11 +7,6 @@
 @endpush
 @push('css')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<style>
-    .row-not-space {
-        width: 110px;
-    }
-</style>
 @endpush
 
 @section('content')

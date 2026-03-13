@@ -52,7 +52,7 @@
             Tabla kardex del producto
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
                         <th>Fecha y Hora</th>

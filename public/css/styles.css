@@ -11817,6 +11817,92 @@ textarea.form-control {
 .catalog-footer {
     background-color: rgba(0, 0, 0, 0.25);
 }
+
+/* Legacy module harmonization */
+.page-shell > h1.mt-4 {
+    margin: 0;
+    font-size: clamp(1.4rem, 2vw, 1.9rem);
+    font-weight: 700;
+    color: #111827;
+}
+
+.page-shell > h1.mt-4.text-center {
+    text-align: left !important;
+}
+
+.page-shell > .breadcrumb.mb-4 {
+    margin: 0 !important;
+    padding: .7rem 1rem;
+    border: 1px solid var(--pos-border);
+    border-radius: 12px;
+    background: var(--pos-surface);
+    box-shadow: var(--pos-shadow);
+}
+
+.page-shell > .breadcrumb.mb-4 .breadcrumb-item a {
+    text-decoration: none;
+    color: var(--pos-primary);
+    font-weight: 500;
+}
+
+.page-shell > .mb-4 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem;
+}
+
+.page-shell > .mb-4 .btn {
+    min-width: 126px;
+}
+
+.page-shell .card {
+    overflow: hidden;
+}
+
+.page-shell table.table-striped,
+.page-shell table#datatablesSimple {
+    width: 100%;
+}
+
+.module-image-sm {
+    width: 80px;
+}
+
+.field-toggle-hidden {
+    display: none;
+}
+
+.row-not-space {
+    width: 110px;
+}
+
+.sale-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.sale-card .card-header {
+    background: #f8fafc;
+    font-weight: 700;
+}
+
+.sale-total-box {
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: .75rem;
+    background: #fff;
+}
+
+.sale-total-box .value {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.sale-help {
+    font-size: .82rem;
+    color: #6b7280;
+}
 .page-shell > * {
     margin-bottom: 0;
 }
