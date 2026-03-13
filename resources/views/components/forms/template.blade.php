@@ -4,19 +4,20 @@
 'patch' => false,
 'file' => false
 ])
-<div class="card form-card">
+
+<x-ui.card class="form-card" :padding="false">
     <form action="{{ $action }}" method="{{ $method }}" @if($file) enctype="multipart/form-data" @endif>
 
         @if ($patch)
-        @method('PATCH')
+            @method('PATCH')
         @endif
 
         @csrf
 
         @if (isset($header))
-        <div class="card-header">
-            {{$header}}
-        </div>
+            <div class="card-header">
+                {{$header}}
+            </div>
         @endif
 
         <div class="card-body form-card-body">
@@ -28,4 +29,4 @@
         </div>
 
     </form>
-</div>
+</x-ui.card>

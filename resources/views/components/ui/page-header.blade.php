@@ -1,9 +1,15 @@
 @props([
     'title',
+    'subtitle' => null,
 ])
 
 <div class="page-heading">
-    <h1 class="page-title">{{ $title }}</h1>
+    <div>
+        <h1 class="page-title">{{ $title }}</h1>
+        @if($subtitle)
+            <p class="page-subtitle">{{ $subtitle }}</p>
+        @endif
+    </div>
 
     @isset($actions)
         <div class="page-toolbar">
