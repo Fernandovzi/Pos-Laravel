@@ -5,7 +5,7 @@
 
                 <x-nav.heading>Inicio</x-nav.heading>
 
-                <x-nav.nav-link content='Panel'
+                <x-nav.nav-link content='Principal'
                     icon='fas fa-tachometer-alt'
                     :href="route('panel')" />
 
@@ -128,10 +128,6 @@
 
 
             </div>
-        </div>
-        <div class="sb-sidenav-footer">
-            <div class="small text-uppercase">Usuario activo</div>
-            <div class="fw-semibold">{{ auth()->user()->name }}</div>
         </div>
     </nav>
 </div>
