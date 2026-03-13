@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\DB;
 
 #[ObservedBy(VentaObsever::class)]
 class Venta extends Model
@@ -77,27 +78,20 @@ class Venta extends Model
     /**
      * Generar el número de venta
      */
-    public function generarNumeroVenta(int $cajaId, string $tipoComprobante): string
+    public function generarNumeroVenta(string $tipoComprobante): string
     {
-        // Determinar el prefijo según el tipo de comprobante
-        $prefijo = strtoupper(substr($tipoComprobante, 0, 1)); // "B" para Boleta, "F" para Factura
+        $prefijo = str_contains(strtoupper($tipoComprobante), 'FACTURA') ? 'F' : 'T';
 
-        // Obtener la última venta de la caja
-        $ultimaVenta = Venta::where('caja_id', $cajaId)
-            ->latest('id') // Ordenar por la más reciente
-            ->first();
+        return DB::transaction(function () use ($prefijo) {
+            $ultimoConsecutivo = self::query()
+                ->lockForUpdate()
+                ->where('numero_comprobante', 'like', $prefijo . '%')
+                ->selectRaw('MAX(CAST(SUBSTRING(numero_comprobante, 2) AS UNSIGNED)) as consecutivo')
+                ->value('consecutivo');
 
-        // Extraer la parte numérica del número de venta o comenzar desde 1
-        $ultimoNumero = $ultimaVenta
-            ? (int) substr($ultimaVenta->numero_comprobante, 7) // "0000001" -> 1
-            : 0;
+            $nuevoConsecutivo = ($ultimoConsecutivo ?? 0) + 1;
 
-        // Incrementar el número
-        $nuevoNumero = $ultimoNumero + 1;
-
-        // Formatear el número de venta
-        $numeroVenta = sprintf("%s%03d - %07d", $prefijo, $cajaId, $nuevoNumero);
-
-        return $numeroVenta;
+            return $prefijo . str_pad((string) $nuevoConsecutivo, 5, '0', STR_PAD_LEFT);
+        });
     }
 }
