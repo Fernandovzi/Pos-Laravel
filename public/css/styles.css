@@ -12009,3 +12009,126 @@ textarea.form-control {
         width: 100%;
     }
 }
+
+/* ===== BlueCrow SaaS Design System ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --ui-primary: #2563eb;
+  --ui-primary-hover: #1d4ed8;
+  --ui-secondary: #64748b;
+  --ui-success: #16a34a;
+  --ui-danger: #dc2626;
+  --ui-warning: #f59e0b;
+  --ui-bg: #f8fafc;
+  --ui-surface: #ffffff;
+  --ui-border: #e2e8f0;
+  --ui-text: #0f172a;
+  --ui-muted: #64748b;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 10px 30px rgba(15, 23, 42, 0.08);
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  font-family: 'Inter', 'Roboto', var(--bs-font-sans-serif);
+}
+
+body { background: var(--ui-bg); color: var(--ui-text); }
+
+.pos-main { padding: var(--space-6); }
+.page-shell { display: grid; gap: var(--space-4); }
+.page-heading { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-4); margin-bottom: var(--space-2); }
+.page-title { font-size: 1.75rem; font-weight: 700; margin: 0; letter-spacing: -0.02em; color: var(--ui-text); }
+.page-subtitle { margin: var(--space-1) 0 0; color: var(--ui-muted); }
+
+.ui-card,
+.card,
+.form-card {
+  border: 1px solid var(--ui-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm);
+  background: var(--ui-surface);
+}
+.card-header,
+.ui-card__header { background: #f8fafc !important; border-bottom: 1px solid var(--ui-border) !important; padding: var(--space-4) var(--space-6); font-weight: 600; }
+.card-body,
+.ui-card__body,
+.form-card-body { padding: var(--space-6); }
+.card-footer,
+.form-card-footer { background: #fff; border-top: 1px solid var(--ui-border); padding: var(--space-4) var(--space-6); display: flex; justify-content: flex-end; gap: var(--space-2); }
+
+.form-label-modern,
+.ui-field__label,
+.form-label { font-size: .875rem; font-weight: 600; color: #334155; margin-bottom: var(--space-2); }
+.form-field { margin-bottom: var(--space-4); }
+.form-control,
+.form-select,
+.ui-input,
+.ui-select {
+  border-radius: var(--radius-md) !important;
+  border-color: #cbd5e1 !important;
+  min-height: 42px;
+  padding: 10px 12px;
+}
+.form-control:focus,
+.form-select:focus,
+.ui-input:focus,
+.ui-select:focus {
+  border-color: #93c5fd !important;
+  box-shadow: 0 0 0 .25rem rgba(37, 99, 235, .15) !important;
+}
+
+.btn,
+.ui-btn {
+  border-radius: var(--radius-md) !important;
+  min-height: 40px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn-primary,.ui-btn--primary { background: var(--ui-primary); border-color: var(--ui-primary); }
+.btn-primary:hover,.ui-btn--primary:hover { background: var(--ui-primary-hover); border-color: var(--ui-primary-hover); }
+.btn-secondary,.ui-btn--secondary { background: var(--ui-secondary); border-color: var(--ui-secondary); }
+.btn-danger,.ui-btn--danger { background: var(--ui-danger); border-color: var(--ui-danger); }
+.btn-success,.ui-btn--success { background: var(--ui-success); border-color: var(--ui-success); }
+.btn:disabled,.ui-btn:disabled { opacity: .65; cursor: not-allowed; }
+
+.table.ui-table,
+.table {
+  --bs-table-striped-bg: #f8fafc;
+  --bs-table-hover-bg: #eff6ff;
+  margin-bottom: 0;
+}
+.table thead th { background: #f8fafc; color: #334155; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; border-bottom-width: 1px; }
+.table td,
+.table th { padding: .8rem .9rem; vertical-align: middle; }
+
+.sb-topnav { background: #0f172a !important; box-shadow: var(--shadow-sm); }
+.modern-sidenav { background: #111827 !important; }
+.sb-sidenav .nav-link { border-radius: 10px; margin: 2px 8px; }
+.sb-sidenav .nav-link:hover { background: rgba(148, 163, 184, .12); }
+
+.breadcrumb { margin-bottom: 0; }
+.ui-breadcrumbs { padding: var(--space-2) 0; }
+.breadcrumb-item + .breadcrumb-item::before { color: #94a3b8; }
+.breadcrumb-item a { text-decoration: none; color: var(--ui-secondary); }
+
+@media (max-width: 768px) {
+  .pos-main { padding: var(--space-4); }
+  .page-heading { flex-direction: column; }
+  .card-body,.form-card-body { padding: var(--space-4); }
+}

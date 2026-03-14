@@ -12,157 +12,143 @@
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Nueva venta" />
 
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item :href="route('ventas.index')" content="Ventas" />
-        <x-breadcrumb.item active='true' content="Nueva venta" />
-    </x-breadcrumb.template>
+    <x-ui.breadcrumbs :items="[
+        ['href' => route('panel'), 'label' => 'Inicio'],
+        ['href' => route('ventas.index'), 'label' => 'Ventas'],
+        ['label' => 'Nueva venta', 'active' => true]
+    ]" />
 
     <form action="{{ route('ventas.store') }}" method="post" target="_blank">
         @csrf
 
-        <div class="card sale-card mb-3">
-            <div class="card-header">1) Datos generales</div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-lg-6">
-                        <label class="form-label">Cliente</label>
-                        <select name="cliente_id" id="cliente_id" class="form-control selectpicker" data-live-search="true" title="Selecciona">
-                            @foreach ($clientes as $item)
-                            <option
-                                value="{{$item->id}}"
-                                data-rfc="{{$item->persona->rfc ?? ''}}"
-                                data-regimen="{{$item->persona->regimen_fiscal ?? ''}}"
-                                data-uso-cfdi="{{$item->persona->uso_cfdi ?? ''}}"
-                                data-cp-fiscal="{{$item->persona->codigo_postal_fiscal ?? ''}}"
-                            >
-                                {{$item->nombre_documento}}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-6">
-                        <label class="form-label">Comprobante</label>
-                        <select name="comprobante_id" id="comprobante_id" class="form-control selectpicker" title="Selecciona">
-                            @foreach ($comprobantes as $item)
-                            <option value="{{$item->id}}" data-nombre="{{$item->nombre}}">{{$item->nombre}}</option>
-                            @endforeach
-                        </select>
-                        <small class="sale-help">Si seleccionas Factura, se validará RFC, régimen fiscal, uso CFDI y código postal fiscal del cliente.</small>
-                    </div>
+        <x-ui.card title="1) Datos generales" class="sale-card">
+            <div class="row g-3">
+                <div class="col-lg-6">
+                    <label class="form-label">Cliente</label>
+                    <select name="cliente_id" id="cliente_id" class="form-control selectpicker" data-live-search="true" title="Selecciona">
+                        @foreach ($clientes as $item)
+                        <option
+                            value="{{$item->id}}"
+                            data-rfc="{{$item->persona->rfc ?? ''}}"
+                            data-regimen="{{$item->persona->regimen_fiscal ?? ''}}"
+                            data-uso-cfdi="{{$item->persona->uso_cfdi ?? ''}}"
+                            data-cp-fiscal="{{$item->persona->codigo_postal_fiscal ?? ''}}"
+                        >
+                            {{$item->nombre_documento}}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-lg-6">
+                    <label class="form-label">Comprobante</label>
+                    <select name="comprobante_id" id="comprobante_id" class="form-control selectpicker" title="Selecciona">
+                        @foreach ($comprobantes as $item)
+                        <option value="{{$item->id}}" data-nombre="{{$item->nombre}}">{{$item->nombre}}</option>
+                        @endforeach
+                    </select>
+                    <small class="sale-help">Si seleccionas Factura, se validará RFC, régimen fiscal, uso CFDI y código postal fiscal del cliente.</small>
                 </div>
             </div>
-        </div>
+        </x-ui.card>
 
-        <div class="card sale-card mb-3">
-            <div class="card-header">2) Productos</div>
-            <div class="card-body">
-                <div class="row g-3 align-items-end">
-                    <div class="col-lg-6">
-                        <label class="form-label">Producto</label>
-                        <select id="producto_id" class="form-control selectpicker" data-live-search="true" title="Busque un producto aquí">
-                            @foreach ($productos as $item)
-                            <option value="{{$item->id}}-{{$item->cantidad}}-{{$item->precio}}-{{$item->nombre}}-{{$item->sigla}}">
-                                {{'Código: '. $item->codigo.' - '. $item->nombre.' - '.$item->sigla}}
-                            </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">Stock</label>
-                        <input id="stock" disabled class="form-control" placeholder="Stock">
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">Precio</label>
-                        <input id="precio" disabled class="form-control" placeholder="Precio">
-                    </div>
-                    <div class="col-lg-2">
-                        <label class="form-label">Cantidad</label>
-                        <input id="cantidad" type="number" class="form-control" placeholder="Cantidad">
-                    </div>
-                    <div class="col-12 text-end">
-                        <button id="btn_agregar" class="btn btn-primary" type="button">Agregar producto</button>
-                    </div>
+        <x-ui.card title="2) Productos" class="sale-card">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-6">
+                    <label class="form-label">Producto</label>
+                    <select id="producto_id" class="form-control selectpicker" data-live-search="true" title="Busque un producto aquí">
+                        @foreach ($productos as $item)
+                        <option value="{{$item->id}}-{{$item->cantidad}}-{{$item->precio}}-{{$item->nombre}}-{{$item->sigla}}">
+                            {{'Código: '. $item->codigo.' - '. $item->nombre.' - '.$item->sigla}}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
-
-                <div class="table-responsive mt-3">
-                    <table class="table table-sm table-bordered align-middle" id="tabla_detalle">
-                        <thead class="table-light">
-                            <tr><th>Producto</th><th>Presentación</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th><th width="70"></th></tr>
-                        </thead>
-                        <tbody></tbody>
-                        <tfoot>
-                            <tr><th colspan="4" class="text-end">Subtotal</th><th id="sumas">0</th><th></th></tr>
-                            <tr><th colspan="4" class="text-end">Impuesto</th><th id="igv">0</th><th></th></tr>
-                            <tr><th colspan="4" class="text-end">Total</th><th id="total">0</th><th></th></tr>
-                        </tfoot>
-                    </table>
+                <div class="col-lg-2">
+                    <label class="form-label">Stock</label>
+                    <input id="stock" disabled class="form-control" placeholder="Stock">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label">Precio</label>
+                    <input id="precio" disabled class="form-control" placeholder="Precio">
+                </div>
+                <div class="col-lg-2">
+                    <label class="form-label">Cantidad</label>
+                    <input id="cantidad" type="number" class="form-control" placeholder="Cantidad">
+                </div>
+                <div class="col-12 text-end">
+                    <button id="btn_agregar" class="btn btn-primary" type="button">Agregar producto</button>
                 </div>
             </div>
-        </div>
+
+            <x-ui.table title="Detalle de productos" id="tabla_detalle">
+                <thead>
+                    <tr><th>Producto</th><th>Presentación</th><th class="text-end">Cantidad</th><th class="text-end">Precio</th><th class="text-end">Subtotal</th><th width="70"></th></tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr><th colspan="4" class="text-end">Subtotal</th><th class="text-end" id="sumas">0</th><th></th></tr>
+                    <tr><th colspan="4" class="text-end">Impuesto</th><th class="text-end" id="igv">0</th><th></th></tr>
+                    <tr><th colspan="4" class="text-end">Total</th><th class="text-end" id="total">0</th><th></th></tr>
+                </tfoot>
+            </x-ui.table>
+        </x-ui.card>
 
         <input type="hidden" name="subtotal" id="inputSubtotal" value="0">
         <input type="hidden" name="impuesto" id="inputImpuesto" value="0">
         <input type="hidden" name="total" id="inputTotal" value="0">
 
-        {{-- Mantener la lógica sin mostrar estos campos al usuario --}}
         <input type="hidden" name="metodo_pago" id="metodo_pago" value="">
         <input type="hidden" name="monto_recibido" id="monto_recibido" value="0">
         <input type="hidden" name="vuelto_entregado" id="vuelto" value="0">
 
-        <div class="card sale-card mb-3">
-            <div class="card-header">3) Pagos</div>
-            <div class="card-body">
-                <div class="row g-3 align-items-end">
-                    <div class="col-lg-4">
-                        <label class="form-label">Método de pago</label>
-                        <select id="pago_metodo" class="form-control selectpicker" title="Selecciona método">
-                            @foreach ($optionsMetodoPago as $item)
-                                @if ($item->value !== \App\Enums\MetodoPagoEnum::PagoMixto->value)
-                                <option value="{{$item->value}}">{{$item->label()}}</option>
-                                @endif
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-lg-5">
-                        <label class="form-label">Referencia / autorización (tarjeta o SPEI)</label>
-                        <input type="text" id="pago_referencia" class="form-control" placeholder="Ej: auth 12345 / folio SPEI">
-                    </div>
-                    <div class="col-lg-3">
-                        <label class="form-label">Monto</label>
-                        <input type="number" step="any" id="pago_monto" class="form-control">
-                    </div>
-                    <div class="col-12 text-end">
-                        <button id="btn_agregar_pago" type="button" class="btn btn-success">Agregar pago</button>
-                    </div>
+        <x-ui.card title="3) Pagos" class="sale-card">
+            <div class="row g-3 align-items-end">
+                <div class="col-lg-4">
+                    <label class="form-label">Método de pago</label>
+                    <select id="pago_metodo" class="form-control selectpicker" title="Selecciona método">
+                        @foreach ($optionsMetodoPago as $item)
+                            @if ($item->value !== \App\Enums\MetodoPagoEnum::PagoMixto->value)
+                            <option value="{{$item->value}}">{{$item->label()}}</option>
+                            @endif
+                        @endforeach
+                    </select>
                 </div>
-
-                <div class="table-responsive mt-3">
-                    <table class="table table-sm table-bordered align-middle" id="tabla_pagos">
-                        <thead class="table-light"><tr><th>Método</th><th width="160">Monto</th><th>Referencia</th><th width="70"></th></tr></thead>
-                        <tbody></tbody>
-                    </table>
+                <div class="col-lg-5">
+                    <label class="form-label">Referencia / autorización (tarjeta o SPEI)</label>
+                    <input type="text" id="pago_referencia" class="form-control" placeholder="Ej: auth 12345 / folio SPEI">
                 </div>
-
-                <div class="row g-3 mt-1">
-                    <div class="col-md-4"><div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div></div>
-                    <div class="col-md-4"><div class="sale-total-box">Pagado<br><span class="value" id="box_pagado">0.00</span></div></div>
-                    <div class="col-md-4"><div class="sale-total-box">Pendiente<br><span class="value" id="box_pendiente">0.00</span></div></div>
+                <div class="col-lg-3">
+                    <label class="form-label">Monto</label>
+                    <input type="number" step="any" id="pago_monto" class="form-control">
                 </div>
-
-                <div class="mt-3">
-                    <small class="sale-help">El monto se captura una sola vez por cada registro de pago. La suma de pagos debe coincidir con el total.</small>
+                <div class="col-12 text-end">
+                    <button id="btn_agregar_pago" type="button" class="btn btn-success">Agregar pago</button>
                 </div>
             </div>
-        </div>
+
+            <x-ui.table title="Pagos agregados" id="tabla_pagos">
+                <thead><tr><th>Método</th><th class="text-end" width="160">Monto</th><th>Referencia</th><th width="70"></th></tr></thead>
+                <tbody></tbody>
+            </x-ui.table>
+
+            <div class="row g-3 mt-1">
+                <div class="col-md-4"><div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div></div>
+                <div class="col-md-4"><div class="sale-total-box">Pagado<br><span class="value" id="box_pagado">0.00</span></div></div>
+                <div class="col-md-4"><div class="sale-total-box">Pendiente<br><span class="value" id="box_pendiente">0.00</span></div></div>
+            </div>
+
+            <div class="mt-3">
+                <small class="sale-help">El monto se captura una sola vez por cada registro de pago. La suma de pagos debe coincidir con el total.</small>
+            </div>
+        </x-ui.card>
 
         @if ($errors->any())
         <div class="alert alert-danger">{{ $errors->first() }}</div>
         @endif
 
         <div class="d-flex justify-content-end gap-2 mb-4">
-            <a href="{{ route('ventas.index') }}" class="btn btn-outline-secondary">Cancelar</a>
-            <button type="submit" id="guardar" class="btn btn-primary">Cobrar venta</button>
+            <a href="{{ route('ventas.index') }}"><x-ui.button variant="secondary" icon="fa-solid fa-xmark">Cancelar</x-ui.button></a>
+            <x-ui.button variant="primary" icon="fa-solid fa-cash-register" type="submit" id="guardar">Cobrar venta</x-ui.button>
         </div>
     </form>
 </div>
@@ -214,10 +200,10 @@ function agregarProducto() {
     const fila = `<tr id="fila${cont}">
         <td><input type="hidden" name="arrayidproducto[]" value="${idProducto}">${nameProducto}</td>
         <td>${presentacioneProducto}</td>
-        <td><input type="hidden" name="arraycantidad[]" value="${cantidad}">${cantidad}</td>
-        <td><input type="hidden" name="arrayprecioventa[]" value="${precioVenta}">${precioVenta}</td>
-        <td>${subtotal[cont]}</td>
-        <td><button class="btn btn-sm btn-outline-danger" type="button" onClick="eliminarProducto(${cont}, ${idProducto})">X</button></td>
+        <td class="text-end"><input type="hidden" name="arraycantidad[]" value="${cantidad}">${cantidad}</td>
+        <td class="text-end"><input type="hidden" name="arrayprecioventa[]" value="${precioVenta}">${precioVenta}</td>
+        <td class="text-end">${subtotal[cont]}</td>
+        <td><button class="btn btn-danger btn-sm" type="button" onClick="eliminarProducto(${cont}, ${idProducto})">X</button></td>
     </tr>`;
 
     $('#tabla_detalle tbody').append(fila);
@@ -269,9 +255,9 @@ function renderPagos() {
     pagos.forEach((pago, idx) => {
         tbody.append(`<tr>
             <td>${labels[pago.metodo_pago] || pago.metodo_pago}<input type="hidden" name="pagos[${idx}][metodo_pago]" value="${pago.metodo_pago}"></td>
-            <td>${Number(pago.monto).toFixed(2)}<input type="hidden" name="pagos[${idx}][monto]" value="${pago.monto}"></td>
+            <td class="text-end">${Number(pago.monto).toFixed(2)}<input type="hidden" name="pagos[${idx}][monto]" value="${pago.monto}"></td>
             <td>${pago.referencia || ''}<input type="hidden" name="pagos[${idx}][referencia]" value="${pago.referencia || ''}"></td>
-            <td><button type="button" class="btn btn-sm btn-outline-danger" onclick="eliminarPago(${idx})">X</button></td>
+            <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPago(${idx})">X</button></td>
         </tr>`);
     });
 
@@ -307,7 +293,6 @@ function sincronizarCamposOcultos() {
         .filter(p => p.metodo_pago === 'EFECTIVO')
         .reduce((acc, p) => acc + Number(p.monto), 0);
 
-    // Mantener lógica backend: campos requeridos aunque no visibles en la UI.
     $('#monto_recibido').val(round(sumaPagos));
     $('#vuelto').val(round(Math.max(0, efectivo - Math.min(efectivo, total))));
 }

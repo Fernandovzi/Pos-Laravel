@@ -5,48 +5,43 @@
 @section('content')
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Detalle de Producción Interna" />
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('compras.index') }}">Producción Interna</a></li>
-        <li class="breadcrumb-item active">Detalle</li>
-    </ol>
 
-    <div class="card mb-4">
-        <div class="card-header">Datos generales</div>
-        <div class="card-body">
-            <p><strong>Registro:</strong> #{{ $compra->id }}</p>
-            <p><strong>Usuario:</strong> {{ $compra->user->name }}</p>
-            <p><strong>Fecha y hora:</strong> {{ $compra->fecha }} {{ $compra->hora }}</p>
-            <p><strong>Total:</strong> {{ $compra->total }} {{ $empresa->moneda->simbolo }}</p>
-        </div>
-    </div>
+    <x-ui.breadcrumbs :items="[
+        ['href' => route('panel'), 'label' => 'Inicio'],
+        ['href' => route('compras.index'), 'label' => 'Producción Interna'],
+        ['label' => 'Detalle', 'active' => true]
+    ]" />
 
-    <div class="card mb-4">
-        <div class="card-header">Detalle de productos ingresados</div>
-        <div class="card-body table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Presentación</th>
-                        <th>Cantidad</th>
-                        <th>Costo unitario</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($compra->productos as $item)
-                    <tr>
-                        <td>{{ $item->nombre }}</td>
-                        <td>{{ $item->presentacione->sigla }}</td>
-                        <td>{{ $item->pivot->cantidad }}</td>
-                        <td>{{ $item->pivot->precio_compra }}</td>
-                        <td>{{ $item->pivot->cantidad * $item->pivot->precio_compra }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+    <x-ui.card title="Datos generales">
+        <div class="row g-3">
+            <div class="col-md-3"><strong>Registro:</strong> #{{ $compra->id }}</div>
+            <div class="col-md-3"><strong>Usuario:</strong> {{ $compra->user->name }}</div>
+            <div class="col-md-3"><strong>Fecha y hora:</strong> {{ $compra->fecha }} {{ $compra->hora }}</div>
+            <div class="col-md-3"><strong>Total:</strong> {{ $compra->total }} {{ $empresa->moneda->simbolo }}</div>
         </div>
-    </div>
+    </x-ui.card>
+
+    <x-ui.table title="Detalle de productos ingresados">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Presentación</th>
+                <th class="text-end">Cantidad</th>
+                <th class="text-end">Costo unitario</th>
+                <th class="text-end">Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($compra->productos as $item)
+            <tr>
+                <td>{{ $item->nombre }}</td>
+                <td>{{ $item->presentacione->sigla }}</td>
+                <td class="text-end">{{ $item->pivot->cantidad }}</td>
+                <td class="text-end">{{ $item->pivot->precio_compra }}</td>
+                <td class="text-end">{{ $item->pivot->cantidad * $item->pivot->precio_compra }}</td>
+            </tr>
+            @endforeach
+        </tbody>
+    </x-ui.table>
 </div>
 @endsection
