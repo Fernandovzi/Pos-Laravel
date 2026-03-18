@@ -74,7 +74,6 @@
         <div class="card-body">
 
             <table id="datatablesSimple" class="table table-striped fs-6">
-
                 <thead>
                     <tr>
                         <th>#</th>
@@ -87,17 +86,14 @@
                 </thead>
 
                 <tbody>
-
                     @forelse($compras as $item)
-
                     <tr>
-
                         <td>{{ $item->id }}</td>
-
-                        <td>{{ $item->fecha }} {{ $item->hora }}</td>
-
+                        <td>
+                            <p class="fw-semibold mb-1"><i class="fa-solid fa-calendar-days me-1"></i>{{ $item->fecha }}</p>
+                            <p class="text-muted mb-0"><i class="fa-solid fa-clock me-1"></i>{{ $item->hora }}</p>
+                        </td>
                         <td>{{ $item->user->name }}</td>
-
                         <td>
                             @foreach($item->productos as $producto)
                             <span class="badge bg-primary">
@@ -105,42 +101,38 @@
                             </span>
                             @endforeach
                         </td>
-
-                        <td class="text-end">
-                            {{ $item->total }}
-                        </td>
-
+                        <td class="text-end">{{ $item->total }}</td>
                         <td>
-
-                            <div class="d-flex justify-content-center">
-
-                                <a href="{{ route('compras.show', $item) }}">
-                                    <button class="btn btn-datatable btn-icon btn-transparent-dark"
-                                        title="Ver">
-
-                                        <i class="fa-solid fa-eye"></i>
-
+                            <div class="d-flex justify-content-around align-items-center">
+                                <div>
+                                    <button title="Opciones" class="btn btn-datatable btn-icon btn-transparent-dark me-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg class="svg-inline--fa fa-ellipsis-vertical" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-vertical" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
+                                            <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
+                                        </svg>
                                     </button>
-                                </a>
-
+                                    <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
+                                        <li><a class="dropdown-item" href="{{ route('compras.show', $item) }}">Ver detalle</a></li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <div class="vr"></div>
+                                </div>
+                                <div>
+                                    <a href="{{ route('compras.show', $item) }}" title="Ver" class="btn btn-datatable btn-icon btn-transparent-dark">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </a>
+                                </div>
                             </div>
-
                         </td>
-
                     </tr>
-
                     @empty
-
                     <tr>
                         <td colspan="6" class="text-center text-muted">
                             Sin registros
                         </td>
                     </tr>
-
                     @endforelse
-
                 </tbody>
-
             </table>
 
         </div>
@@ -148,3 +140,8 @@
     </div>
 </div>
 @endsection
+
+@push('js')
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+<script src="{{ asset('js/datatables-simple-demo.js') }}"></script>
+@endpush
