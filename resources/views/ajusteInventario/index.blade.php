@@ -16,8 +16,8 @@
     </x-breadcrumb.template>
 
     @can('crear-ajuste-inventario')
-    <div class="mb-3">
-        <a href="{{ route('ajustes-inventario.create') }}" class="btn btn-primary">Nuevo ajuste</a>
+    <div class="page-toolbar mb-4">
+        <a href="{{ route('ajustes-inventario.create') }}" class="btn btn-primary btn-ui">Nuevo ajuste</a>
     </div>
     @endcan
 

@@ -19,15 +19,17 @@
         <li class="breadcrumb-item active">Productos</li>
     </ol>
 
-    <div class="mb-4 d-flex flex-wrap gap-2">
+    <div class="page-toolbar mb-4">
         @can('crear-producto')
-        <a href="{{ route('productos.create') }}" class="btn btn-primary">
+        <a href="{{ route('productos.create') }}" class="btn btn-primary btn-ui">
             Añadir nuevo registro
         </a>
         @endcan
 
-        <a href="{{ route('productos.export.control-excel') }}" class="btn btn-success">
-            Exportar Excel de control
+
+
+        <a href="{{ route('productos.export.control-excel') }}">
+            <x-ui.button variant="success" icon="fa-solid fa-file-excel" class="text-white">Exportar Excel</x-ui.button>
         </a>
     </div>
 

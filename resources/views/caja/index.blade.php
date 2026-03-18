@@ -12,13 +12,13 @@
 
 @section('content')
 
+
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Cajas" />
-
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item active='true' content="Cajas" />
-    </x-breadcrumb.template>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Cajas</li>
+    </ol>
 
     @can('aperturar-caja')
     <div class="page-toolbar mb-4">
@@ -88,7 +88,7 @@
                                 {{$item->estado == 1 ? 'aperturada' : 'cerrada'}}</span>
                         </td>
                         @php
-                            $ventas = $item->movimientos->filter(fn($mov) => $mov->tipo->value === 'VENTA');
+                        $ventas = $item->movimientos->filter(fn($mov) => $mov->tipo->value === 'VENTA');
                         @endphp
                         <td>{{$ventas->where('metodo_pago.value', 'EFECTIVO')->sum('monto')}}</td>
                         <td>{{$ventas->where('metodo_pago.value', 'TARJETA_DEBITO')->sum('monto')}}</td>
@@ -99,7 +99,7 @@
                                 @can('ver-movimiento')
                                 <form action="{{route('movimientos.index')}}" method="get">
                                     <input type="hidden" name="caja_id" value="{{$item->id}}">
-                                    <button type="submit" class="btn btn-success">
+                                    <button type="submit" class="btn btn-primary">
                                         Ver
                                     </button>
                                 </form>

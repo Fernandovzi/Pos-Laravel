@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('title','presentaciones')
+
 @push('css-datatable')
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
 @endpush
+
 @push('css')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endpush
@@ -27,7 +29,7 @@
 
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
+            <i class="fas fa-layer-group me-1"></i>
             Tabla presentaciones
         </div>
         <div class="card-body">

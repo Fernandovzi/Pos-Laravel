@@ -10,21 +10,25 @@
 @endpush
 
 @section('content')
-<div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Ventas">
-        <x-slot name="actions">
-            @can('crear-venta')
-                <a href="{{ route('ventas.create') }}">
-                    <x-ui.button variant="primary" icon="fa-solid fa-plus">Crear venta</x-ui.button>
-                </a>
-                <a href="{{ route('export.excel-ventas-all') }}">
-                    <x-ui.button variant="success" icon="fa-solid fa-file-excel">Exportar Excel</x-ui.button>
-                </a>
-            @endcan
-        </x-slot>
-    </x-ui.page-header>
 
-    <x-ui.breadcrumbs :items="[['href' => route('panel'), 'label' => 'Inicio'], ['label' => 'Ventas', 'active' => true]]" />
+<div class="container-fluid px-4 page-shell">
+    <x-ui.page-header title="Ventas" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Ventas</li>
+    </ol>
+
+    @can('crear-presentacione')
+    <div class="page-toolbar mb-4">
+        <a href="{{route('presentaciones.create')}}">
+            <button type="button" class="btn btn-primary btn-ui">Añadir nuevo registro</button>
+        </a>
+
+        <a href="{{ route('export.excel-ventas-all') }}">
+            <x-ui.button variant="success" icon="fa-solid fa-file-excel" class="text-white">Exportar Excel</x-ui.button>
+        </a>
+    </div>
+    @endcan
 
     <x-ui.table title="Tabla de ventas" id="datatablesSimple">
         <thead>
@@ -77,8 +81,8 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
 <script>
-window.addEventListener('DOMContentLoaded', () => {
-    new simpleDatatables.DataTable("#datatablesSimple", {});
-});
+    window.addEventListener('DOMContentLoaded', () => {
+        new simpleDatatables.DataTable("#datatablesSimple", {});
+    });
 </script>
 @endpush

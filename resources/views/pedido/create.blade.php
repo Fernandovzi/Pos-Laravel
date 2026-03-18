@@ -94,9 +94,11 @@
         <input type="hidden" name="impuesto" id="inputImpuesto" value="0">
         <input type="hidden" name="total" id="inputTotal" value="0">
 
-        <div class="d-flex justify-content-end gap-2">
-            <a href="{{ route('pedidos.index') }}"><x-ui.button variant="secondary" icon="fa-solid fa-xmark">Cancelar</x-ui.button></a>
-            <x-ui.button variant="success" icon="fa-solid fa-floppy-disk" type="submit">Guardar pedido</x-ui.button>
+        <div class="page-toolbar mt-4">
+            <x-ui.button variant="primary" type="submit" class="text-white">Guardar entrada</x-ui.button>
+            <a href="{{ route('pedidos.index') }}">
+            <x-ui.button variant="danger" class="text-white">Cancelar</x-ui.button>
+            </a>
         </div>
     </form>
 </div>

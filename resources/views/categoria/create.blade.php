@@ -5,12 +5,11 @@
 @section('content')
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Crear Categoría" />
-
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item :href="route('categorias.index')" content="Categorías" />
-        <x-breadcrumb.item active='true' content="Crear categoría" />
-    </x-breadcrumb.template>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('categorias.index')}}">Categorías</a></li>
+        <li class="breadcrumb-item active">Crear categoría</li>
+    </ol>
 
     <x-forms.template :action="route('categorias.store')" method='post'>
 
@@ -25,7 +24,7 @@
             </div>
         </div>
 
-        <x-slot name='footer'>
+       <x-slot name='footer'>
             <button type="submit" class="btn btn-primary">Guardar</button>
         </x-slot>
 

@@ -3,16 +3,21 @@
 @section('title','Pedidos')
 
 @section('content')
-<div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Pedidos">
-        <x-slot name="actions">
-            <a href="{{ route('pedidos.create') }}">
-                <x-ui.button variant="primary" icon="fa-solid fa-plus">Nuevo pedido</x-ui.button>
-            </a>
-        </x-slot>
-    </x-ui.page-header>
 
-    <x-ui.breadcrumbs :items="[['href' => route('panel'), 'label' => 'Inicio'], ['label' => 'Pedidos', 'active' => true]]" />
+<div class="container-fluid px-4 page-shell">
+    <x-ui.page-header title="Pedidos" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item active">Pedidos</li>
+    </ol>
+
+    @can('crear-presentacione')
+    <div class="page-toolbar mb-4">
+        <a href="{{route('pedidos.create')}}">
+            <button type="button" class="btn btn-primary btn-ui">Nuevo pedido</button>
+        </a>
+    </div>
+    @endcan
 
     <x-ui.table title="Listado de pedidos">
         <thead>

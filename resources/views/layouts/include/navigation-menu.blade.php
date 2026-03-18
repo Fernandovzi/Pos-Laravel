@@ -19,7 +19,7 @@
 
                 @can('ver-presentacione')
                 <x-nav.nav-link content='Presentaciones'
-                    icon='fa-solid fa-box-archive'
+                    icon='fa-solid fa-layer-group'
                     :href="route('presentaciones.index')" />
                 @endcan
                 @can('ver-producto')
