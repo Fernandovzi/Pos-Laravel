@@ -53,10 +53,11 @@
                 </thead>
                 <tbody>
                     @foreach ($cajas as $item)
+                    @php
+                    $ventas = $item->movimientos->filter(fn($mov) => $mov->tipo->value === 'VENTA');
+                    @endphp
                     <tr>
-                        <td>
-                            {{$item->nombre}}
-                        </td>
+                        <td>{{$item->nombre}}</td>
                         <td>
                             <p class="fw-semibold mb-1">
                                 <span class="m-1"><i class="fa-solid fa-calendar-days"></i></span>
@@ -75,78 +76,83 @@
                             <p class="fw-semibold mb-0"><span class="m-1"><i class="fa-solid fa-clock"></i></span>
                                 {{$item->hora_cierre}}
                             </p>
+                            @else
+                            <span class="text-muted">Pendiente</span>
                             @endif
                         </td>
-                        <td>
-                            {{$item->saldo_inicial}}
-                        </td>
-                        <td>
-                            {{$item->saldo_final}}
-                        </td>
+                        <td>{{$item->saldo_inicial}}</td>
+                        <td>{{$item->saldo_final}}</td>
                         <td>
                             <span class="badge rounded-pill {{ $item->estado == 1 ? 'text-bg-success' : 'text-bg-danger' }}">
-                                {{$item->estado == 1 ? 'aperturada' : 'cerrada'}}</span>
+                                {{$item->estado == 1 ? 'Aperturada' : 'Cerrada'}}
+                            </span>
                         </td>
-                        @php
-                        $ventas = $item->movimientos->filter(fn($mov) => $mov->tipo->value === 'VENTA');
-                        @endphp
                         <td>{{$ventas->where('metodo_pago.value', 'EFECTIVO')->sum('monto')}}</td>
                         <td>{{$ventas->where('metodo_pago.value', 'TARJETA_DEBITO')->sum('monto')}}</td>
                         <td>{{$ventas->where('metodo_pago.value', 'TARJETA_CREDITO')->sum('monto')}}</td>
                         <td>{{$ventas->where('metodo_pago.value', 'TRANSFERENCIA_SPEI')->sum('monto')}}</td>
                         <td>
-                            <div class="btn-group" role="group">
-                                @can('ver-movimiento')
-                                <form action="{{route('movimientos.index')}}" method="get">
-                                    <input type="hidden" name="caja_id" value="{{$item->id}}">
-                                    <button type="submit" class="btn btn-primary">
-                                        Ver
+                            <div class="d-flex justify-content-around align-items-center">
+                                <div>
+                                    <button title="Opciones" class="btn btn-datatable btn-icon btn-transparent-dark me-2" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <svg class="svg-inline--fa fa-ellipsis-vertical" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-vertical" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
+                                            <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
+                                        </svg>
                                     </button>
-                                </form>
-                                @endcan
-
-                                @can('cerrar-caja')
-                                @if ($item->estado == 1)
-                                <button type="button" class="btn btn-danger"
-                                    data-bs-toggle="modal" data-bs-target="#confirmModal-{{$item->id}}">
-                                    Cerrar</button>
-                                @endif
-                                @endcan
-
+                                    <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
+                                        @can('ver-movimiento')
+                                        <li>
+                                            <form action="{{route('movimientos.index')}}" method="get">
+                                                <input type="hidden" name="caja_id" value="{{$item->id}}">
+                                                <button type="submit" class="dropdown-item">Ver movimientos</button>
+                                            </form>
+                                        </li>
+                                        @endcan
+                                    </ul>
+                                </div>
+                                <div>
+                                    <div class="vr"></div>
+                                </div>
+                                <div>
+                                    @can('cerrar-caja')
+                                    @if ($item->estado == 1)
+                                    <button type="button" title="Cerrar caja" class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#confirmModal-{{$item->id}}">
+                                        <i class="fa-solid fa-lock"></i>
+                                    </button>
+                                    @else
+                                    <button type="button" title="Caja cerrada" class="btn btn-datatable btn-icon btn-transparent-dark" disabled>
+                                        <i class="fa-solid fa-lock"></i>
+                                    </button>
+                                    @endif
+                                    @endcan
+                                </div>
                             </div>
                         </td>
                     </tr>
 
-                    <!-- Modal para cerra la caja-->
                     <div class="modal fade" id="confirmModal-{{$item->id}}" tabindex="-1">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h1 class="modal-title fs-5">
-                                        Mensaje de confirmación</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal">
-                                    </button>
+                                    <h1 class="modal-title fs-5">Mensaje de confirmación</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
                                     ¿Seguro que quieres cerrar la caja?
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        Cancelar</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
 
                                     <form action="{{route('cajas.destroy',['caja' => $item->id])}}" method="post">
                                         @method('DELETE')
                                         @csrf
-                                        <button type="submit" class="btn btn-danger">
-                                            Confirmar</button>
+                                        <button type="submit" class="btn btn-danger">Confirmar</button>
                                     </form>
 
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                     @endforeach
                 </tbody>
             </table>
