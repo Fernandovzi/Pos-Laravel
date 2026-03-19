@@ -36,7 +36,7 @@
             Tabla de ventas
         </div>
         <div class="card-body">
-            <table id="datatablesSimple" class="table table-striped fs-6">
+            <table id="datatablesSimple" class="table table-striped fs-6 align-middle">
                 <thead>
                     <tr>
                         <th>Comprobante</th>
@@ -52,60 +52,43 @@
                     @foreach ($ventas as $item)
                     <tr>
                         <td>
-                            <p class="fw-semibold mb-1">{{$item->comprobante->tipo_comprobante}}</p>
-                            <p class="text-muted mb-0">{{$item->numero_comprobante}}</p>
+                            <p class="fw-semibold mb-1">{{ $item->comprobante->nombre }}</p>
+                            <p class="text-muted mb-0">{{ $item->numero_comprobante }}</p>
                         </td>
                         <td>
-                            <p class="fw-semibold mb-1">{{ ucfirst($item->cliente->persona->tipo_persona) }}</p>
-                            <p class="text-muted mb-0">{{$item->cliente->persona->razon_social}}</p>
+                            <p class="fw-semibold mb-1">{{ ucfirst($item->cliente->persona->tipo->value ?? $item->cliente->persona->tipo) }}</p>
+                            <p class="text-muted mb-0">{{ $item->cliente->persona->razon_social }}</p>
                         </td>
                         <td>
-                            <p class="fw-semibold mb-1"><i class="fa-solid fa-calendar-days me-1"></i>{{$item->fecha}}</p>
-                            <p class="fw-semibold mb-0"><i class="fa-solid fa-clock me-1"></i>{{$item->hora}}</p>
+                            <p class="fw-semibold mb-1"><i class="fa-solid fa-calendar-days me-1"></i>{{ $item->fecha }}</p>
+                            <p class="fw-semibold mb-0"><i class="fa-solid fa-clock me-1"></i>{{ $item->hora }}</p>
                         </td>
-                        <td>{{$item->user->name}}</td>
-                        <td><span class="badge {{$item->estado === 'CANCELADA' ? 'bg-danger' : 'bg-success'}}">{{$item->estado}}</span></td>
-                        <td class="text-end">{{$item->total}}</td>
+                        <td>{{ $item->user->name }}</td>
                         <td>
-                            <div class="d-flex justify-content-around align-items-center">
-                                <div>
-                                    <button title="Opciones" class="btn btn-datatable btn-icon btn-transparent-dark me-2" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <svg class="svg-inline--fa fa-ellipsis-vertical" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="ellipsis-vertical" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 512">
-                                            <path fill="currentColor" d="M56 472a56 56 0 1 1 0-112 56 56 0 1 1 0 112zm0-160a56 56 0 1 1 0-112 56 56 0 1 1 0 112zM0 96a56 56 0 1 1 112 0A56 56 0 1 1 0 96z"></path>
-                                        </svg>
-                                    </button>
-                                    <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
-                                        @can('mostrar-venta')
-                                        <li>
-                                            <form action="{{route('ventas.show', ['venta'=>$item]) }}" method="get">
-                                                <button type="submit" class="dropdown-item">Ver detalle</button>
-                                            </form>
-                                        </li>
-                                        @endcan
-                                        <li><a class="dropdown-item" href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($item->id)]) }}" target="_blank">Descargar PDF</a></li>
-                                        @can('eliminar-venta')
-                                            @if($item->estado !== 'CANCELADA')
-                                            <li>
-                                                <form action="{{ route('ventas.destroy', $item) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger">Cancelar venta</button>
-                                                </form>
-                                            </li>
-                                            @endif
-                                        @endcan
-                                    </ul>
-                                </div>
+                            <span class="badge {{ $item->estado === 'CANCELADA' ? 'bg-danger' : 'bg-success' }}">
+                                {{ $item->estado }}
+                            </span>
+                        </td>
+                        <td class="text-end">{{ $item->total }}</td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-2 align-items-center">
+                                @can('mostrar-venta')
+                                <a href="{{ route('ventas.show', ['venta' => $item]) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fa-solid fa-eye me-1"></i>Ver detalle
+                                </a>
+                                @endcan
+
+                                <a class="btn btn-outline-danger btn-sm" href="{{ route('export.pdf-comprobante-venta', ['id' => Crypt::encrypt($item->id)]) }}" target="_blank">
+                                    <i class="fa-solid fa-file-pdf me-1"></i>PDF
+                                </a>
+
                                 @can('eliminar-venta')
                                     @if($item->estado !== 'CANCELADA')
-                                    <div>
-                                        <div class="vr"></div>
-                                    </div>
-                                    <div>
-                                        <button type="button" title="Cancelar venta" class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#confirmVentaModal-{{ $item->id }}">
-                                            <i class="fa-solid fa-ban"></i>
-                                        </button>
-                                    </div>
+                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmVentaModal-{{ $item->id }}">
+                                        <i class="fa-solid fa-ban me-1"></i>Cancelar venta
+                                    </button>
+                                    @else
+                                    <span class="text-muted small">Venta cancelada</span>
                                     @endif
                                 @endcan
                             </div>
@@ -129,7 +112,7 @@
                                         <form action="{{ route('ventas.destroy', $item) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Confirmar</button>
+                                            <button type="submit" class="btn btn-danger">Confirmar cancelación</button>
                                         </form>
                                     </div>
                                 </div>
