@@ -75,7 +75,7 @@ class PermissionSeeder extends Seeder
             'crear-producto',
             'editar-producto',
 
-            //Perfil 
+            //Perfil
             'ver-perfil',
             'editar-perfil',
 
@@ -89,6 +89,7 @@ class PermissionSeeder extends Seeder
             'ver-venta',
             'crear-venta',
             'mostrar-venta',
+            'eliminar-venta',
 
             //Roles
             'ver-role',
@@ -104,7 +105,10 @@ class PermissionSeeder extends Seeder
         ];
 
         foreach ($permisos as $permiso) {
-            Permission::create(['name' => $permiso]);
+            Permission::firstOrCreate([
+                'name' => $permiso,
+                'guard_name' => 'web',
+            ]);
         }
     }
 }
