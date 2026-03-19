@@ -43,6 +43,7 @@
                         <th>Cliente</th>
                         <th>Fecha y hora</th>
                         <th>Vendedor</th>
+                        <th>Estado</th>
                         <th class="text-end">Total</th>
                         <th>Acciones</th>
                     </tr>
@@ -63,6 +64,7 @@
                             <p class="fw-semibold mb-0"><i class="fa-solid fa-clock me-1"></i>{{$item->hora}}</p>
                         </td>
                         <td>{{$item->user->name}}</td>
+                        <td><span class="badge {{$item->estado === 'CANCELADA' ? 'bg-danger' : 'bg-success'}}">{{$item->estado}}</span></td>
                         <td class="text-end">{{$item->total}}</td>
                         <td>
                             <div class="d-flex justify-content-around align-items-center">
@@ -81,6 +83,17 @@
                                         </li>
                                         @endcan
                                         <li><a class="dropdown-item" href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($item->id)]) }}" target="_blank">Descargar PDF</a></li>
+                                        @can('eliminar-venta')
+                                            @if($item->estado !== 'CANCELADA')
+                                            <li>
+                                                <form action="{{ route('ventas.destroy', $item) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">Cancelar venta</button>
+                                                </form>
+                                            </li>
+                                            @endif
+                                        @endcan
                                     </ul>
                                 </div>
                                 <div>

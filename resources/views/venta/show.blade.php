@@ -11,11 +11,28 @@
         <li class="breadcrumb-item active">Detalle</li>
     </ol>
 
+    <div class="page-toolbar mb-4">
+        <a href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($venta->id)]) }}" target="_blank" class="btn btn-danger btn-ui">
+            <i class="fa-solid fa-file-pdf me-1"></i> Descargar PDF
+        </a>
+
+        @can('eliminar-venta')
+            @if($venta->estado !== 'CANCELADA')
+            <form action="{{ route('ventas.destroy', $venta) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-warning btn-ui">Cancelar venta</button>
+            </form>
+            @endif
+        @endcan
+    </div>
+
     <x-ui.card title="Datos generales de la venta">
         <p class="mb-2"><strong>Comprobante:</strong> {{$venta->comprobante->nombre}} ({{$venta->numero_comprobante}})</p>
         <p class="mb-2"><strong>Cliente:</strong> {{$venta->cliente->persona->razon_social}}</p>
         <p class="mb-2"><strong>Vendedor:</strong> {{$venta->user->name}}</p>
         <p class="mb-2"><strong>Método principal:</strong> {{$venta->metodo_pago?->label()}}</p>
+        <p class="mb-2"><strong>Estado:</strong> <span class="badge {{$venta->estado === 'CANCELADA' ? 'bg-danger' : 'bg-success'}}">{{$venta->estado}}</span></p>
         <p class="mb-3"><strong>Fecha y hora:</strong> {{$venta->fecha}} - {{$venta->hora}}</p>
 
         <h6 class="mb-2">Desglose de pagos</h6>
