@@ -4,13 +4,12 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Detalle de Producción Interna" />
-
-    <x-ui.breadcrumbs :items="[
-        ['href' => route('panel'), 'label' => 'Inicio'],
-        ['href' => route('compras.index'), 'label' => 'Producción Interna'],
-        ['label' => 'Detalle', 'active' => true]
-    ]" />
+    <x-ui.page-header title="Detalle pedido" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('pedidos.index')}}">Pedidos</a></li>
+        <li class="breadcrumb-item active">Detalle pedido</li>
+    </ol>
 
     <x-ui.card title="Datos generales">
         <div class="row g-3">

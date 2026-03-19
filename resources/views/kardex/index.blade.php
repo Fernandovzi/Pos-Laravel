@@ -15,11 +15,10 @@
 
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Kardex" />
-
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item active='true' content="Kardex" />
-    </x-breadcrumb.template>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item active"><a href="{{ route('kardex.index')}}">Kardex</a></li>
+    </ol>
 
     <div class="mb-3">
         <form action="{{route('kardex.index')}}" method="get">

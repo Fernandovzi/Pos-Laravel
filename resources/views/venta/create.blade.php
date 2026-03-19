@@ -11,12 +11,11 @@
 @section('content')
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Nueva venta" />
-
-    <x-ui.breadcrumbs :items="[
-        ['href' => route('panel'), 'label' => 'Inicio'],
-        ['href' => route('ventas.index'), 'label' => 'Ventas'],
-        ['label' => 'Nueva venta', 'active' => true]
-    ]" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Ventas</a></li>
+        <li class="breadcrumb-item active">Crear venta</li>
+    </ol>
 
     <form action="{{ route('ventas.store') }}" method="post" target="_blank">
         @csrf
@@ -122,7 +121,7 @@
                     <input type="number" step="any" id="pago_monto" class="form-control">
                 </div>
                 <div class="col-12 text-end">
-                    <button id="btn_agregar_pago" type="button" class="btn btn-success">Agregar pago</button>
+                    <button id="btn_agregar_pago" type="button" class="btn btn-primary">Agregar pago</button>
                 </div>
             </div>
 
@@ -146,9 +145,11 @@
         <div class="alert alert-danger">{{ $errors->first() }}</div>
         @endif
 
-        <div class="d-flex justify-content-end gap-2 mb-4">
-            <a href="{{ route('ventas.index') }}"><x-ui.button variant="secondary" icon="fa-solid fa-xmark">Cancelar</x-ui.button></a>
-            <x-ui.button variant="primary" icon="fa-solid fa-cash-register" type="submit" id="guardar">Cobrar venta</x-ui.button>
+        <div class="page-toolbar mt-4">
+            <x-ui.button variant="primary" type="submit" class="text-white">Cobrar venta</x-ui.button>
+            <a href="{{ route('ventas.index') }}">
+            <x-ui.button variant="danger" class="text-white">Cancelar</x-ui.button>
+            </a>
         </div>
     </form>
 </div>

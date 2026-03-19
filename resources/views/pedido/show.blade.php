@@ -5,18 +5,14 @@
 @section('content')
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header :title="'Pedido '.$pedido->folio">
-        <x-slot name="actions">
-            <a href="{{ route('pedidos.pdf', $pedido) }}" target="_blank">
-                <x-ui.button variant="secondary" icon="fa-solid fa-file-pdf">Descargar PDF</x-ui.button>
-            </a>
-        </x-slot>
+
     </x-ui.page-header>
 
-    <x-ui.breadcrumbs :items="[
-        ['href' => route('panel'), 'label' => 'Inicio'],
-        ['href' => route('pedidos.index'), 'label' => 'Pedidos'],
-        ['label' => 'Detalle', 'active' => true]
-    ]" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('pedidos.index')}}">Pedidos</a></li>
+        <li class="breadcrumb-item active">Crear pedido</li>
+    </ol>
 
     <x-ui.card title="Datos del pedido">
         <div class="row g-3">
@@ -29,7 +25,12 @@
 
     <x-ui.table title="Productos del pedido">
         <thead>
-            <tr><th>Producto</th><th class="text-end">Cantidad</th><th class="text-end">Precio</th><th class="text-end">Subtotal</th></tr>
+            <tr>
+                <th>Producto</th>
+                <th class="text-end">Cantidad</th>
+                <th class="text-end">Precio</th>
+                <th class="text-end">Subtotal</th>
+            </tr>
         </thead>
         <tbody>
             @foreach($pedido->productos as $producto)
@@ -42,8 +43,19 @@
             @endforeach
         </tbody>
         <tfoot>
-            <tr><th colspan="3" class="text-end">Total</th><th class="text-end">{{ number_format($pedido->total, 2) }}</th></tr>
+            <tr>
+                <th colspan="3" class="text-end">Total</th>
+                <th class="text-end">{{ number_format($pedido->total, 2) }}</th>
+            </tr>
         </tfoot>
     </x-ui.table>
+
+    <div class="page-toolbar mt-4">
+
+        <a href="{{ route('pedidos.pdf', $pedido) }}" target="_blank">
+            <x-ui.button variant="secondary" icon="fa-solid fa-file-pdf" class="text-white">Descargar PDF</x-ui.button>
+        </a>
+
+    </div>
 </div>
 @endsection

@@ -7,14 +7,14 @@
 @endpush
 
 @section('content')
+
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Crear ajuste de inventario" />
-
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item :href="route('ajustes-inventario.index')" content="Ajustes de inventario" />
-        <x-breadcrumb.item active='true' content="Crear ajuste" />
-    </x-breadcrumb.template>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('ajustes-inventario.index')}}">Ajustes de inventario</a></li>
+        <li class="breadcrumb-item active">Crear ajuste</li>
+    </ol>
 
     <div class="card">
         <div class="card-body">
@@ -78,8 +78,14 @@
                     @enderror
                 </div>
 
-                <button type="submit" class="btn btn-primary">Aplicar ajuste</button>
-                <a href="{{ route('ajustes-inventario.index') }}" class="btn btn-secondary">Cancelar</a>
+                <div class="page-toolbar mt-4">
+                    <x-ui.button variant="primary" type="submit" class="text-white">Aplicar ajuste</x-ui.button>
+                    <a href="{{ route('ajustes-inventario.index') }}">
+                        <x-ui.button variant="danger" class="text-white">Cancelar</x-ui.button>
+                    </a>
+                </div>
+
+
             </form>
         </div>
     </div>
