@@ -17,7 +17,7 @@
         <li class="breadcrumb-item active">Crear venta</li>
     </ol>
 
-    <form action="{{ route('ventas.store') }}" method="post" target="_blank">
+    <form action="{{ route('ventas.store') }}" method="post">
         @csrf
 
         <x-ui.card title="1) Datos generales" class="sale-card">
@@ -131,9 +131,10 @@
             </x-ui.table>
 
             <div class="row g-3 mt-1">
-                <div class="col-md-4"><div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div></div>
-                <div class="col-md-4"><div class="sale-total-box">Pagado<br><span class="value" id="box_pagado">0.00</span></div></div>
-                <div class="col-md-4"><div class="sale-total-box">Pendiente<br><span class="value" id="box_pendiente">0.00</span></div></div>
+                <div class="col-md-3"><div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div></div>
+                <div class="col-md-3"><div class="sale-total-box">Pagado<br><span class="value" id="box_pagado">0.00</span></div></div>
+                <div class="col-md-3"><div class="sale-total-box">Pendiente / cambio<br><span class="value" id="box_pendiente">0.00</span></div></div>
+                <div class="col-md-3"><div class="sale-total-box">Cambio a devolver<br><span class="value" id="box_cambio">0.00</span></div></div>
             </div>
 
             <div class="mt-3">
@@ -301,10 +302,16 @@ function sincronizarCamposOcultos() {
 function renderResumenPagos() {
     const pagado = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
     const pendiente = round(total - pagado);
+    const efectivo = pagos
+        .filter(p => p.metodo_pago === 'EFECTIVO')
+        .reduce((acc, p) => acc + Number(p.monto), 0);
+    const cambio = round(Math.max(0, pagado - total));
+    const cambioEfectivo = round(Math.max(0, efectivo - Math.min(efectivo, total)));
 
     $('#box_total').text(Number(total).toFixed(2));
     $('#box_pagado').text(Number(pagado).toFixed(2));
     $('#box_pendiente').text((pendiente > 0 ? pendiente : 0).toFixed(2));
+    $('#box_cambio').text((cambioEfectivo > 0 ? cambioEfectivo : cambio).toFixed(2));
 }
 
 function validarRequisitosFactura() {
@@ -353,9 +360,9 @@ function validarPagosAntesDeEnviar(e) {
         return showModal('Debe agregar al menos un pago.');
     }
 
-    if (Math.abs(round(sumaPagos) - round(total)) > 0.01) {
+    if (round(sumaPagos) + 0.009 < round(total)) {
         e.preventDefault();
-        return showModal('La suma de pagos debe ser igual al total.');
+        return showModal('La suma de pagos no puede ser menor al total.');
     }
 
     sincronizarCamposOcultos();

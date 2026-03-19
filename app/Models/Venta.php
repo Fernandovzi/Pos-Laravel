@@ -24,6 +24,10 @@ class Venta extends Model
         'metodo_pago' => MetodoPagoEnum::class,
     ];
 
+    protected $attributes = [
+        'estado' => 'ACTIVA',
+    ];
+
     public function caja(): BelongsTo
     {
         return $this->belongsTo(Caja::class);
