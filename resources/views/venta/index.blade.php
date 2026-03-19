@@ -83,6 +83,17 @@
                                         </li>
                                         @endcan
                                         <li><a class="dropdown-item" href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($item->id)]) }}" target="_blank">Descargar PDF</a></li>
+                                        @can('eliminar-venta')
+                                            @if($item->estado !== 'CANCELADA')
+                                            <li>
+                                                <form action="{{ route('ventas.destroy', $item) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">Cancelar venta</button>
+                                                </form>
+                                            </li>
+                                            @endif
+                                        @endcan
                                     </ul>
                                 </div>
                                 <div>
