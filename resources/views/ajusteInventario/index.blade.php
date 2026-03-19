@@ -8,12 +8,12 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Historial de ajustes de inventario" />
-
-    <x-breadcrumb.template>
-        <x-breadcrumb.item :href="route('panel')" content="Inicio" />
-        <x-breadcrumb.item active='true' content="Ajustes de inventario" />
-    </x-breadcrumb.template>
+    <x-ui.page-header title="Crear Categoría" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('ajustes-inventario.index')}}">Ajustes de inventario</a></li>
+        <li class="breadcrumb-item active">Crear ajuste</li>
+    </ol>
 
     @can('crear-ajuste-inventario')
     <div class="page-toolbar mb-4">

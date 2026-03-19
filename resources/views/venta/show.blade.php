@@ -5,12 +5,11 @@
 @section('content')
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Detalle de Venta" />
-
-    <x-ui.breadcrumbs :items="[
-        ['href' => route('panel'), 'label' => 'Inicio'],
-        ['href' => route('ventas.index'), 'label' => 'Ventas'],
-        ['label' => 'Detalle', 'active' => true]
-    ]" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Ventas</a></li>
+        <li class="breadcrumb-item active">Detalle</li>
+    </ol>
 
     <x-ui.card title="Datos generales de la venta">
         <p class="mb-2"><strong>Comprobante:</strong> {{$venta->comprobante->nombre}} ({{$venta->numero_comprobante}})</p>

@@ -10,12 +10,11 @@
 @section('content')
 <div class="container-fluid px-4 page-shell">
     <x-ui.page-header title="Nuevo pedido" />
-
-    <x-ui.breadcrumbs :items="[
-        ['href' => route('panel'), 'label' => 'Inicio'],
-        ['href' => route('pedidos.index'), 'label' => 'Pedidos'],
-        ['label' => 'Nuevo pedido', 'active' => true]
-    ]" />
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('pedidos.index')}}">Pedidos</a></li>
+        <li class="breadcrumb-item active">Crear pedido</li>
+    </ol>
 
     <form action="{{ route('pedidos.store') }}" method="POST">
         @csrf
@@ -66,8 +65,8 @@
                     <label class="form-label">Stock</label>
                     <input type="text" id="stockProducto" class="form-control" readonly>
                 </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-primary w-100" onclick="agregarProducto()">Agregar</button>
+                <div class="page-toolbar mt-4">
+                     <x-ui.button variant="primary" onclick="agregarProducto()" class="text-white">Agregar</x-ui.button>
                 </div>
             </div>
         </x-ui.card>

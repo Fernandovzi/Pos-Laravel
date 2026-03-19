@@ -18,10 +18,10 @@
         <li class="breadcrumb-item active">Ventas</li>
     </ol>
 
-    @can('crear-presentacione')
+    @can('crear-venta')
     <div class="page-toolbar mb-4">
-        <a href="{{route('presentaciones.create')}}">
-            <button type="button" class="btn btn-primary btn-ui">Añadir nuevo registro</button>
+        <a href="{{route('ventas.create')}}">
+            <button type="button" class="btn btn-primary btn-ui">Añadir venta</button>
         </a>
 
         <a href="{{ route('export.excel-ventas-all') }}">
