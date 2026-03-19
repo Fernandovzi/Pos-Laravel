@@ -7,24 +7,52 @@ return new class extends Migration
 {
     public function up(): void
     {
-        $exists = DB::table('permissions')
+        $permissionId = DB::table('permissions')
             ->where('name', 'eliminar-venta')
-            ->exists();
+            ->value('id');
 
-        if (!$exists) {
-            DB::table('permissions')->insert([
+        if (!$permissionId) {
+            $permissionId = DB::table('permissions')->insertGetId([
                 'name' => 'eliminar-venta',
                 'guard_name' => 'web',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
+
+        $adminRoleId = DB::table('roles')
+            ->where('name', 'administrador')
+            ->value('id');
+
+        if ($adminRoleId) {
+            $roleHasPermission = DB::table('role_has_permissions')
+                ->where('permission_id', $permissionId)
+                ->where('role_id', $adminRoleId)
+                ->exists();
+
+            if (!$roleHasPermission) {
+                DB::table('role_has_permissions')->insert([
+                    'permission_id' => $permissionId,
+                    'role_id' => $adminRoleId,
+                ]);
+            }
+        }
     }
 
     public function down(): void
     {
-        DB::table('permissions')
+        $permissionId = DB::table('permissions')
             ->where('name', 'eliminar-venta')
-            ->delete();
+            ->value('id');
+
+        if ($permissionId) {
+            DB::table('role_has_permissions')
+                ->where('permission_id', $permissionId)
+                ->delete();
+
+            DB::table('permissions')
+                ->where('id', $permissionId)
+                ->delete();
+        }
     }
 };
