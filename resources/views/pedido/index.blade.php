@@ -23,7 +23,7 @@
     </div>
     @endcan
 
-    <div class="card shadow-sm border-0">
+    <div class="card">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
             Listado de pedidos
@@ -47,7 +47,7 @@
                         <td>{{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</td>
                         <td>{{ $pedido->persona_recojo }}</td>
                         <td>
-                            <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
+                            <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'warning' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
                                 {{ $pedido->estado->value }}
                             </span>
                         </td>

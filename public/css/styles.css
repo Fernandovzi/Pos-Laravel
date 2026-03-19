@@ -11708,21 +11708,83 @@ textarea.form-control {
     padding: .45rem .7rem;
 }
 
+.datatable-wrapper .datatable-dropdown label,
+.datatable-wrapper .datatable-info {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    flex-wrap: wrap;
+}
+
+.datatable-wrapper .datatable-selector {
+    min-width: 84px;
+    padding-right: 2.4rem;
+    background-position: right .8rem center;
+    flex-shrink: 0;
+}
+
 .datatable-pagination a {
     border-radius: 8px;
 }
 
-.datatable-wrapper .datatable-top {
+.datatable-wrapper .datatable-top,
+.datatable-wrapper .datatable-bottom {
     display: flex;
     flex-wrap: wrap;
-    gap: .65rem;
+    gap: .75rem 1rem;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+}
+
+.datatable-wrapper .datatable-top > *,
+.datatable-wrapper .datatable-bottom > * {
+    float: none !important;
+}
+
+.datatable-wrapper .datatable-search {
+    margin-left: .35rem;
 }
 
 .datatable-wrapper .datatable-search .datatable-input {
-    min-width: 220px;
-    background: #fff;
+    min-width: 280px;
+    padding-left: 2.75rem;
+    border-color: rgba(37, 99, 235, .2);
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 1rem;
+    background-position: left 1rem center;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, .08);
+}
+
+.datatable-wrapper .datatable-search .datatable-input:focus {
+    border-color: rgba(37, 99, 235, .45);
+    box-shadow: 0 0 0 .18rem rgba(37, 99, 235, .16), 0 12px 28px rgba(37, 99, 235, .12);
+}
+
+.datatable-wrapper .datatable-bottom {
+    padding-top: 1rem;
+}
+
+.datatable-wrapper .datatable-info {
+    margin: 0;
+    white-space: nowrap;
+}
+
+.datatable-wrapper .datatable-pagination ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem;
+    align-items: center;
+    margin: 0;
+}
+
+.datatable-wrapper .datatable-pagination li {
+    margin: 0;
+}
+
+.datatable-wrapper .datatable-pagination {
+    margin-left: auto;
 }
 
 .btn-datatable,
@@ -11939,6 +12001,26 @@ textarea.form-control {
     .form-card-footer .btn,
     .page-toolbar .btn {
         width: 100%;
+    }
+
+    .datatable-wrapper .datatable-top,
+    .datatable-wrapper .datatable-bottom {
+        align-items: stretch;
+    }
+
+    .datatable-wrapper .datatable-search,
+    .datatable-wrapper .datatable-pagination {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .datatable-wrapper .datatable-search .datatable-input,
+    .datatable-wrapper .datatable-pagination ul {
+        width: 100%;
+    }
+
+    .datatable-wrapper .datatable-pagination ul {
+        justify-content: flex-start;
     }
 }
 

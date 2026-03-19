@@ -96,9 +96,9 @@
                         <td>{{ $item->user->name }}</td>
                         <td>
                             @foreach($item->productos as $producto)
-
-                            Producto: {{ $producto->nombre }} - Cantidad : {{ $producto->pivot->cantidad }}
-
+                            <span class="badge bg-primary">
+                                {{ $producto->nombre }} ({{ $producto->pivot->cantidad }})
+                            </span>
                             @endforeach
                         </td>
                         <td class="text-end">{{ $item->total }}</td>
