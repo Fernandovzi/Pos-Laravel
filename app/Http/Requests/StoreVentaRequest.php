@@ -82,8 +82,8 @@ class StoreVentaRequest extends FormRequest
             $totalVenta = (float) $this->input('total', 0);
             $sumaPagos = collect($pagos)->sum(fn($pago) => (float) ($pago['monto'] ?? 0));
 
-            if (abs($sumaPagos - $totalVenta) > 0.01) {
-                $validator->errors()->add('pagos', 'La suma de los pagos debe ser igual al total de la venta.');
+            if (($sumaPagos + 0.01) < $totalVenta) {
+                $validator->errors()->add('pagos', 'La suma de los pagos no puede ser menor al total de la venta.');
             }
 
             if (collect($pagos)->pluck('metodo_pago')->contains(MetodoPagoEnum::PagoMixto->value)) {

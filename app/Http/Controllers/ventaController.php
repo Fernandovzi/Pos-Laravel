@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MetodoPagoEnum;
+use App\Enums\TipoMovimientoEnum;
+use App\Enums\TipoTransaccionEnum;
 use App\Events\CreateVentaDetalleEvent;
 use App\Events\CreateVentaEvent;
 use App\Http\Requests\StoreVentaRequest;
 use App\Models\Cliente;
+use App\Models\Inventario;
+use App\Models\Kardex;
+use App\Models\Movimiento;
 use App\Models\Producto;
 use App\Models\Venta;
 use App\Services\ActivityLogService;
@@ -17,7 +22,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -31,6 +35,7 @@ class ventaController extends Controller
         $this->middleware('permission:ver-venta|crear-venta|mostrar-venta|eliminar-venta', ['only' => ['index']]);
         $this->middleware('permission:crear-venta', ['only' => ['create', 'store']]);
         $this->middleware('permission:mostrar-venta', ['only' => ['show']]);
+        $this->middleware('permission:eliminar-venta', ['only' => ['destroy']]);
         $this->middleware('check-caja-aperturada-user', ['only' => ['create', 'store']]);
         $this->middleware('check-show-venta-user', ['only' => ['show']]);
         $this->empresaService = $empresaService;
@@ -63,9 +68,6 @@ class ventaController extends Controller
         ));
     }
 
-    /**
-     * Registra la venta, su detalle y los pagos múltiples asociados.
-     */
     public function store(StoreVentaRequest $request): RedirectResponse
     {
         try {
@@ -95,7 +97,6 @@ class ventaController extends Controller
                     );
                 });
 
-                // Guardar el desglose de pagos para soportar pago mixto y referencias por método.
                 $venta->pagos()->createMany($request->validated('pagos'));
 
                 CreateVentaEvent::dispatch($venta);
@@ -105,7 +106,7 @@ class ventaController extends Controller
 
             ActivityLogService::log('Creación de una venta', 'Ventas', $request->validated());
 
-            return redirect()->route('export.pdf-comprobante-venta', ['id' => Crypt::encrypt($venta->id)]);
+            return redirect()->route('ventas.show', $venta)->with('success', 'Venta cobrada correctamente.');
         } catch (Throwable $e) {
             Log::error('Error al crear la venta', [
                 'error' => $e->getMessage(),
@@ -119,7 +120,7 @@ class ventaController extends Controller
     public function show(Venta $venta): View
     {
         $empresa = $this->empresaService->obtenerEmpresa();
-        $venta->load('pagos');
+        $venta->load(['pagos', 'productos.presentacione', 'cliente.persona', 'user', 'comprobante']);
 
         return view('venta.show', compact('venta', 'empresa'));
     }
@@ -134,9 +135,61 @@ class ventaController extends Controller
         //
     }
 
-    public function destroy(string $id)
+    public function destroy(Venta $venta): RedirectResponse
     {
-        //
+        if ($venta->estado === 'CANCELADA') {
+            return redirect()->route('ventas.show', $venta)->with('error', 'La venta ya fue cancelada.');
+        }
+
+        try {
+            DB::transaction(function () use ($venta): void {
+                $venta->load(['productos', 'pagos']);
+
+                foreach ($venta->productos as $producto) {
+                    $cantidad = (int) $producto->pivot->cantidad;
+
+                    $inventario = Inventario::where('producto_id', $producto->id)
+                        ->lockForUpdate()
+                        ->firstOrFail();
+
+                    $inventario->increment('cantidad', $cantidad);
+
+                    $ultimoKardex = Kardex::where('producto_id', $producto->id)->latest('id')->first();
+
+                    (new Kardex())->crearRegistro([
+                        'venta_id' => $venta->id,
+                        'producto_id' => $producto->id,
+                        'cantidad' => $cantidad,
+                        'tipo_movimiento' => 'ENTRADA',
+                        'costo_unitario' => $ultimoKardex?->costo_unitario ?? $producto->costo,
+                    ], TipoTransaccionEnum::CancelacionVenta);
+                }
+
+                foreach ($venta->pagos as $pago) {
+                    Movimiento::create([
+                        'tipo' => TipoMovimientoEnum::Retiro,
+                        'descripcion' => 'Cancelación de venta n° ' . $venta->numero_comprobante,
+                        'monto' => $pago->monto,
+                        'metodo_pago' => $pago->metodo_pago,
+                        'caja_id' => $venta->caja_id,
+                    ]);
+                }
+
+                $venta->update(['estado' => 'CANCELADA']);
+            });
+
+            ActivityLogService::log('Cancelación de venta', 'Ventas', ['venta_id' => $venta->id, 'numero_comprobante' => $venta->numero_comprobante]);
+
+            return redirect()->route('ventas.show', $venta)->with('success', 'Venta cancelada, caja e inventario actualizados.');
+        } catch (Throwable $e) {
+            Log::error('Error al cancelar la venta', [
+                'venta_id' => $venta->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            return redirect()->route('ventas.show', $venta)->with('error', 'No fue posible cancelar la venta.');
+        }
     }
 
     private function obtenerProductosDisponibles(): Collection
