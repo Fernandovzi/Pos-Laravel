@@ -106,6 +106,11 @@
                                         <li><a class="dropdown-item" href="{{route('productos.edit',['producto' => $item])}}">
                                                 Editar</a>
                                         </li>
+                                        @if (!$item->inventario)
+                                        <li><a class="dropdown-item" href="{{ route('inventario.create', ['producto_id' => $item->id]) }}">
+                                                Inicializar existencia</a>
+                                        </li>
+                                        @endif
                                         @endcan
                                         <!----Ver-producto--->
                                         @can('ver-producto')

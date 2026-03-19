@@ -110,17 +110,20 @@ class ProductoController extends Controller
             }
 
             // Luego llamas al service
-            $this->productoService->crearProducto($data);
+            $producto = $this->productoService->crearProducto($data);
 
             ActivityLogService::log(
                 'Creación de producto',
                 'Productos',
-                $data
+                [
+                    ...$data,
+                    'producto_id' => $producto->id,
+                ]
             );
 
             return redirect()
-                ->route('productos.index')
-                ->with('success', 'Producto registrado');
+                ->route('inventario.create', ['producto_id' => $producto->id])
+                ->with('success', 'Producto registrado. Ahora registra la primera existencia.');
         } catch (Throwable $e) {
             Log::error('Error al crear el producto', [
                 'error' => $e->getMessage()
