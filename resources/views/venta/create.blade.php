@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Realizar venta')
+@section('title','Nueva venta')
 
 @push('css')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
@@ -10,7 +10,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Nueva venta" />
+    <x-ui.page-header title="Nueva venta" subtitle="Registra productos, pagos y comprobantes con la interfaz actual del sistema." />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('ventas.index')}}">Ventas</a></li>
@@ -79,7 +79,14 @@
                 </div>
             </div>
 
-            <x-ui.table title="Detalle de productos" id="tabla_detalle">
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div><i class="fas fa-table me-1"></i>Detalle de productos</div>
+                    <span class="text-muted small">Productos agregados a la venta</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0" id="tabla_detalle">
                 <thead>
                     <tr><th>Producto</th><th>Presentación</th><th class="text-end">Cantidad</th><th class="text-end">Precio</th><th class="text-end">Subtotal</th><th width="70"></th></tr>
                 </thead>
@@ -89,7 +96,10 @@
                     <tr><th colspan="4" class="text-end">Impuesto</th><th class="text-end" id="igv">0</th><th></th></tr>
                     <tr><th colspan="4" class="text-end">Total</th><th class="text-end" id="total">0</th><th></th></tr>
                 </tfoot>
-            </x-ui.table>
+                                    </table>
+                    </div>
+                </div>
+            </div>
         </x-ui.card>
 
         <input type="hidden" name="subtotal" id="inputSubtotal" value="0">
@@ -125,10 +135,20 @@
                 </div>
             </div>
 
-            <x-ui.table title="Pagos agregados" id="tabla_pagos">
-                <thead><tr><th>Método</th><th class="text-end" width="160">Monto</th><th>Referencia</th><th width="70"></th></tr></thead>
-                <tbody></tbody>
-            </x-ui.table>
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <div><i class="fas fa-credit-card me-1"></i>Pagos agregados</div>
+                    <span class="text-muted small">La suma de pagos debe cubrir el total de la venta</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0" id="tabla_pagos">
+                            <thead><tr><th>Método</th><th class="text-end" width="160">Monto</th><th>Referencia</th><th width="70"></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
             <div class="row g-3 mt-1">
                 <div class="col-md-3"><div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div></div>
