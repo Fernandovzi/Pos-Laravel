@@ -112,7 +112,7 @@
                                         ¿Cancelar venta y regresar movimientos a caja, existencias y kardex?
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                                         <form action="{{ route('ventas.destroy', $item) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
