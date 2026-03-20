@@ -31,7 +31,7 @@
 
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
+            <i class="fa-solid fa-money-bill"></i>
             Tabla cajas
         </div>
         <div class="card-body">

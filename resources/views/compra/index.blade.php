@@ -67,7 +67,7 @@
     <div class="card">
 
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
+            <i class="fa-solid fa-store"></i>
             Producciones registradas
         </div>
 
@@ -96,9 +96,9 @@
                         <td>{{ $item->user->name }}</td>
                         <td>
                             @foreach($item->productos as $producto)
-                            <span class="badge bg-primary">
-                                {{ $producto->nombre }} ({{ $producto->pivot->cantidad }})
-                            </span>
+                     
+                                Producto: {{ $producto->nombre }} - Cantidad: ({{ $producto->pivot->cantidad }})
+                           
                             @endforeach
                         </td>
                         <td class="text-end">{{ $item->total }}</td>

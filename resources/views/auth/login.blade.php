@@ -10,7 +10,13 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
             --ink: #0a0a0a;
@@ -25,14 +31,17 @@
             --ease: cubic-bezier(.25, .46, .45, .94);
         }
 
-        html, body {
+        html,
+        body {
             min-height: 100%;
             font-family: var(--sans);
             background: var(--white);
             color: var(--ink);
         }
 
-        body { margin: 0; }
+        body {
+            margin: 0;
+        }
 
         .page {
             display: grid;
@@ -115,8 +124,13 @@
             letter-spacing: -.01em;
         }
 
-        .panel-copy { animation-delay: .15s; }
-        .panel-footer { animation-delay: .25s; }
+        .panel-copy {
+            animation-delay: .15s;
+        }
+
+        .panel-footer {
+            animation-delay: .25s;
+        }
 
         .panel-eyebrow,
         .form-eyebrow {
@@ -141,8 +155,13 @@
             height: 1px;
         }
 
-        .panel-eyebrow::before { background: rgba(255, 255, 255, .25); }
-        .form-eyebrow::before { background: var(--rule); }
+        .panel-eyebrow::before {
+            background: rgba(255, 255, 255, .25);
+        }
+
+        .form-eyebrow::before {
+            background: var(--rule);
+        }
 
         .panel-headline {
             font-family: var(--serif);
@@ -158,7 +177,9 @@
             font-style: italic;
         }
 
-        .panel-headline em { color: rgba(255, 255, 255, .55); }
+        .panel-headline em {
+            color: rgba(255, 255, 255, .55);
+        }
 
         .panel-sub {
             font-size: .85rem;
@@ -187,7 +208,9 @@
             animation: fade-up .55s .1s var(--ease) both;
         }
 
-        .form-header { margin-bottom: 2.5rem; }
+        .form-header {
+            margin-bottom: 2.5rem;
+        }
 
         .form-eyebrow {
             color: var(--ink-muted);
@@ -202,7 +225,9 @@
             line-height: 1.1;
         }
 
-        .form-title em { color: var(--ink-soft); }
+        .form-title em {
+            color: var(--ink-soft);
+        }
 
         .error-box {
             background: rgba(185, 28, 28, .06);
@@ -221,7 +246,9 @@
             line-height: 1.5;
         }
 
-        .error-item + .error-item { margin-top: .3rem; }
+        .error-item+.error-item {
+            margin-top: .3rem;
+        }
 
         .error-item::before {
             content: '—';
@@ -229,7 +256,9 @@
             opacity: .5;
         }
 
-        .field { margin-bottom: 1.1rem; }
+        .field {
+            margin-bottom: 1.1rem;
+        }
 
         .field-label {
             display: block;
@@ -271,7 +300,9 @@
             transition: border-color .2s var(--ease), background .2s var(--ease), box-shadow .2s var(--ease);
         }
 
-        .field-input::placeholder { color: #aaaaaa; }
+        .field-input::placeholder {
+            color: #aaaaaa;
+        }
 
         .field-input:focus {
             border-color: var(--ink);
@@ -279,12 +310,14 @@
             box-shadow: 0 0 0 3px rgba(10, 10, 10, .06);
         }
 
-        .field-input:focus + .field-icon,
+        .field-input:focus+.field-icon,
         .field-input-wrap.is-focused .field-icon {
             color: var(--ink);
         }
 
-        .password-input { padding-right: 2.8rem; }
+        .password-input {
+            padding-right: 2.8rem;
+        }
 
         .pw-toggle {
             right: .9rem;
@@ -298,7 +331,9 @@
             transition: color .18s;
         }
 
-        .pw-toggle:hover { color: var(--ink); }
+        .pw-toggle:hover {
+            color: var(--ink);
+        }
 
         .btn-submit {
             width: 100%;
@@ -332,8 +367,14 @@
             box-shadow: 0 8px 24px rgba(10, 10, 10, .18);
         }
 
-        .btn-submit:hover::after { background: rgba(255, 255, 255, .07); }
-        .btn-submit:active { transform: translateY(0); box-shadow: none; }
+        .btn-submit:hover::after {
+            background: rgba(255, 255, 255, .07);
+        }
+
+        .btn-submit:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
 
         .form-divider {
             display: flex;
@@ -376,21 +417,46 @@
         }
 
         @keyframes fade-up {
-            from { opacity: 0; transform: translateY(16px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @media (max-width: 720px) {
-            .page { grid-template-columns: 1fr; }
+            .page {
+                grid-template-columns: 1fr;
+            }
+
             .panel-left {
                 min-height: 220px;
                 padding: 2rem;
             }
-            .panel-left::after { font-size: 52vw; }
-            .panel-copy { padding-top: 1rem; }
-            .panel-headline { font-size: 2.2rem; }
-            .panel-footer { display: none; }
-            .panel-right { padding: 2.5rem 1.5rem; }
+
+            .panel-left::after {
+                font-size: 52vw;
+            }
+
+            .panel-copy {
+                padding-top: 1rem;
+            }
+
+            .panel-headline {
+                font-size: 2.2rem;
+            }
+
+            .panel-footer {
+                display: none;
+            }
+
+            .panel-right {
+                padding: 2.5rem 1.5rem;
+            }
         }
     </style>
 </head>
@@ -399,9 +465,7 @@
     <div class="page">
         <div class="panel-left">
             <a class="panel-brand" href="{{ route('panel') }}">
-                <div class="panel-brand-icon">
-                    <img src="{{ asset('img/maleri.png') }}" alt="Maleri">
-                </div>
+
                 <span class="panel-brand-name">Maleri</span>
             </a>
 
@@ -422,11 +486,11 @@
                 </div>
 
                 @if ($errors->any())
-                    <div class="error-box">
-                        @foreach ($errors->all() as $item)
-                            <div class="error-item">{{ $item }}</div>
-                        @endforeach
-                    </div>
+                <div class="error-box">
+                    @foreach ($errors->all() as $item)
+                    <div class="error-item">{{ $item }}</div>
+                    @endforeach
+                </div>
                 @endif
 
                 <form action="{{ route('login.login') }}" method="POST">
@@ -499,9 +563,9 @@
                 const show = pwInput.type === 'password';
                 pwInput.type = show ? 'text' : 'password';
                 pwToggle.setAttribute('aria-label', show ? 'Ocultar contraseña' : 'Mostrar contraseña');
-                eyeIcon.innerHTML = show
-                    ? '<path d="M2 2l11 11M5.5 5.7a2 2 0 002.8 2.8M1 7.5C2.5 4 5 2 7.5 2c1.2 0 2.3.4 3.3 1M13 7.5c-.8 1.8-2.2 3.2-3.8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />'
-                    : '<path d="M1 7.5C2.5 4 5 2 7.5 2s5 2 6.5 5.5C12.5 11 10 13 7.5 13S2.5 11 1 7.5z" stroke="currentColor" stroke-width="1.2" /><circle cx="7.5" cy="7.5" r="2" stroke="currentColor" stroke-width="1.2" />';
+                eyeIcon.innerHTML = show ?
+                    '<path d="M2 2l11 11M5.5 5.7a2 2 0 002.8 2.8M1 7.5C2.5 4 5 2 7.5 2c1.2 0 2.3.4 3.3 1M13 7.5c-.8 1.8-2.2 3.2-3.8 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />' :
+                    '<path d="M1 7.5C2.5 4 5 2 7.5 2s5 2 6.5 5.5C12.5 11 10 13 7.5 13S2.5 11 1 7.5z" stroke="currentColor" stroke-width="1.2" /><circle cx="7.5" cy="7.5" r="2" stroke="currentColor" stroke-width="1.2" />';
             });
         }
 

@@ -65,8 +65,8 @@
 
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Historial
+            <i class="fa-solid fa-sliders"></i>
+            Historial de ajustes
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6">

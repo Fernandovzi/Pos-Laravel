@@ -13,7 +13,7 @@
     </ol>
 
     <div class="page-toolbar mb-4">
-        <a href="{{ route('pedidos.pdf', $pedido) }}" target="_blank" class="btn btn-secondary btn-ui">
+        <a href="{{ route('pedidos.pdf', $pedido) }}" target="_blank" class="btn btn-secondary btn-ui text-white">
             <i class="fa-solid fa-file-pdf me-1"></i>Descargar PDF
         </a>
     </div>
@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-2">
                         <p class="text-muted text-uppercase small fw-semibold mb-2">Estado</p>
-                        <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'warning' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
+                        <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
                             {{ $pedido->estado->value }}
                         </span>
                     </div>

@@ -29,7 +29,7 @@
 
     <div class="card">
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
+            <i class="fa-solid fa-users"></i>
             Tabla clientes
         </div>
         <div class="card-body">

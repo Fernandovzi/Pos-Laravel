@@ -22,11 +22,9 @@
     <div class="page-toolbar mb-4">
         @can('crear-producto')
         <a href="{{ route('productos.create') }}" class="btn btn-primary btn-ui">
-            Añadir nuevo registro
+            Añadir producto
         </a>
         @endcan
-
-
 
         <a href="{{ route('productos.export.control-excel') }}">
             <x-ui.button variant="success" icon="fa-solid fa-file-excel" class="text-white">Exportar Excel</x-ui.button>
@@ -35,9 +33,10 @@
 
     <div class="card shadow-sm border-0">
         <div class="card-header">
-            <i class="fas fa-table me-1"></i>
+            <i class="fa-brands fa-shopify"></i>
             Tabla productos
         </div>
+       
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>

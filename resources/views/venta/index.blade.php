@@ -11,7 +11,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Ventas" subtitle="Consulta el historial de ventas y accede rápidamente a sus comprobantes y acciones disponibles." />
+    <x-ui.page-header title="Ventas"/>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Ventas</li>
@@ -32,7 +32,7 @@
     <div class="card">
         <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div>
-                <i class="fas fa-table me-1"></i>
+                <i class="fa-solid fa-cart-shopping"></i>
                 Tabla de ventas
             </div>
             <span class="text-muted small">{{ $ventas->count() }} registros</span>
@@ -77,19 +77,19 @@
                         <td>
                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                 @can('mostrar-venta')
-                                <a href="{{ route('ventas.show', ['venta' => $item]) }}" class="btn btn-outline-primary btn-sm">
-                                    <i class="fa-solid fa-eye me-1"></i>Ver detalle
+                                <a href="{{ route('ventas.show', ['venta' => $item]) }}" title="Ver" class="btn btn-datatable btn-icon btn-transparent-dark">
+                                    <i class="fa-solid fa-eye"></i>
                                 </a>
                                 @endcan
 
-                                <a class="btn btn-outline-danger btn-sm" href="{{ route('export.pdf-comprobante-venta', ['id' => Crypt::encrypt($item->id)]) }}" target="_blank">
-                                    <i class="fa-solid fa-file-pdf me-1"></i>PDF
+                                <a class="btn btn-datatable btn-icon btn-transparent-dark" title="Descargar PDF" href="{{ route('export.pdf-comprobante-venta', ['id' => Crypt::encrypt($item->id)]) }}" target="_blank">
+                                    <i class="fa-solid fa-file-pdf me-1"></i>
                                 </a>
 
                                 @can('eliminar-venta')
                                     @if($item->estado !== 'CANCELADA')
-                                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#confirmVentaModal-{{ $item->id }}">
-                                        <i class="fa-solid fa-ban me-1"></i>Cancelar venta
+                                    <button type="button" class="btn btn-datatable btn-icon btn-transparent-dark" title="Cancelar venta" data-bs-toggle="modal" data-bs-target="#confirmVentaModal-{{ $item->id }}">
+                                        <i class="fa-solid fa-ban me-1"></i>
                                     </button>
                                     @else
                                     <span class="text-muted small">Venta cancelada</span>

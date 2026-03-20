@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Detalle de venta" subtitle="Revisa la información general, el desglose de pagos y los productos registrados en la operación." />
+    <x-ui.page-header title="Detalle de venta"/>
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('ventas.index') }}">Ventas</a></li>
@@ -12,7 +12,7 @@
     </ol>
 
     <div class="page-toolbar mb-4">
-        <a href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($venta->id)]) }}" target="_blank" class="btn btn-danger btn-ui">
+        <a href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($venta->id)]) }}" target="_blank" class="btn btn-secondary btn-ui text-white">
             <i class="fa-solid fa-file-pdf me-1"></i>Descargar PDF
         </a>
 
@@ -21,7 +21,7 @@
             <form action="{{ route('ventas.destroy', $venta) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-warning btn-ui">
+                <button type="submit" class="btn btn-danger btn-ui">
                     <i class="fa-solid fa-ban me-1"></i>Cancelar venta
                 </button>
             </form>

@@ -13,10 +13,10 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Categorías"/>
+    <x-ui.page-header title="Categorías" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item active" >Categorías</li>
+        <li class="breadcrumb-item active">Categorías</li>
     </ol>
 
     @can('crear-categoria')
@@ -27,14 +27,12 @@
     </div>
     @endcan
 
-
     <div class="card">
-
         <div class="card-header">
+            
             <i class="fas fa-tags me-1"></i>
             Tabla categorías
         </div>
-
         <div class="card-body">
 
             <table id="datatablesSimple" class="table table-striped fs-6">
