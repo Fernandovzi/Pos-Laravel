@@ -47,7 +47,7 @@
                         <td>{{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</td>
                         <td>{{ $pedido->persona_recojo }}</td>
                         <td>
-                            <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'warning' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
+                            <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
                                 {{ $pedido->estado->value }}
                             </span>
                         </td>
@@ -91,7 +91,7 @@
                                     ¿Cancelar pedido y liberar stock?
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
                                     <form action="{{ route('pedidos.destroy', $pedido) }}" method="POST">
                                         @csrf
                                         @method('DELETE')

@@ -12,7 +12,7 @@
     </ol>
 
     <div class="page-toolbar mb-4">
-        <a href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($venta->id)]) }}" target="_blank" class="btn btn-danger btn-ui">
+        <a href="{{ route('export.pdf-comprobante-venta',['id' => Crypt::encrypt($venta->id)]) }}" target="_blank" class="btn btn-secondary btn-ui text-white">
             <i class="fa-solid fa-file-pdf me-1"></i> Descargar PDF
         </a>
 
@@ -21,7 +21,7 @@
             <form action="{{ route('ventas.destroy', $venta) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
                 @csrf
                 @method('DELETE')
-                <button type="submit" class="btn btn-warning btn-ui">Cancelar venta</button>
+                <button type="submit" class="btn btn-danger btn-ui">Cancelar venta</button>
             </form>
             @endif
         @endcan
