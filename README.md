@@ -84,7 +84,8 @@ php artisan queue:listen
 
 Este proyecto está licenciado bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
-<img width="1919" height="992" alt="image" src="https://github.com/user-attachments/assets/0f507af1-9f5c-483e-9ac8-6c66006ac8ff" />
+<img width="1899" height="939" alt="image" src="https://github.com/user-attachments/assets/43d4428b-a7a2-4728-9092-16c14282c3c7" />
+
 
 
 
