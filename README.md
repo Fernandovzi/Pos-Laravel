@@ -80,26 +80,11 @@ php artisan serve
 php artisan queue:listen
 ```
 
-## Módulo de pedidos (apartados)
-
-Incluye un módulo para apartar productos con control de inventario temporal y trazabilidad:
-
-- Folio automático diario (`PED-YYYYMMDD-####`).
-- Registro de persona que recogerá el pedido.
-- Descuento temporal de inventario al crear pedido.
-- Registro automático de movimiento en kardex con tipo `PEDIDO`.
-- Cancelación de pedidos para liberar stock.
-- Generación de PDF con detalle del pedido.
-
-### Rutas principales
-
-- `GET /admin/pedidos`
-- `GET /admin/pedidos/create`
-- `POST /admin/pedidos`
-- `GET /admin/pedidos/{pedido}`
-- `DELETE /admin/pedidos/{pedido}`
-- `GET /admin/pedidos/{pedido}/pdf`
-
 ## Licencia
 
 Este proyecto está licenciado bajo la licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+<img width="1919" height="992" alt="image" src="https://github.com/user-attachments/assets/0f507af1-9f5c-483e-9ac8-6c66006ac8ff" />
+
+
+
