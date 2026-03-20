@@ -3,6 +3,7 @@
 @section('title','Registrar producción interna')
 
 @push('css')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 @endpush
 
@@ -24,8 +25,7 @@
                 </div>
                 <div class="col-md-4">
                     <label class="form-label">Producto</label>
-                    <select id="producto_id" class="form-select">
-                        <option value="">Seleccione</option>
+                    <select id="producto_id" class="form-control selectpicker" data-live-search="true" title="Busque un producto aquí">
                         @foreach($productos as $producto)
                         <option value="{{ $producto->id }}" data-costo="{{ $producto->costo ?? $producto->precio ?? 0 }}">
                             {{ $producto->codigo }} - {{ $producto->nombre }}
@@ -74,6 +74,7 @@
 @endsection
 
 @push('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
     let total = 0;
 
@@ -115,6 +116,7 @@
         $('#total').text(total.toFixed(2));
 
         $('#producto_id').val('');
+        $('#producto_id').selectpicker('refresh');
         $('#cantidad').val('');
     });
 
