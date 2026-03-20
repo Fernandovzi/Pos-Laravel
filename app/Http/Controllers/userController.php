@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnum;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Empleado;
@@ -29,7 +30,7 @@ class userController extends Controller
     public function index(): View
     {
         $users = User::whereDoesntHave('roles', function ($query) {
-            $query->where('name', 'administrador');
+            $query->whereIn('name', UserRoleEnum::protected());
         })
             ->latest()
             ->get();
@@ -42,7 +43,7 @@ class userController extends Controller
      */
     public function create(): View
     {
-        $roles = Role::where('name', '!=', 'administrador')->get();
+        $roles = Role::whereNotIn('name', UserRoleEnum::protected())->get();
         $empleados = Empleado::all();
         return view('user.create', compact('roles', 'empleados'));
     }
@@ -83,7 +84,7 @@ class userController extends Controller
      */
     public function edit(User $user): View
     {
-        $roles = Role::where('name', '!=', 'administrador')->get();
+        $roles = Role::whereNotIn('name', UserRoleEnum::protected())->get();
         return view('user.edit', compact('user', 'roles'));
     }
 

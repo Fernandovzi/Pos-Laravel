@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TipoTransaccionEnum;
+use App\Enums\UserRoleEnum;
 use App\Http\Requests\StoreAjusteInventarioRequest;
 use App\Models\AjusteInventario;
 use App\Models\Inventario;
@@ -23,7 +24,7 @@ class AjusteInventarioController extends Controller
     {
         $this->middleware('permission:ver-ajuste-inventario|crear-ajuste-inventario', ['only' => ['index']]);
         $this->middleware('permission:crear-ajuste-inventario', ['only' => ['create', 'store']]);
-        $this->middleware('role:administrador|inventarios', ['only' => ['create', 'store']]);
+        $this->middleware('role:' . UserRoleEnum::protectedForMiddleware(), ['only' => ['create', 'store']]);
     }
 
     public function index(Request $request): View|StreamedResponse

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserRoleEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +22,7 @@ return new class extends Migration
         }
 
         $adminRoleId = DB::table('roles')
-            ->where('name', 'administrador')
+            ->where('name', UserRoleEnum::Administrador->value)
             ->value('id');
 
         if ($adminRoleId) {

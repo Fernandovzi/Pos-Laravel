@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRoleEnum;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -26,7 +27,7 @@ class roleController extends Controller
      */
     public function index(): View
     {
-        $roles = Role::where('name', '!=', 'administrador')
+        $roles = Role::whereNotIn('name', UserRoleEnum::protected())
             ->latest()
             ->get();
 
