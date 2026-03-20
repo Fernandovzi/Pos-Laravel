@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','ventas')
+@section('title','Ventas')
 
 @push('css-datatable')
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -10,9 +10,8 @@
 @endpush
 
 @section('content')
-
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Ventas" />
+    <x-ui.page-header title="Ventas" subtitle="Consulta el historial de ventas y accede rápidamente a sus comprobantes y acciones disponibles." />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item active">Ventas</li>
@@ -20,8 +19,8 @@
 
     @can('crear-venta')
     <div class="page-toolbar mb-4">
-        <a href="{{route('ventas.create')}}">
-            <button type="button" class="btn btn-primary btn-ui">Añadir venta</button>
+        <a href="{{ route('ventas.create') }}" class="btn btn-primary btn-ui">
+            <i class="fa-solid fa-cart-plus me-1"></i>Añadir venta
         </a>
 
         <a href="{{ route('export.excel-ventas-all') }}">
@@ -31,9 +30,12 @@
     @endcan
 
     <div class="card">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Tabla de ventas
+        <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div>
+                <i class="fas fa-table me-1"></i>
+                Tabla de ventas
+            </div>
+            <span class="text-muted small">{{ $ventas->count() }} registros</span>
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6 align-middle">
@@ -53,23 +55,25 @@
                     <tr>
                         <td>
                             <p class="fw-semibold mb-1">{{ $item->comprobante->nombre }}</p>
-                            <p class="text-muted mb-0">{{ $item->numero_comprobante }}</p>
+                            <p class="text-muted mb-0 small">{{ $item->numero_comprobante }}</p>
                         </td>
                         <td>
-                            <p class="fw-semibold mb-1">{{ ucfirst($item->cliente->persona->tipo->value ?? $item->cliente->persona->tipo) }}</p>
-                            <p class="text-muted mb-0">{{ $item->cliente->persona->razon_social }}</p>
+                            <p class="fw-semibold mb-1">{{ $item->cliente->persona->razon_social }}</p>
+                            <p class="text-muted mb-0 small">{{ ucfirst($item->cliente->persona->tipo->value ?? $item->cliente->persona->tipo) }}</p>
                         </td>
                         <td>
                             <p class="fw-semibold mb-1"><i class="fa-solid fa-calendar-days me-1"></i>{{ $item->fecha }}</p>
-                            <p class="fw-semibold mb-0"><i class="fa-solid fa-clock me-1"></i>{{ $item->hora }}</p>
+                            <p class="text-muted mb-0 small"><i class="fa-solid fa-clock me-1"></i>{{ $item->hora }}</p>
                         </td>
-                        <td>{{ $item->user->name }}</td>
                         <td>
-                            <span class="badge {{ $item->estado === 'CANCELADA' ? 'bg-danger' : 'bg-success' }}">
+                            <p class="fw-semibold mb-0">{{ $item->user->name }}</p>
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill {{ $item->estado === 'CANCELADA' ? 'text-bg-danger' : 'text-bg-success' }}">
                                 {{ $item->estado }}
                             </span>
                         </td>
-                        <td class="text-end">{{ $item->total }}</td>
+                        <td class="text-end fw-semibold">{{ $item->total }}</td>
                         <td>
                             <div class="d-flex flex-wrap gap-2 align-items-center">
                                 @can('mostrar-venta')
