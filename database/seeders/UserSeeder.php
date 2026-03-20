@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRoleEnum;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -22,7 +23,7 @@ class UserSeeder extends Seeder
             ]
         );
 
-        $rol = Role::firstOrCreate(['name' => 'administrador', 'guard_name' => 'web']);
+        $rol = Role::firstOrCreate(['name' => UserRoleEnum::Administrador->value, 'guard_name' => 'web']);
         $permisos = Permission::pluck('id', 'id')->all();
 
         $rol->syncPermissions($permisos);

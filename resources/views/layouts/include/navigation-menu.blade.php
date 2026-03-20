@@ -98,7 +98,7 @@
                     <x-nav.link-collapsed-item :href="route('pedidos.create')" content="Crear" />
                 </x-nav.link-collapsed>
 
-                @hasrole('administrador')
+                @hasrole(\App\Enums\UserRoleEnum::Administrador->value)
                 <x-nav.heading>Datos de la empresa</x-nav.heading>
                 @endhasrole
 
