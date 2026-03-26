@@ -57,7 +57,8 @@ class roleController extends Controller
         try {
             DB::transaction(function () use ($validated): void {
                 $rol = Role::create(['name' => $validated['name']]);
-                $rol->syncPermissions($validated['permission']);
+                $permissions = Permission::whereIn('id', $validated['permission'])->get();
+                $rol->syncPermissions($permissions);
             });
 
             ActivityLogService::log('Creación de rol', 'Roles', $validated);
@@ -99,7 +100,8 @@ class roleController extends Controller
         try {
             DB::transaction(function () use ($validated, $role): void {
                 $role->update(['name' => $validated['name']]);
-                $role->syncPermissions($validated['permission']);
+                $permissions = Permission::whereIn('id', $validated['permission'])->get();
+                $role->syncPermissions($permissions);
             });
 
             ActivityLogService::log('Edición de rol', 'Roles', $validated);
