@@ -34,9 +34,11 @@
                     :href="route('kardex.index')" />
                 @endcan
 
+                @canany(['ver-ajuste-inventario', 'crear-ajuste-inventario'])
                 <x-nav.nav-link content='Ajustes de inventario'
                     icon='fa-solid fa-sliders'
                     :href="route('ajustes-inventario.index')" />
+                @endcanany
 
                 @can('ver-cliente')
                 <x-nav.nav-link content='Clientes'
