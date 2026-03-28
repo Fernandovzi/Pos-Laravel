@@ -64,8 +64,6 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('pedidos', PedidoController::class)->except('edit', 'update');
     Route::get('/pedidos/{pedido}/pdf', [PedidoController::class, 'exportPdf'])->name('pedidos.pdf');
 
-    Route::resource('clientes', App\Http\Controllers\ClienteController::class);
-
 
     //Reportes
     Route::get('/export-pdf-comprobante-venta/{id}', [ExportPDFController::class, 'exportPdfComprobanteVenta'])
