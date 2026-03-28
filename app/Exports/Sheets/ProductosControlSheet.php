@@ -47,7 +47,7 @@ class ProductosControlSheet implements FromArray, WithTitle, WithEvents, ShouldA
                     $logo = new Drawing();
                     $logo->setName('Maleri');
                     $logo->setDescription('Logotipo de Maleri');
-                    $logo->setPath($this->logoPath);
+                    $logo->setPath($this->logoPath, false);
                     $logo->setHeight(55);
                     $logo->setCoordinates('A1');
                     $logo->setWorksheet($sheet);
