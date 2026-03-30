@@ -64,7 +64,12 @@ class ProductoController extends Controller
 
         $filename = 'control-inventario-maleri-' . now()->format('Ymd_His') . '.xlsx';
 
-        return Excel::download(new ProductoControlExport($productos, $pedidosNoCancelados), $filename);
+        return Excel::download(
+            new ProductoControlExport($productos, $pedidosNoCancelados),
+            $filename,
+            null,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        );
     }
 
     /**

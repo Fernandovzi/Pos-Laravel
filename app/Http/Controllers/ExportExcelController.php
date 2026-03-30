@@ -15,6 +15,11 @@ class ExportExcelController extends Controller
     {
         $filename = 'ventas_' . now()->format('Y_m_d_His') . '.xlsx';
 
-        return Excel::download(new VentasExport(), $filename);
+        return Excel::download(
+            new VentasExport(),
+            $filename,
+            null,
+            ['Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']
+        );
     }
 }
