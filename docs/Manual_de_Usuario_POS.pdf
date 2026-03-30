@@ -1,0 +1,885 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Count 8 /Kids [ 4 0 R 6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R ] >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 5 0 R >>
+endobj
+5 0 obj
+<< /Length 2504 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+(MANUAL DE USUARIO DEL SISTEMA POS LARAVEL) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Version del manual:** 1.0) Tj
+0 -14 Td
+(**Fecha:** 30 de marzo de 2026) Tj
+0 -14 Td
+(**Dirigido a:** Usuarios finales \(Administrador y Usuario operativo\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(1. INTRODUCCION) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(DESCRIPCION GENERAL DEL SISTEMA) Tj
+0 -14 Td
+(El sistema POS Laravel es una plataforma de gestion comercial para tiendas, orientada a) Tj
+0 -14 Td
+(controlar:) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(- Catalogo de productos \(categorias, presentaciones y productos\)) Tj
+0 -14 Td
+(- Inventario y movimientos de existencias \(incluyendo kardex y ajustes\)) Tj
+0 -14 Td
+(- Ventas con comprobante y multiples metodos de pago) Tj
+0 -14 Td
+(- Pedidos y compras internas) Tj
+0 -14 Td
+(- Caja \(apertura, movimientos y cierre\)) Tj
+0 -14 Td
+(- Gestion de clientes, proveedores, empleados, usuarios y roles) Tj
+0 -14 Td
+(- Reportes y exportaciones \(PDF y Excel\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Pantalla de inicio / panel principal\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(OBJETIVO) Tj
+0 -14 Td
+(Facilitar la operacion diaria del negocio, centralizando en una sola herramienta los procesos) Tj
+0 -14 Td
+(de venta, control de stock, pedidos y administracion basica.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(TIPOS DE USUARIOS) Tj
+0 -14 Td
+(- **Administrador:** Configura el sistema, administra usuarios/roles y supervisa operaciones.) Tj
+0 -14 Td
+(- **Usuario:** Ejecuta tareas operativas del dia a dia segun los permisos asignados \(ventas,) Tj
+0 -14 Td
+(pedidos, caja, consulta de inventario, etc.\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(2. REQUISITOS DEL SISTEMA) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(NAVEGADOR / SISTEMA OPERATIVO) Tj
+0 -14 Td
+(- Navegadores recomendados:) Tj
+0 -14 Td
+(  - Google Chrome \(version reciente\)) Tj
+0 -14 Td
+(  - Microsoft Edge \(version reciente\)) Tj
+0 -14 Td
+(  - Mozilla Firefox \(version reciente\)) Tj
+0 -14 Td
+(- Sistemas operativos compatibles para uso web:) Tj
+0 -14 Td
+(  - Windows 10/11) Tj
+0 -14 Td
+(  - macOS \(versiones recientes\)) Tj
+0 -14 Td
+(  - Linux \(distribuciones actuales\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(REQUISITOS TECNICOS MINIMOS) Tj
+0 -14 Td
+(- Conexion estable a internet o red local \(segun despliegue\)) Tj
+0 -14 Td
+(- Resolucion minima recomendada: 1366 x 768) Tj
+0 -14 Td
+(- JavaScript habilitado en el navegador) Tj
+0 -14 Td
+(- Cookies habilitadas para mantener sesion activa) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 7 0 R >>
+endobj
+7 0 obj
+<< /Length 2088 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3. ACCESO AL SISTEMA) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(URL \(SI APLICA\)) Tj
+0 -14 Td
+(- **Acceso principal:** `http://TU_DOMINIO/`) Tj
+0 -14 Td
+(- **Inicio de sesion:** `http://TU_DOMINIO/login`) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(> Nota: Reemplaza `TU_DOMINIO` por la direccion real proporcionada por tu empresa.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(INICIO DE SESION) Tj
+0 -14 Td
+(1. Abra la URL de acceso.) Tj
+0 -14 Td
+(2. Ingrese su **correo electronico**.) Tj
+0 -14 Td
+(3. Ingrese su **contrasena**.) Tj
+0 -14 Td
+(4. Haga clic en **Ingresar**.) Tj
+0 -14 Td
+(5. Si las credenciales son correctas, entrara al panel principal.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Formulario de inicio de sesion\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(RECUPERACION DE CONTRASENA) Tj
+0 -14 Td
+(En la interfaz actual no se muestra una opcion automatica de "Olvide mi contrasena".) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Procedimiento recomendado:) Tj
+0 -14 Td
+(1. Contacte al **Administrador del sistema**.) Tj
+0 -14 Td
+(2. Solicite restablecimiento de credenciales.) Tj
+0 -14 Td
+(3. Inicie sesion con la nueva contrasena y cambiela desde **Perfil**.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(4. DESCRIPCION GENERAL DE LA INTERFAZ) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(MENU PRINCIPAL) Tj
+0 -14 Td
+(El menu lateral organiza modulos como:) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(- Inicio \(Principal\)) Tj
+0 -14 Td
+(- Categorias, Presentaciones, Productos) Tj
+0 -14 Td
+(- Kardex y Ajustes de inventario) Tj
+0 -14 Td
+(- Clientes, Proveedores) Tj
+0 -14 Td
+(- Cajas y Movimientos) Tj
+0 -14 Td
+(- Produccion/Compras) Tj
+0 -14 Td
+(- Ventas) Tj
+0 -14 Td
+(- Pedidos) Tj
+0 -14 Td
+(- Empresa, Empleados, Usuarios, Roles) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(> Los modulos visibles dependen del rol y permisos del usuario.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Menu lateral del sistema\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(DASHBOARD \(PANEL PRINCIPAL\)) Tj
+0 -14 Td
+(El panel muestra indicadores operativos, por ejemplo:) Tj
+0 -14 Td
+(- Productos registrados) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 9 0 R >>
+endobj
+9 0 obj
+<< /Length 2284 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+(- Existencia total) Tj
+0 -14 Td
+(- Pedidos apartados) Tj
+0 -14 Td
+(- Ventas del dia) Tj
+0 -14 Td
+(- Grafica de produccion interna \(ultimos 7 dias\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Dashboard con indicadores\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(NAVEGACION GENERAL) Tj
+0 -14 Td
+(- Use el menu lateral para abrir modulos.) Tj
+0 -14 Td
+(- Use los botones **Nuevo / Anadir / Crear** para registrar informacion.) Tj
+0 -14 Td
+(- Use columnas de **Acciones** para ver, editar, cancelar o eliminar registros.) Tj
+0 -14 Td
+(- Use buscadores/tablas para localizar datos rapidamente.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5. ROLES DE USUARIO) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5.1 ADMINISTRADOR) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(DESCRIPCION DEL ROL) Tj
+0 -14 Td
+(Responsable de la configuracion global, seguridad operativa y administracion de) Tj
+0 -14 Td
+(catalogos/usuarios.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(PERMISOS) Tj
+0 -14 Td
+(Generalmente cuenta con permisos completos para ver, crear, editar, eliminar y configurar.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(ACCESO A MODULOS) Tj
+0 -14 Td
+(Puede acceder a modulos de administracion y operacion \(usuarios, roles, empresa, reportes,) Tj
+0 -14 Td
+(catalogo, ventas, inventario, caja, etc.\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(FUNCIONALIDADES DEL ADMINISTRADOR) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(A\) GESTION DE USUARIOS) Tj
+0 -14 Td
+(**Descripcion:** Alta, edicion y activacion/desactivacion de usuarios del sistema.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso:**) Tj
+0 -14 Td
+(1. Ir a **Usuarios**.) Tj
+0 -14 Td
+(2. Clic en **Anadir nuevo usuario**.) Tj
+0 -14 Td
+(3. Capturar empleado, alias, correo, contrasena y rol.) Tj
+0 -14 Td
+(4. Guardar.) Tj
+0 -14 Td
+(5. Para cambios, usar accion **Editar**.) Tj
+0 -14 Td
+(6. Para desactivar/reactivar, usar el boton de eliminar/restaurar.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Crear usuario "cajero1" para el turno de tarde, con rol operativo y correo corporativo.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Listado y alta de usuarios\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(B\) CONFIGURACION DEL SISTEMA) Tj
+0 -14 Td
+(**Descripcion:** Actualiza datos de la empresa y parametros como impuesto y moneda.) Tj
+ET
+endstream
+endobj
+10 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 11 0 R >>
+endobj
+11 0 obj
+<< /Length 2251 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+() Tj
+0 -14 Td
+(**Paso a paso:**) Tj
+0 -14 Td
+(1. Entrar a **Empresa**.) Tj
+0 -14 Td
+(2. Editar razon social, datos fiscales/contacto y configuracion de impuesto.) Tj
+0 -14 Td
+(3. Seleccionar moneda.) Tj
+0 -14 Td
+(4. Clic en **Actualizar**.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Cambiar el porcentaje de impuesto y abreviatura para reflejar una nueva politica fiscal.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Pantalla de configuracion de empresa\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(C\) ADMINISTRACION DE CATALOGOS) Tj
+0 -14 Td
+(**Descripcion:** Mantiene la base operativa del negocio \(categorias, presentaciones, productos,) Tj
+0 -14 Td
+(clientes y proveedores\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso \(general\):**) Tj
+0 -14 Td
+(1. Abrir modulo deseado \(ej. **Categorias** o **Productos**\).) Tj
+0 -14 Td
+(2. Clic en **Nuevo** o **Anadir**.) Tj
+0 -14 Td
+(3. Capturar informacion requerida.) Tj
+0 -14 Td
+(4. Guardar registro.) Tj
+0 -14 Td
+(5. Editar cuando sea necesario desde acciones.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Crear categoria "Anillos", presentacion "Par", y luego registrar un producto con codigo,) Tj
+0 -14 Td
+(precio y stock inicial.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Alta de categorias/presentaciones/productos\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(D\) REPORTES) Tj
+0 -14 Td
+(**Descripcion:** Genera documentos para control y auditoria operativa.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso:**) Tj
+0 -14 Td
+(1. Ir al modulo de **Ventas** o **Pedidos**.) Tj
+0 -14 Td
+(2. Seleccionar registro.) Tj
+0 -14 Td
+(3. Usar opcion **Descargar PDF**.) Tj
+0 -14 Td
+(4. Para ventas, tambien usar **Exportar Excel** cuando aplique.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Exportar ventas del periodo para revision administrativa mensual.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Exportacion PDF/Excel\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(E\) OTROS MODULOS RELEVANTES) Tj
+0 -14 Td
+(- **Roles:** crear y ajustar permisos por perfil.) Tj
+0 -14 Td
+(- **Empleados:** registrar personal y datos base.) Tj
+ET
+endstream
+endobj
+12 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 13 0 R >>
+endobj
+13 0 obj
+<< /Length 2244 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+(- **Registro de actividad:** monitorear acciones del sistema.) Tj
+0 -14 Td
+(- **Caja:** apertura/cierre y control de movimientos.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5.2 USUARIO) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(DESCRIPCION DEL ROL) Tj
+0 -14 Td
+(Perfil operativo que ejecuta procesos diarios \(ventas, pedidos, caja y consulta de inventario\),) Tj
+0 -14 Td
+(con alcance limitado por permisos.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(PERMISOS) Tj
+0 -14 Td
+(Dependen del rol asignado. Puede tener permisos de consulta o captura en modulos especificos.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(ACCESO A MODULOS) Tj
+0 -14 Td
+(Normalmente: Ventas, Pedidos, Caja/Movimientos, Clientes y consulta de inventario/kardex \(segun) Tj
+0 -14 Td
+(politica interna\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(FUNCIONALIDADES DEL USUARIO) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(A\) OPERACIONES PRINCIPALES DEL SISTEMA) Tj
+0 -14 Td
+(**Descripcion:** Registro de ventas y pedidos; consulta de existencias.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso \(venta\):**) Tj
+0 -14 Td
+(1. Ir a **Ventas > Crear**.) Tj
+0 -14 Td
+(2. Seleccionar cliente y comprobante.) Tj
+0 -14 Td
+(3. Agregar productos y cantidades.) Tj
+0 -14 Td
+(4. Registrar metodo\(s\) de pago.) Tj
+0 -14 Td
+(5. Confirmar con **Cobrar venta**.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Venta de 2 productos, pago mixto \(efectivo + tarjeta\), emision de comprobante.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Flujo de creacion de venta\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(B\) REGISTRO DE INFORMACION) Tj
+0 -14 Td
+(**Descripcion:** Captura de datos operativos de pedidos, movimientos de caja y actualizaciones) Tj
+0 -14 Td
+(permitidas.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso \(pedido\):**) Tj
+0 -14 Td
+(1. Ir a **Pedidos > Crear**.) Tj
+0 -14 Td
+(2. Elegir proveedor y persona de recojo.) Tj
+0 -14 Td
+(3. Agregar productos y cantidades.) Tj
+0 -14 Td
+(4. Revisar subtotal/impuesto/total.) Tj
+0 -14 Td
+(5. Guardar pedido.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Registrar pedido para reposicion de stock de temporada.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Formulario de pedido y detalle\)*) Tj
+ET
+endstream
+endobj
+14 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 15 0 R >>
+endobj
+15 0 obj
+<< /Length 2129 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(C\) CONSULTAS) Tj
+0 -14 Td
+(**Descripcion:** Revision de informacion historica y de estado.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso:**) Tj
+0 -14 Td
+(1. Abrir el modulo requerido \(Ventas, Pedidos, Kardex, Inventario, Caja\).) Tj
+0 -14 Td
+(2. Usar la tabla para buscar/filtrar.) Tj
+0 -14 Td
+(3. Entrar al detalle o descargar comprobante cuando aplique.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Consultar una venta cancelada y verificar su comprobante PDF.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(D\) PROCESOS DIARIOS) Tj
+0 -14 Td
+(**Descripcion:** Secuencia tipica de operacion en jornada laboral.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Paso a paso sugerido:**) Tj
+0 -14 Td
+(1. Abrir caja \(si tiene permiso\).) Tj
+0 -14 Td
+(2. Registrar ventas y/o pedidos del dia.) Tj
+0 -14 Td
+(3. Hacer retiros de caja cuando corresponda.) Tj
+0 -14 Td
+(4. Revisar inventario/kardex en cierres parciales.) Tj
+0 -14 Td
+(5. Cerrar caja al finalizar turno.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**Ejemplo practico:**) Tj
+0 -14 Td
+(- Turno matutino: apertura con saldo inicial, 12 ventas, 1 retiro operativo, cierre con) Tj
+0 -14 Td
+(conciliacion.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(6. FLUJOS DE TRABAJO COMUNES) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(FLUJO 1: CREAR, EDITAR Y DESACTIVAR UN REGISTRO \(EJ. CLIENTE\)) Tj
+0 -14 Td
+(1. Crear desde modulo **Clientes**.) Tj
+0 -14 Td
+(2. Editar en la opcion **Editar**.) Tj
+0 -14 Td
+(3. Desactivar o eliminar segun las politicas del sistema.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(FLUJO 2: GENERAR REPORTES) Tj
+0 -14 Td
+(1. Entrar a **Ventas** o **Pedidos**.) Tj
+0 -14 Td
+(2. Seleccionar la operacion.) Tj
+0 -14 Td
+(3. Descargar PDF o exportar Excel \(ventas\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(FLUJO 3: PROCESO FRECUENTE DE VENTA) Tj
+0 -14 Td
+(1. Verificar caja abierta.) Tj
+0 -14 Td
+(2. Crear venta y agregar productos.) Tj
+0 -14 Td
+(3. Registrar pagos.) Tj
+0 -14 Td
+(4. Confirmar cobro.) Tj
+0 -14 Td
+(5. Entregar comprobante.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(FLUJO 4: CANCELACION CONTROLADA) Tj
+ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 17 0 R >>
+endobj
+17 0 obj
+<< /Length 2537 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+(1. Entrar al listado \(ventas/pedidos\).) Tj
+0 -14 Td
+(2. Ubicar el registro.) Tj
+0 -14 Td
+(3. Confirmar cancelacion en modal.) Tj
+0 -14 Td
+(4. Verificar actualizacion en stock/caja/estado.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Flujograma operativo simple\)*) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(7. MENSAJES DE ERROR Y SOLUCION DE PROBLEMAS) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(| Error o situacion | Posible causa | Solucion recomendada |) Tj
+0 -14 Td
+(|---|---|---|) Tj
+0 -14 Td
+(| "Credenciales incorrectas" | Correo/contrasena invalidos | Verificar escritura y volver a) Tj
+0 -14 Td
+(intentar. |) Tj
+0 -14 Td
+(| Usuario sin acceso a modulo | Falta de permisos | Solicitar ajuste de rol al Administrador. |) Tj
+0 -14 Td
+(| "Debe aperturar una caja" | Se intenta operar sin caja abierta | Ir a modulo **Cajas** y) Tj
+0 -14 Td
+(aperturar. |) Tj
+0 -14 Td
+(| No permite guardar venta/pedido | Campos obligatorios incompletos | Revisar formulario y) Tj
+0 -14 Td
+(completar datos faltantes. |) Tj
+0 -14 Td
+(| Cantidad mayor al stock | Se supera inventario disponible | Reducir cantidad o reabastecer) Tj
+0 -14 Td
+(stock. |) Tj
+0 -14 Td
+(| No aparece boton de accion | Permiso no asignado o rol restringido | Consultar con) Tj
+0 -14 Td
+(Administrador. |) Tj
+0 -14 Td
+(| Error al exportar PDF/Excel | Falla temporal de conexion o datos | Reintentar; si persiste,) Tj
+0 -14 Td
+(reportar al area de soporte. |) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(8. PREGUNTAS FRECUENTES \(FAQ\)) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**1\) Por que no veo todos los modulos?**) Tj
+0 -14 Td
+(Porque el sistema muestra opciones segun permisos del rol.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**2\) Puedo recuperar mi contrasena desde el login?**) Tj
+0 -14 Td
+(En la version actual, normalmente lo gestiona un Administrador.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**3\) Que hago si no puedo registrar una venta?**) Tj
+0 -14 Td
+(Verifique que la caja este abierta, que exista stock y que el pago cubra el total.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**4\) Como imprimo o guardo comprobantes?**) Tj
+0 -14 Td
+(Desde el listado de ventas/pedidos use la opcion **Descargar PDF**.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(**5\) Se puede exportar informacion masiva?**) Tj
+0 -14 Td
+(Si, en ventas existe exportacion a Excel.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(9. GLOSARIO) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(- **POS:** Punto de venta.) Tj
+0 -14 Td
+(- **Kardex:** Historial de movimientos de inventario por producto.) Tj
+ET
+endstream
+endobj
+18 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 842] /Resources << /Font << /F1 3 0 R >> >> /Contents 19 0 R >>
+endobj
+19 0 obj
+<< /Length 862 >>
+stream
+BT
+/F1 10 Tf
+50 800 Td
+(- **Comprobante:** Documento de respaldo de una venta.) Tj
+0 -14 Td
+(- **Pedido apartado:** Solicitud registrada pendiente de cierre/cancelacion.) Tj
+0 -14 Td
+(- **Caja aperturada:** Caja activa para registrar cobros y movimientos.) Tj
+0 -14 Td
+(- **Rol:** Conjunto de permisos asignados a un usuario.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(---) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(RECOMENDACIONES DE USO) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(- Mantenga sus datos de acceso protegidos.) Tj
+0 -14 Td
+(- Cierre sesion al finalizar su turno.) Tj
+0 -14 Td
+(- Registre operaciones en tiempo real para evitar inconsistencias.) Tj
+0 -14 Td
+(- No comparta cuentas entre empleados.) Tj
+0 -14 Td
+(- Solicite capacitacion breve al Administrador antes de operar en produccion.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+([Agregar imagen aqui] *\(Checklist de buenas practicas de uso\)*) Tj
+ET
+endstream
+endobj
+xref
+0 20
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000164 00000 n 
+0000000234 00000 n 
+0000000360 00000 n 
+0000002916 00000 n 
+0000003042 00000 n 
+0000005182 00000 n 
+0000005308 00000 n 
+0000007644 00000 n 
+0000007772 00000 n 
+0000010076 00000 n 
+0000010204 00000 n 
+0000012501 00000 n 
+0000012629 00000 n 
+0000014811 00000 n 
+0000014939 00000 n 
+0000017529 00000 n 
+0000017657 00000 n 
+trailer
+<< /Size 20 /Root 1 0 R >>
+startxref
+18571
+%%EOF
