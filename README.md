@@ -89,3 +89,5 @@ Este proyecto está licenciado bajo la licencia MIT. Consulta el archivo [LICENS
 
 
 
+
+- POS_TICKET_WIDTH_MM: ancho del ticket POS en mm (58 u 80).
