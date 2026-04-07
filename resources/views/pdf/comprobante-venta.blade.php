@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <title>Ticket</title>
 
+    @php
+        $ticketWidthMm = (float) config('printing.ticket_width_mm', 80);
+        $ticketWidthPx = (int) round($ticketWidthMm * 3.78);
+    @endphp
+
     <style>
         body {
             font-family: monospace;
@@ -14,9 +19,7 @@
         }
 
         .ticket {
-            width: 220px;
-            /* 58mm */
-            /* width: 300px;  80mm */
+            width: {{ $ticketWidthPx }}px;
             margin: auto;
             padding: 5px;
             font-size: 11px;

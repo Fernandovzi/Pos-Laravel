@@ -38,6 +38,12 @@ class ExportPDFController extends Controller
             'empresa' => $empresa,
         ]);
 
+        if (! $isFactura) {
+            $ticketWidthMm = (float) config('printing.ticket_width_mm', 80);
+            $ticketWidthPt = $ticketWidthMm * 72 / 25.4;
+            $pdf->setPaper([0, 0, $ticketWidthPt, 2000]);
+        }
+
         $nombreArchivo = $isFactura ? 'factura-' . $venta->id : 'ticket-' . $venta->id;
 
         return $pdf->stream($nombreArchivo . '.pdf');
