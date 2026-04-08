@@ -6,23 +6,53 @@
     <title>Ticket</title>
 
     @php
-        $ticketWidthMm = (float) config('printing.ticket_width_mm', 80);
-        $ticketWidthPx = (int) round($ticketWidthMm * 3.78);
+    $ticketWidthMm = (float) config('printing.ticket_width_mm', 80);
+    $ticketPaddingMm = (float) config('printing.ticket_padding_mm', 2);
+    $printableWidthMm = (float) config('printing.ticket_printable_width_mm', 72);
+    $safeTicketWidthMm = max(min($printableWidthMm, $ticketWidthMm) - ($ticketPaddingMm * 2), 40);
     @endphp
 
     <style>
+        @page {
+            margin: 0;
+
+            size: {
+                    {
+                    $ticketWidthMm
+                }
+            }
+
+            mm auto;
+        }
+
+        html,
         body {
             font-family: monospace;
             margin: 0;
             padding: 0;
             background: #fff;
+            width: {{ $ticketWidthMm }}mm;
         }
 
         .ticket {
-            width: {{ $ticketWidthPx }}px;
+            width: {
+                    {
+                    $safeTicketWidthMm
+                }
+            }
+
+            mm;
             margin: auto;
-            padding: 5px;
-            font-size: 11px;
+
+            padding: 0 {
+                    {
+                    $ticketPaddingMm
+                }
+            }
+
+            mm;
+            box-sizing: border-box;
+            font-size: 12px;
         }
 
         .center {
@@ -60,11 +90,11 @@
         }
 
         .qty {
-            width: 25px;
+            width: 12px;
         }
 
         .desc {
-            width: 120px;
+            width: 58px;
         }
 
         .price {
@@ -73,7 +103,7 @@
         }
 
         .total {
-            width: 45px;
+            width: 30px;
             text-align: right;
         }
     </style>
