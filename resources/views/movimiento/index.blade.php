@@ -27,31 +27,37 @@
                             <div class="d-flex flex-wrap gap-3 text-muted small">
                                 <span><i class="fa-solid fa-calendar-days me-1"></i>Apertura: {{ $caja->fecha_apertura }} - {{ $caja->hora_apertura }}</span>
                                 @if ($caja->fecha_hora_cierre)
-                                    <span><i class="fa-solid fa-lock me-1"></i>Cierre: {{ $caja->fecha_cierre }} - {{ $caja->hora_cierre }}</span>
+                                <span><i class="fa-solid fa-lock me-1"></i>Cierre: {{ $caja->fecha_cierre }} - {{ $caja->hora_cierre }}</span>
                                 @else
-                                    <span><i class="fa-solid fa-lock-open me-1"></i>Caja actualmente abierta</span>
+                                <span><i class="fa-solid fa-lock-open me-1"></i>Caja actualmente abierta</span>
                                 @endif
                             </div>
                         </div>
 
                         @if ($caja->estado == 1)
-                            <div class="d-flex flex-wrap gap-2">
-                                @can('crear-venta')
-                                    <a href="{{ route('ventas.create') }}" class="btn btn-primary btn-ui">
-                                        <i class="fa-solid fa-cart-plus me-1"></i>Nueva venta
-                                    </a>
-                                @endcan
-                                @can('crear-movimiento')
-                                    <a href="{{ route('movimientos.create', ['caja_id' => $caja->id]) }}" class="btn btn-success btn-ui">
-                                        <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Nuevo retiro
-                                    </a>
-                                @endcan
-                                @can('cerrar-caja')
-                                    <button type="button" class="btn btn-danger btn-ui" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $caja->id }}">
-                                        <i class="fa-solid fa-lock me-1"></i>Cerrar caja
-                                    </button>
-                                @endcan
-                            </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            @can('crear-venta')
+                            <a href="{{ route('ventas.create') }}" class="btn btn-primary btn-ui">
+                                <i class="fa-solid fa-cart-plus me-1"></i>Nueva venta
+                            </a>
+                            @endcan
+                            @can('crear-movimiento')
+                            <a href="{{ route('movimientos.create', ['caja_id' => $caja->id]) }}" class="btn btn-success btn-ui">
+                                <i class="fa-solid fa-arrow-up-right-from-square me-1"></i>Nuevo retiro
+                            </a>
+                            @endcan
+                            @can('cerrar-caja')
+                            <button type="button" class="btn btn-danger btn-ui" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $caja->id }}">
+                                <i class="fa-solid fa-lock me-1"></i>Cerrar caja
+                            </button>
+                            @endcan
+                        </div>
+                        @else
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{{ route('cajas.movimientos.excel', ['caja' => $caja->id]) }}" class="btn btn-success btn-ui">
+                                <i class="fa-solid fa-file-excel me-1"></i>Exportar cierre en Excel
+                            </a>
+                        </div>
                         @endif
                     </div>
 
@@ -129,25 +135,27 @@
                     <tr>
                         <th>Tipo</th>
                         <th>Descripción</th>
+                        <th>Cliente</th>
                         <th>Método de pago</th>
                         <th class="text-end">Monto</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($caja->movimientos as $item)
-                        <tr>
-                            <td>
-                                <span class="badge rounded-pill {{ $item->tipo->value === 'VENTA' ? 'text-bg-success' : 'text-bg-warning' }}">
-                                    {{ $item->tipo->value }}
-                                </span>
-                            </td>
-                            <td>
-                                <p class="fw-semibold mb-1">{{ $item->descripcion }}</p>
-                                <p class="text-muted mb-0 small">Caja: {{ $caja->nombre }}</p>
-                            </td>
-                            <td>{{ $item->metodo_pago?->label() ?? 'No definido' }}</td>
-                            <td class="text-end">{{ $item->monto }}</td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <span class="badge rounded-pill {{ $item->tipo->value === 'VENTA' ? 'text-bg-success' : 'text-bg-warning' }}">
+                                {{ $item->tipo->value }}
+                            </span>
+                        </td>
+                        <td>
+                            <p class="fw-semibold mb-1">{{ $item->descripcion }}</p>
+                            <p class="text-muted mb-0 small">Caja: {{ $caja->nombre }}</p>
+                        </td>
+                         <td>{{ $item->cliente_nombre ?? 'No aplica' }}</td>
+                        <td>{{ $item->metodo_pago?->label() ?? 'No definido' }}</td>
+                        <td class="text-end">{{ $item->monto }}</td>
+                    </tr>
                     @endforeach
                 </tbody>
             </table>
