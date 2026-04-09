@@ -8,6 +8,7 @@ use App\Enums\TipoTransaccionEnum;
 use App\Events\CreateVentaDetalleEvent;
 use App\Events\CreateVentaEvent;
 use App\Http\Requests\StoreVentaRequest;
+use App\Models\Caja;
 use App\Models\Cliente;
 use App\Models\Inventario;
 use App\Models\Kardex;
@@ -72,7 +73,14 @@ class ventaController extends Controller
     {
         try {
             $venta = DB::transaction(function () use ($request) {
-                $venta = Venta::create($request->safe()->except('pagos', 'arrayidproducto', 'arraycantidad', 'arrayprecioventa'));
+                $venta = Venta::create($request->safe()->except(
+                    'pagos',
+                    'arrayidproducto',
+                    'arraycantidad',
+                    'arrayprecioventa',
+                    'arraydescuentoproducto',
+                    'descuento_total_porcentaje'
+                ));
                 $detalleVenta = $this->obtenerDetalleVenta($request);
 
                 $pivotData = $detalleVenta
@@ -121,8 +129,12 @@ class ventaController extends Controller
     {
         $empresa = $this->empresaService->obtenerEmpresa();
         $venta->load(['pagos', 'productos.presentacione', 'cliente.persona', 'user', 'comprobante']);
+        $tieneCajaAbierta = Caja::where('user_id', Auth::id())
+            ->where('estado', 1)
+            ->exists();
 
-        return view('venta.show', compact('venta', 'empresa'));
+
+        return view('venta.show', compact('venta', 'empresa', 'tieneCajaAbierta'));
     }
 
     public function edit(string $id)
@@ -141,8 +153,17 @@ class ventaController extends Controller
             return redirect()->route('ventas.show', $venta)->with('error', 'La venta ya fue cancelada.');
         }
 
+        $cajaAbierta = Caja::where('user_id', Auth::id())
+            ->where('estado', 1)
+            ->latest('id')
+            ->first();
+
+        if (!$cajaAbierta) {
+            return redirect()->route('ventas.show', $venta)->with('error', 'Debe tener una caja abierta para cancelar la venta.');
+        }
+
         try {
-            DB::transaction(function () use ($venta): void {
+            DB::transaction(function () use ($venta, $cajaAbierta): void {
                 $venta->load(['productos', 'pagos']);
 
                 foreach ($venta->productos as $producto) {
@@ -171,7 +192,7 @@ class ventaController extends Controller
                         'descripcion' => 'Cancelación de venta n° ' . $venta->numero_comprobante,
                         'monto' => $pago->monto,
                         'metodo_pago' => $pago->metodo_pago,
-                        'caja_id' => $venta->caja_id,
+                        'caja_id' => $cajaAbierta->id,
                     ]);
                 }
 
@@ -227,14 +248,16 @@ class ventaController extends Controller
         $idsProductos = $request->validated('arrayidproducto');
         $cantidades = $request->validated('arraycantidad');
         $preciosVenta = $request->validated('arrayprecioventa');
+        $descuentosProducto = $request->validated('arraydescuentoproducto');
 
         return collect($idsProductos)
             ->values()
-            ->map(function ($productoId, int $index) use ($cantidades, $preciosVenta): array {
+            ->map(function ($productoId, int $index) use ($cantidades, $preciosVenta, $descuentosProducto): array {
                 return [
                     'producto_id' => (int) $productoId,
                     'cantidad' => $cantidades[$index],
                     'precio_venta' => $preciosVenta[$index],
+                    'descuento_porcentaje' => $descuentosProducto[$index] ?? 0,
                 ];
             });
     }

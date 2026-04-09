@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Detalle de venta"/>
+    <x-ui.page-header title="Detalle de venta" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('ventas.index') }}">Ventas</a></li>
@@ -17,15 +17,21 @@
         </a>
 
         @can('eliminar-venta')
-            @if($venta->estado !== 'CANCELADA')
-            <form action="{{ route('ventas.destroy', $venta) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-ui">
-                    <i class="fa-solid fa-ban me-1"></i>Cancelar venta
-                </button>
-            </form>
-            @endif
+        @if($venta->estado !== 'CANCELADA')
+        @if(!$tieneCajaAbierta)
+        <div class="alert alert-warning mb-0 py-2 px-3">
+            <i class="fa-solid fa-triangle-exclamation me-1"></i>
+            Debe aperturar una caja para cancelar esta venta.
+        </div>
+        @endif
+        <form action="{{ route('ventas.destroy', $venta) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
+            @csrf
+            @method('DELETE')
+              <button type="submit" class="btn btn-danger btn-ui" @disabled(!$tieneCajaAbierta) title="{{ !$tieneCajaAbierta ? 'Debe aperturar una caja para cancelar' : '' }}">
+                <i class="fa-solid fa-ban me-1"></i>Cancelar venta
+            </button>
+        </form>
+        @endif
         @endcan
     </div>
 
@@ -122,9 +128,18 @@
                     @endforeach
                 </tbody>
                 <tfoot>
-                    <tr><th colspan="4" class="text-end">Sumas</th><th class="text-end">{{ $venta->subtotal }} {{ $empresa->moneda->simbolo }}</th></tr>
-                    <tr><th colspan="4" class="text-end">Impuesto</th><th class="text-end">{{ $venta->impuesto }} {{ $empresa->moneda->simbolo }}</th></tr>
-                    <tr><th colspan="4" class="text-end">Total</th><th class="text-end">{{ $venta->total }} {{ $empresa->moneda->simbolo }}</th></tr>
+                    <tr>
+                        <th colspan="4" class="text-end">Sumas</th>
+                        <th class="text-end">{{ $venta->subtotal }} {{ $empresa->moneda->simbolo }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="text-end">Impuesto</th>
+                        <th class="text-end">{{ $venta->impuesto }} {{ $empresa->moneda->simbolo }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="4" class="text-end">Total</th>
+                        <th class="text-end">{{ $venta->total }} {{ $empresa->moneda->simbolo }}</th>
+                    </tr>
                 </tfoot>
             </table>
         </div>

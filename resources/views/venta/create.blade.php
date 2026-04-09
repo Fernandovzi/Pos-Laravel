@@ -31,8 +31,7 @@
                             data-rfc="{{$item->persona->rfc ?? ''}}"
                             data-regimen="{{$item->persona->regimen_fiscal ?? ''}}"
                             data-uso-cfdi="{{$item->persona->uso_cfdi ?? ''}}"
-                            data-cp-fiscal="{{$item->persona->codigo_postal_fiscal ?? ''}}"
-                        >
+                            data-cp-fiscal="{{$item->persona->codigo_postal_fiscal ?? ''}}">
                             {{$item->nombre_documento}}
                         </option>
                         @endforeach
@@ -74,6 +73,10 @@
                     <label class="form-label">Cantidad</label>
                     <input id="cantidad" type="number" class="form-control" placeholder="Cantidad">
                 </div>
+                <div class="col-lg-2">
+                    <label class="form-label">% Desc. pieza</label>
+                    <input id="descuento_producto" type="number" class="form-control" placeholder="0" min="0" max="100" step="0.01">
+                </div>
                 <div class="col-12 text-end">
                     <button id="btn_agregar" class="btn btn-primary" type="button">Agregar producto</button>
                 </div>
@@ -87,19 +90,47 @@
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-striped align-middle mb-0" id="tabla_detalle">
-                <thead>
-                    <tr><th>Producto</th><th>Presentación</th><th class="text-end">Cantidad</th><th class="text-end">Precio</th><th class="text-end">Subtotal</th><th width="70"></th></tr>
-                </thead>
-                <tbody></tbody>
-                <tfoot>
-                    <tr><th colspan="4" class="text-end">Subtotal</th><th class="text-end" id="sumas">0</th><th></th></tr>
-                    <tr><th colspan="4" class="text-end">Impuesto</th><th class="text-end" id="igv">0</th><th></th></tr>
-                    <tr><th colspan="4" class="text-end">Total</th><th class="text-end" id="total">0</th><th></th></tr>
-                </tfoot>
-                                    </table>
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Presentación</th>
+                                    <th class="text-end">Cantidad</th>
+                                    <th class="text-end">Precio</th>
+                                    <th class="text-end">Subtotal</th>
+                                    <th width="70"></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4" class="text-end">Subtotal</th>
+                                    <th class="text-end" id="sumas">0</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="4" class="text-end">Impuesto</th>
+                                    <th class="text-end" id="igv">0</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <th colspan="4" class="text-end">Total</th>
+                                    <th class="text-end" id="total">0</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>
+
+            <div class="row g-3 align-items-end mt-2">
+                <div class="col-lg-4 ms-auto">
+                    <label class="form-label">% Descuento total</label>
+                    <input id="descuento_total_porcentaje" name="descuento_total_porcentaje" type="number" class="form-control" placeholder="0" min="0" max="100" step="0.01" value="0">
+                    <small class="sale-help">Solo puedes aplicar descuento por producto o descuento total.</small>
+                </div>
+            </div>
+
         </x-ui.card>
 
         <input type="hidden" name="subtotal" id="inputSubtotal" value="0">
@@ -116,9 +147,9 @@
                     <label class="form-label">Método de pago</label>
                     <select id="pago_metodo" class="form-control selectpicker" title="Selecciona método">
                         @foreach ($optionsMetodoPago as $item)
-                            @if ($item->value !== \App\Enums\MetodoPagoEnum::PagoMixto->value)
-                            <option value="{{$item->value}}">{{$item->label()}}</option>
-                            @endif
+                        @if ($item->value !== \App\Enums\MetodoPagoEnum::PagoMixto->value)
+                        <option value="{{$item->value}}">{{$item->label()}}</option>
+                        @endif
                         @endforeach
                     </select>
                 </div>
@@ -143,7 +174,14 @@
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-striped align-middle mb-0" id="tabla_pagos">
-                            <thead><tr><th>Método</th><th class="text-end" width="160">Monto</th><th>Referencia</th><th width="70"></th></tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Método</th>
+                                    <th class="text-end" width="160">Monto</th>
+                                    <th>Referencia</th>
+                                    <th width="70"></th>
+                                </tr>
+                            </thead>
                             <tbody></tbody>
                         </table>
                     </div>
@@ -151,10 +189,18 @@
             </div>
 
             <div class="row g-3 mt-1">
-                <div class="col-md-3"><div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div></div>
-                <div class="col-md-3"><div class="sale-total-box">Pagado<br><span class="value" id="box_pagado">0.00</span></div></div>
-                <div class="col-md-3"><div class="sale-total-box">Pendiente / cambio<br><span class="value" id="box_pendiente">0.00</span></div></div>
-                <div class="col-md-3"><div class="sale-total-box">Cambio a devolver<br><span class="value" id="box_cambio">0.00</span></div></div>
+                <div class="col-md-3">
+                    <div class="sale-total-box">Total venta<br><span class="value" id="box_total">0.00</span></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="sale-total-box">Pagado<br><span class="value" id="box_pagado">0.00</span></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="sale-total-box">Pendiente / cambio<br><span class="value" id="box_pendiente">0.00</span></div>
+                </div>
+                <div class="col-md-3">
+                    <div class="sale-total-box">Cambio a devolver<br><span class="value" id="box_cambio">0.00</span></div>
+                </div>
             </div>
 
             <div class="mt-3">
@@ -169,7 +215,7 @@
         <div class="page-toolbar mt-4">
             <x-ui.button variant="primary" type="submit" class="text-white">Cobrar venta</x-ui.button>
             <a href="{{ route('ventas.index') }}">
-            <x-ui.button variant="danger" class="text-white">Cancelar</x-ui.button>
+                <x-ui.button variant="danger" class="text-white">Cancelar</x-ui.button>
             </a>
         </div>
     </form>
@@ -179,234 +225,308 @@
 @push('js')
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script>
-let cont = 0, subtotal = [], sumas = 0, igv = 0, total = 0, arrayIdProductos = [];
-let pagos = [];
-const impuesto = @json($empresa->porcentaje_impuesto);
-const labels = {
-    EFECTIVO: 'Efectivo',
-    TARJETA_DEBITO: 'Tarjeta de Débito',
-    TARJETA_CREDITO: 'Tarjeta de Crédito',
-    TRANSFERENCIA_SPEI: 'Transferencia / SPEI',
-};
+    let cont = 0,
+        subtotal = [],
+        sumas = 0,
+        subtotalNeto = 0,
+        igv = 0,
+        total = 0,
+        arrayIdProductos = [];
+    let pagos = [];
+    const detalleProductos = {};
+    const impuesto = Number(@json(data_get($empresa, 'porcentaje_impuesto', 0)));
+    const labels = {
+        EFECTIVO: 'Efectivo',
+        TARJETA_DEBITO: 'Tarjeta de Débito',
+        TARJETA_CREDITO: 'Tarjeta de Crédito',
+        TRANSFERENCIA_SPEI: 'Transferencia / SPEI',
+    };
 
-$(function() {
-    $('#producto_id').change(mostrarValores);
-    $('#btn_agregar').click(agregarProducto);
-    $('#btn_agregar_pago').click(agregarPago);
-    $('#comprobante_id, #cliente_id').on('changed.bs.select', validarRequisitosFactura);
-    $('form').on('submit', validarPagosAntesDeEnviar);
-    renderResumenPagos();
-});
+    $(function() {
+        $('#producto_id').change(mostrarValores);
+        $('#btn_agregar').click(agregarProducto);
+        $('#btn_agregar_pago').click(agregarPago);
+        $('#descuento_total_porcentaje').on('input', cambiarDescuentoTotal);
+        $('#comprobante_id, #cliente_id').on('changed.bs.select', validarRequisitosFactura);
+        $('form').on('submit', validarPagosAntesDeEnviar);
+        renderResumenPagos();
+    });
 
-function mostrarValores() {
-    const dataProducto = ($('#producto_id').val() || '').split('-');
-    $('#stock').val(dataProducto[1] || '');
-    $('#precio').val(dataProducto[2] || '');
-}
+    function mostrarValores() {
+        const dataProducto = ($('#producto_id').val() || '').split('-');
+        $('#stock').val(dataProducto[1] || '');
+        $('#precio').val(dataProducto[2] || '');
+    }
 
-function agregarProducto() {
-    const dataProducto = ($('#producto_id').val() || '').split('-');
-    const [idProducto, stock, precioVenta, nameProducto, presentacioneProducto] = dataProducto;
-    const cantidad = $('#cantidad').val();
+    function agregarProducto() {
+        const dataProducto = ($('#producto_id').val() || '').split('-');
+        const [idProducto, stock, precioVenta, nameProducto, presentacioneProducto] = dataProducto;
+        const cantidad = $('#cantidad').val();
+        const descuentoPorcentaje = parseFloat($('#descuento_producto').val() || 0);
 
-    if (!idProducto || !cantidad) return showModal('Completa producto y cantidad.');
-    if (!(parseInt(cantidad) > 0 && (cantidad % 1 == 0))) return showModal('La cantidad debe ser un entero mayor a 0.');
-    if (parseInt(cantidad) > parseInt(stock)) return showModal('La cantidad supera el stock disponible.');
-    if (arrayIdProductos.includes(idProducto)) return showModal('El producto ya fue agregado.');
+        if (!idProducto || !cantidad) return showModal('Completa producto y cantidad.');
+        if (!(parseInt(cantidad) > 0 && (cantidad % 1 == 0))) return showModal('La cantidad debe ser un entero mayor a 0.');
+        if (parseInt(cantidad) > parseInt(stock)) return showModal('La cantidad supera el stock disponible.');
+        if (arrayIdProductos.includes(idProducto)) return showModal('El producto ya fue agregado.');
+        if (descuentoPorcentaje < 0 || descuentoPorcentaje > 100) return showModal('El descuento por pieza debe estar entre 0 y 100.');
+        if (Number($('#descuento_total_porcentaje').val() || 0) > 0 && descuentoPorcentaje > 0) {
+            return showModal('No puedes combinar descuento total con descuento por producto.');
+        }
 
-    subtotal[cont] = round(cantidad * precioVenta);
-    sumas = round(sumas + subtotal[cont]);
-    igv = round(sumas / 100 * impuesto);
-    total = round(sumas + igv);
+        const precioBase = Number(precioVenta);
+        const precioConDescuento = round(precioBase * (1 - (descuentoPorcentaje / 100)));
+        subtotal[cont] = round(cantidad * precioConDescuento);
+        detalleProductos[cont] = {
+            idProducto,
+            cantidad: Number(cantidad),
+            precioBase,
+            descuentoPorcentaje,
+            precioConDescuento,
+        };
+        recalcularTotales();
 
-    const fila = `<tr id="fila${cont}">
+        const fila = `<tr id="fila${cont}">
         <td><input type="hidden" name="arrayidproducto[]" value="${idProducto}">${nameProducto}</td>
         <td>${presentacioneProducto}</td>
         <td class="text-end"><input type="hidden" name="arraycantidad[]" value="${cantidad}">${cantidad}</td>
-        <td class="text-end"><input type="hidden" name="arrayprecioventa[]" value="${precioVenta}">${precioVenta}</td>
+        <td class="text-end">
+            <input type="hidden" name="arrayprecioventa[]" value="${precioConDescuento}">
+            <input type="hidden" name="arraydescuentoproducto[]" value="${descuentoPorcentaje}">
+            ${precioConDescuento} ${descuentoPorcentaje > 0 ? `<small class="text-muted d-block">${descuentoPorcentaje}% desc.</small>` : ''}
+        </td>
         <td class="text-end">${subtotal[cont]}</td>
         <td><button class="btn btn-danger btn-sm" type="button" onClick="eliminarProducto(${cont}, ${idProducto})">X</button></td>
-    </tr>`;
+        </tr>`;
 
-    $('#tabla_detalle tbody').append(fila);
-    arrayIdProductos.push(idProducto);
-    cont++;
-    limpiarCampos();
-    renderTotales();
-}
+        $('#tabla_detalle tbody').append(fila);
+        arrayIdProductos.push(idProducto);
+        cont++;
+        limpiarCampos();
+        renderTotales();
+    }
 
-function eliminarProducto(indice, idProducto) {
-    sumas = round(sumas - round(subtotal[indice] || 0));
-    igv = round(sumas / 100 * impuesto);
-    total = round(sumas + igv);
-    $('#fila' + indice).remove();
-    arrayIdProductos = arrayIdProductos.filter(item => item !== String(idProducto));
-    renderTotales();
-}
+    function eliminarProducto(indice, idProducto) {
+        delete detalleProductos[indice];
+        $('#fila' + indice).remove();
+        arrayIdProductos = arrayIdProductos.filter(item => item !== String(idProducto));
 
-function renderTotales() {
-    $('#sumas').html(sumas.toFixed(2));
-    $('#igv').html(igv.toFixed(2));
-    $('#total').html(total.toFixed(2));
-    $('#inputImpuesto').val(igv);
-    $('#inputTotal').val(total);
-    $('#inputSubtotal').val(sumas);
-    renderResumenPagos();
-    sincronizarCamposOcultos();
-}
+        recalcularTotales();
+    }
 
-function agregarPago() {
-    const metodo = $('#pago_metodo').val();
-    const monto = parseFloat($('#pago_monto').val());
-    const referencia = $('#pago_referencia').val();
+    function cambiarDescuentoTotal() {
+        const descuentoTotal = Number($('#descuento_total_porcentaje').val() || 0);
 
-    if (!metodo || isNaN(monto) || monto <= 0) return showModal('Capture método y monto válidos.');
+        if (descuentoTotal < 0 || descuentoTotal > 100) {
+            return showModal('El descuento total debe estar entre 0 y 100.');
+        }
 
-    pagos.push({ metodo_pago: metodo, monto: round(monto), referencia });
-    renderPagos();
+        const hayDescuentoProducto = Object.values(detalleProductos).some(item => Number(item.descuentoPorcentaje) > 0);
+        if (descuentoTotal > 0 && hayDescuentoProducto) {
+            $('#descuento_total_porcentaje').val(0);
+            return showModal('Ya tienes descuentos por producto. Elige solo un tipo de descuento.');
+        }
 
-    $('#pago_monto').val('');
-    $('#pago_referencia').val('');
-    $('#pago_metodo').selectpicker('val', '');
-}
+        recalcularTotales();
+    }
 
-function renderPagos() {
-    const tbody = $('#tabla_pagos tbody');
-    tbody.empty();
+    function recalcularTotales() {
+        sumas = round(Object.values(detalleProductos).reduce((acc, item, idx) => {
+            const itemSubtotal = round(item.cantidad * item.precioConDescuento);
+            subtotal[idx] = itemSubtotal;
+            return acc + itemSubtotal;
+        }, 0));
 
-    pagos.forEach((pago, idx) => {
-        tbody.append(`<tr>
+        const descuentoTotalPorcentaje = Number($('#descuento_total_porcentaje').val() || 0);
+        const descuentoTotalMonto = round(sumas * (descuentoTotalPorcentaje / 100));
+        subtotalNeto = round(sumas - descuentoTotalMonto);
+
+        igv = round(subtotalNeto / 100 * impuesto);
+        total = round(subtotalNeto + igv);
+        renderTotales();
+    }
+
+    function renderTotales() {
+        $('#sumas').html(subtotalNeto.toFixed(2));
+        $('#igv').html(igv.toFixed(2));
+        $('#total').html(total.toFixed(2));
+        $('#inputImpuesto').val(igv);
+        $('#inputTotal').val(total);
+        $('#inputSubtotal').val(subtotalNeto);
+        renderResumenPagos();
+        sincronizarCamposOcultos();
+    }
+
+    function agregarPago() {
+        const metodo = $('#pago_metodo').val();
+        const monto = parseFloat($('#pago_monto').val());
+        const referencia = $('#pago_referencia').val();
+
+        if (!metodo || isNaN(monto) || monto <= 0) return showModal('Capture método y monto válidos.');
+
+        pagos.push({
+            metodo_pago: metodo,
+            monto: round(monto),
+            referencia
+        });
+        renderPagos();
+
+        $('#pago_monto').val('');
+        $('#pago_referencia').val('');
+        $('#pago_metodo').selectpicker('val', '');
+    }
+
+    function renderPagos() {
+        const tbody = $('#tabla_pagos tbody');
+        tbody.empty();
+
+        pagos.forEach((pago, idx) => {
+            tbody.append(`<tr>
             <td>${labels[pago.metodo_pago] || pago.metodo_pago}<input type="hidden" name="pagos[${idx}][metodo_pago]" value="${pago.metodo_pago}"></td>
             <td class="text-end">${Number(pago.monto).toFixed(2)}<input type="hidden" name="pagos[${idx}][monto]" value="${pago.monto}"></td>
             <td>${pago.referencia || ''}<input type="hidden" name="pagos[${idx}][referencia]" value="${pago.referencia || ''}"></td>
             <td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPago(${idx})">X</button></td>
         </tr>`);
-    });
+        });
 
-    sincronizarMetodoPrincipal();
-    renderResumenPagos();
-    sincronizarCamposOcultos();
-}
-
-function eliminarPago(index) {
-    pagos.splice(index, 1);
-    renderPagos();
-}
-
-function sincronizarMetodoPrincipal() {
-    const metodos = [...new Set(pagos.map(p => p.metodo_pago))];
-
-    if (metodos.length > 1) {
-        $('#metodo_pago').val('PAGO_MIXTO');
-        return;
+        sincronizarMetodoPrincipal();
+        renderResumenPagos();
+        sincronizarCamposOcultos();
     }
 
-    if (metodos.length === 1) {
-        $('#metodo_pago').val(metodos[0]);
-        return;
+    function eliminarPago(index) {
+        pagos.splice(index, 1);
+        renderPagos();
     }
 
-    $('#metodo_pago').val('');
-}
+    function sincronizarMetodoPrincipal() {
+        const metodos = [...new Set(pagos.map(p => p.metodo_pago))];
 
-function sincronizarCamposOcultos() {
-    const sumaPagos = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
-    const efectivo = pagos
-        .filter(p => p.metodo_pago === 'EFECTIVO')
-        .reduce((acc, p) => acc + Number(p.monto), 0);
+        if (metodos.length > 1) {
+            $('#metodo_pago').val('PAGO_MIXTO');
+            return;
+        }
 
-    $('#monto_recibido').val(round(sumaPagos));
-    $('#vuelto').val(round(Math.max(0, efectivo - Math.min(efectivo, total))));
-}
+        if (metodos.length === 1) {
+            $('#metodo_pago').val(metodos[0]);
+            return;
+        }
 
-function renderResumenPagos() {
-    const pagado = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
-    const pendiente = round(total - pagado);
-    const efectivo = pagos
-        .filter(p => p.metodo_pago === 'EFECTIVO')
-        .reduce((acc, p) => acc + Number(p.monto), 0);
-    const cambio = round(Math.max(0, pagado - total));
-    const cambioEfectivo = round(Math.max(0, efectivo - Math.min(efectivo, total)));
+        $('#metodo_pago').val('');
+    }
 
-    $('#box_total').text(Number(total).toFixed(2));
-    $('#box_pagado').text(Number(pagado).toFixed(2));
-    $('#box_pendiente').text((pendiente > 0 ? pendiente : 0).toFixed(2));
-    $('#box_cambio').text((cambioEfectivo > 0 ? cambioEfectivo : cambio).toFixed(2));
-}
+    function sincronizarCamposOcultos() {
+        const sumaPagos = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
+        const efectivo = pagos
+            .filter(p => p.metodo_pago === 'EFECTIVO')
+            .reduce((acc, p) => acc + Number(p.monto), 0);
 
-function validarRequisitosFactura() {
-    const comprobanteSel = $('#comprobante_id option:selected');
-    const clienteSel = $('#cliente_id option:selected');
-    const nombreComprobante = (comprobanteSel.data('nombre') || '').toString().toUpperCase();
+        $('#monto_recibido').val(round(sumaPagos));
+        $('#vuelto').val(round(Math.max(0, efectivo - Math.min(efectivo, total))));
+    }
 
-    if (!nombreComprobante.includes('FACTURA')) {
+    function renderResumenPagos() {
+        const pagado = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
+        const pendiente = round(total - pagado);
+        const efectivo = pagos
+            .filter(p => p.metodo_pago === 'EFECTIVO')
+            .reduce((acc, p) => acc + Number(p.monto), 0);
+        const cambio = round(Math.max(0, pagado - total));
+        const cambioEfectivo = round(Math.max(0, efectivo - Math.min(efectivo, total)));
+
+        $('#box_total').text(Number(total).toFixed(2));
+        $('#box_pagado').text(Number(pagado).toFixed(2));
+        $('#box_pendiente').text((pendiente > 0 ? pendiente : 0).toFixed(2));
+        $('#box_cambio').text((cambioEfectivo > 0 ? cambioEfectivo : cambio).toFixed(2));
+    }
+
+    function validarRequisitosFactura() {
+        const comprobanteSel = $('#comprobante_id option:selected');
+        const clienteSel = $('#cliente_id option:selected');
+        const nombreComprobante = (comprobanteSel.data('nombre') || '').toString().toUpperCase();
+
+        if (!nombreComprobante.includes('FACTURA')) {
+            return true;
+        }
+
+        const rfc = (clienteSel.data('rfc') || '').toString().trim();
+        const regimen = (clienteSel.data('regimen') || '').toString().trim();
+        const usoCfdi = (clienteSel.data('uso-cfdi') || '').toString().trim();
+        const cpFiscal = (clienteSel.data('cp-fiscal') || '').toString().trim();
+
+        const faltantes = [];
+        if (!rfc) faltantes.push('RFC');
+        if (!regimen) faltantes.push('Régimen fiscal');
+        if (!usoCfdi) faltantes.push('Uso CFDI');
+        if (!cpFiscal) faltantes.push('Código postal fiscal');
+
+        if (faltantes.length > 0) {
+            showModal(`Para FACTURA faltan datos del cliente: ${faltantes.join(', ')}`);
+            return false;
+        }
+
         return true;
     }
 
-    const rfc = (clienteSel.data('rfc') || '').toString().trim();
-    const regimen = (clienteSel.data('regimen') || '').toString().trim();
-    const usoCfdi = (clienteSel.data('uso-cfdi') || '').toString().trim();
-    const cpFiscal = (clienteSel.data('cp-fiscal') || '').toString().trim();
+    function validarPagosAntesDeEnviar(e) {
+        const sumaPagos = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
+        const descuentoTotal = Number($('#descuento_total_porcentaje').val() || 0);
+        const hayDescuentoProducto = Object.values(detalleProductos).some(item => Number(item.descuentoPorcentaje) > 0);
 
-    const faltantes = [];
-    if (!rfc) faltantes.push('RFC');
-    if (!regimen) faltantes.push('Régimen fiscal');
-    if (!usoCfdi) faltantes.push('Uso CFDI');
-    if (!cpFiscal) faltantes.push('Código postal fiscal');
+        if (!validarRequisitosFactura()) {
+            e.preventDefault();
+            return;
+        }
 
-    if (faltantes.length > 0) {
-        showModal(`Para FACTURA faltan datos del cliente: ${faltantes.join(', ')}`);
-        return false;
+        if (total <= 0) {
+            e.preventDefault();
+            return showModal('Agregue al menos un producto.');
+        }
+
+        if (pagos.length === 0) {
+            e.preventDefault();
+            return showModal('Debe agregar al menos un pago.');
+        }
+
+        if (descuentoTotal > 0 && hayDescuentoProducto) {
+            e.preventDefault();
+            return showModal('Solo puedes aplicar descuento por producto o descuento total.');
+        }
+
+        if (round(sumaPagos) + 0.009 < round(total)) {
+            e.preventDefault();
+            return showModal('La suma de pagos no puede ser menor al total.');
+        }
+
+        sincronizarCamposOcultos();
     }
 
-    return true;
-}
-
-function validarPagosAntesDeEnviar(e) {
-    const sumaPagos = pagos.reduce((acc, p) => acc + Number(p.monto), 0);
-
-    if (!validarRequisitosFactura()) {
-        e.preventDefault();
-        return;
+    function limpiarCampos() {
+        $('#producto_id').selectpicker('val', '');
+        $('#cantidad').val('');
+        $('#descuento_producto').val('');
+        $('#precio').val('');
+        $('#stock').val('');
     }
 
-    if (total <= 0) {
-        e.preventDefault();
-        return showModal('Agregue al menos un producto.');
+    function showModal(message, icon = 'error') {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 2500,
+            icon,
+            title: message
+        });
     }
 
-    if (pagos.length === 0) {
-        e.preventDefault();
-        return showModal('Debe agregar al menos un pago.');
+    function round(num, decimales = 2) {
+        let signo = (num >= 0 ? 1 : -1);
+        num = num * signo;
+        if (decimales === 0) return signo * Math.round(num);
+        num = num.toString().split('e');
+        num = Math.round(+(num[0] + 'e' + (num[1] ? (+num[1] + decimales) : decimales)));
+        num = num.toString().split('e');
+        return signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales));
     }
-
-    if (round(sumaPagos) + 0.009 < round(total)) {
-        e.preventDefault();
-        return showModal('La suma de pagos no puede ser menor al total.');
-    }
-
-    sincronizarCamposOcultos();
-}
-
-function limpiarCampos() {
-    $('#producto_id').selectpicker('val', '');
-    $('#cantidad').val('');
-    $('#precio').val('');
-    $('#stock').val('');
-}
-
-function showModal(message, icon = 'error') {
-    Swal.fire({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2500, icon, title: message });
-}
-
-function round(num, decimales = 2) {
-    let signo = (num >= 0 ? 1 : -1);
-    num = num * signo;
-    if (decimales === 0) return signo * Math.round(num);
-    num = num.toString().split('e');
-    num = Math.round(+(num[0] + 'e' + (num[1] ? (+num[1] + decimales) : decimales)));
-    num = num.toString().split('e');
-    return signo * (num[0] + 'e' + (num[1] ? (+num[1] - decimales) : -decimales));
-}
 </script>
 @endpush

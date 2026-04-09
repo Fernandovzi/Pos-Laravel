@@ -25,6 +25,7 @@ class StoreVentaRequest extends FormRequest
             'subtotal' => 'required|numeric|min:1',
             'impuesto' => 'required|numeric|min:0',
             'total' => 'required|numeric|min:1',
+            'descuento_total_porcentaje' => 'nullable|numeric|min:0|max:100',
             'monto_recibido' => 'required|numeric|min:0',
             'vuelto_entregado' => 'required|numeric|min:0',
             'pagos' => 'required|array|min:1',
@@ -37,6 +38,8 @@ class StoreVentaRequest extends FormRequest
             'arraycantidad.*' => 'required|numeric|min:1',
             'arrayprecioventa' => 'required|array|min:1',
             'arrayprecioventa.*' => 'required|numeric|min:0',
+            'arraydescuentoproducto' => 'required|array|min:1',
+            'arraydescuentoproducto.*' => 'required|numeric|min:0|max:100',
         ];
     }
 
@@ -61,6 +64,7 @@ class StoreVentaRequest extends FormRequest
             'arrayidproducto' => array_values((array) $this->input('arrayidproducto', [])),
             'arraycantidad' => array_values((array) $this->input('arraycantidad', [])),
             'arrayprecioventa' => array_values((array) $this->input('arrayprecioventa', [])),
+            'arraydescuentoproducto' => array_values((array) $this->input('arraydescuentoproducto', [])),
         ]);
     }
 
@@ -70,11 +74,22 @@ class StoreVentaRequest extends FormRequest
             $ids = $this->input('arrayidproducto', []);
             $cantidades = $this->input('arraycantidad', []);
             $precios = $this->input('arrayprecioventa', []);
+            $descuentos = $this->input('arraydescuentoproducto', []);
 
-            if (count($ids) !== count($cantidades) || count($ids) !== count($precios)) {
+            if (count($ids) !== count($cantidades) || count($ids) !== count($precios) || count($ids) !== count($descuentos)) {
                 $validator->errors()->add(
                     'arrayidproducto',
-                    'El detalle de venta es inconsistente: los arreglos de producto, cantidad y precio deben tener la misma longitud.'
+                    'El detalle de venta es inconsistente: los arreglos de producto, cantidad, precio y descuento deben tener la misma longitud.'
+                );
+            }
+
+            $descuentoTotal = (float) $this->input('descuento_total_porcentaje', 0);
+            $hayDescuentoPorProducto = collect($descuentos)->contains(fn($valor) => (float) $valor > 0);
+
+            if ($descuentoTotal > 0 && $hayDescuentoPorProducto) {
+                $validator->errors()->add(
+                    'descuento_total_porcentaje',
+                    'Solo se puede aplicar descuento por producto o descuento total, no ambos.'
                 );
             }
 
