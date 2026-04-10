@@ -112,7 +112,9 @@
                         <th>Producto</th>
                         <th>Presentación</th>
                         <th class="text-end">Cantidad</th>
+                        <th class="text-end">Precio original</th>
                         <th class="text-end">Precio de venta</th>
+                        <th class="text-end">Descuento</th>
                         <th class="text-end">Subtotal</th>
                     </tr>
                 </thead>
@@ -122,22 +124,34 @@
                         <td class="fw-semibold">{{ $item->nombre }}</td>
                         <td>{{ $item->presentacione->sigla }}</td>
                         <td class="text-end">{{ $item->pivot->cantidad }}</td>
+                        <td class="text-end">{{ number_format($item->pivot->precio_original ?? $item->pivot->precio_venta, 2) }}</td>
                         <td class="text-end">{{ $item->pivot->precio_venta }}</td>
+                        <td class="text-end">
+                            @if(($item->pivot->descuento_porcentaje ?? 0) > 0)
+                            {{ number_format($item->pivot->descuento_porcentaje, 2) }}%
+                            @else
+                            -
+                            @endif
+                        </td>
                         <td class="text-end">{{ ($item->pivot->cantidad) * ($item->pivot->precio_venta) }}</td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="4" class="text-end">Sumas</th>
+                        <th colspan="6" class="text-end">Sumas</th>
                         <th class="text-end">{{ $venta->subtotal }} {{ $empresa->moneda->simbolo }}</th>
                     </tr>
                     <tr>
-                        <th colspan="4" class="text-end">Impuesto</th>
+                        <th colspan="6" class="text-end">Descuento total</th>
+                        <th class="text-end">-{{ number_format($venta->descuento_total_monto ?? 0, 2) }} {{ $empresa->moneda->simbolo }}</th>
+                    </tr>
+                    <tr>
+                        <th colspan="6" class="text-end">Impuesto</th>
                         <th class="text-end">{{ $venta->impuesto }} {{ $empresa->moneda->simbolo }}</th>
                     </tr>
                     <tr>
-                        <th colspan="4" class="text-end">Total</th>
+                        <th colspan="6" class="text-end">Total</th>
                         <th class="text-end">{{ $venta->total }} {{ $empresa->moneda->simbolo }}</th>
                     </tr>
                 </tfoot>
