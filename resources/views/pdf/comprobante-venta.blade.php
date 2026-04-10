@@ -9,12 +9,13 @@
     $ticketWidthMm = (float) config('printing.ticket_width_mm', 80);
     $ticketPaddingMm = (float) config('printing.ticket_padding_mm', 2);
     $printableWidthMm = (float) config('printing.ticket_printable_width_mm', 72);
-    $safeTicketWidthMm = max(min($printableWidthMm, $ticketWidthMm) - ($ticketPaddingMm * 2), 40);
+    $extraInnerPaddingMm = 2.5;
+    $safeTicketWidthMm = max(min($printableWidthMm, $ticketWidthMm) - (($ticketPaddingMm + $extraInnerPaddingMm) * 2), 36);
     @endphp
 
     <style>
         @page {
-            margin: 0;
+            margin: 1.5mm 0;
 
             size: {
                     {
@@ -42,17 +43,18 @@
             }
 
             mm;
-            margin: auto;
+            margin: 3mm auto;
 
             padding: 0 {
                     {
-                    $ticketPaddingMm
+                    $ticketPaddingMm + $extraInnerPaddingMm
                 }
             }
 
             mm;
             box-sizing: border-box;
-            font-size: 12px;
+            font-size: 13px;
+            font-weight: 900;
         }
 
         .center {
@@ -65,6 +67,15 @@
 
         .bold {
             font-weight: bold;
+        }
+
+        .title {
+            font-size: 13px;
+            letter-spacing: .3px;
+        }
+
+        .label {
+            opacity: 1;
         }
 
         .divider {
@@ -103,8 +114,14 @@
         }
 
         .total {
-            width: 30px;
+            width: 34px;
             text-align: right;
+        }
+
+        .muted {
+            font-size: 12px;
+            opacity: 1;
+            font-weight: 900;
         }
     </style>
 </head>
@@ -120,7 +137,7 @@
         <br>
 
         <!-- EMPRESA -->
-        <div class="center bold">{{ strtoupper($empresa->nombre) }}</div>
+        <div class="center bold title">{{ strtoupper($empresa->nombre) }}</div>
         <div class="center">RUC: {{ $empresa->ruc }}</div>
         <div class="center">{{ strtoupper($empresa->direccion) }}</div>
         <div class="center">{{ strtoupper($empresa->ubicacion) }}</div>
@@ -130,7 +147,7 @@
 
         <!-- COMPROBANTE -->
         <div class="center bold">
-            {{ strtoupper($venta->comprobante->nombre) }}
+            <span class="title">{{ strtoupper($venta->comprobante->nombre) }}</span>
         </div>
         <div class="center bold">
             {{ $venta->numero_comprobante }}
@@ -139,9 +156,9 @@
         <div class="divider"></div>
 
         <!-- CLIENTE -->
-        <div>Cliente: {{ strtoupper($venta->cliente->persona->razon_social) }}</div>
-        <div>RFC: {{ $venta->cliente->persona->rfc ?? 'N/D' }}</div>
-        <div>Fecha: {{ date('d/m/Y H:i', strtotime($venta->fecha_hora)) }}</div>
+        <div><span class="label">Cliente:</span> {{ strtoupper($venta->cliente->persona->razon_social) }}</div>
+        <div><span class="label">RFC:</span> {{ $venta->cliente->persona->rfc ?? 'N/D' }}</div>
+        <div><span class="label">Fecha:</span> {{ date('d/m/Y H:i', strtotime($venta->fecha_hora)) }}</div>
 
         <div class="divider"></div>
 
@@ -149,11 +166,19 @@
         <table>
             @foreach ($venta->productos as $detalle)
             <tr>
-
                 <td class="desc"> {{$detalle->codigo}} - {{$detalle->nombre}}</td>
                 <td class="qty">{{ $detalle->pivot->cantidad }}</td>
                 <td class="total">{{ number_format($detalle->pivot->cantidad * $detalle->pivot->precio_venta, 2) }}</td>
             </tr>
+            @if(($detalle->pivot->descuento_porcentaje ?? 0) > 0)
+            <tr>
+                <td colspan="3" class="muted">
+                    P. original: {{ number_format($detalle->pivot->precio_original ?? $detalle->pivot->precio_venta, 2) }}
+                    | Desc: {{ number_format($detalle->pivot->descuento_porcentaje, 2) }}%
+                    | P. final: {{ number_format($detalle->pivot->precio_venta, 2) }}
+                </td>
+            </tr>
+            @endif
             @endforeach
         </table>
 
@@ -164,6 +189,10 @@
             <tr>
                 <td>SUBTOTAL</td>
                 <td class="right">{{ number_format($venta->subtotal, 2) }}</td>
+            </tr>
+            <tr>
+                <td>DESCUENTO</td>
+                <td class="right">-{{ number_format($venta->descuento_total_monto ?? 0, 2) }}</td>
             </tr>
             <tr>
                 <td>{{ $empresa->abreviatura_impuesto }}</td>
@@ -178,8 +207,8 @@
         <div class="divider"></div>
 
         <!-- EXTRA -->
-        <div>Pago: {{ $venta->metodo_pago?->label() }}</div>
-        <div>Cajero: {{ $venta->user->empleado->razon_social ?? $venta->user->name }}</div>
+        <div><span class="label">Pago:</span> {{ $venta->metodo_pago?->label() }}</div>
+        <div><span class="label">Cajero:</span> {{ $venta->user->empleado->razon_social ?? $venta->user->name }}</div>
 
         <div class="divider"></div>
 
