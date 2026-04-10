@@ -32,14 +32,15 @@
             margin: 0;
             padding: 0;
             background: #fff;
+            width: {{ $ticketWidthMm }}mm;
+            font-weight: 700;
+        }
 
-            width: {
-                    {
-                    $ticketWidthMm
-                }
-            }
-
-            mm;
+        body,
+        div,
+        span,
+        td {
+            font-weight: 700 !important;
         }
 
         .ticket {
@@ -127,7 +128,8 @@
 
         .inline-discount {
             font-size: 13px;
-            font-weight: 900;
+            font-weight: 700 !important;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -173,13 +175,9 @@
             @foreach ($venta->productos as $detalle)
             <tr>
                 <td class="desc">
-                    {{$detalle->codigo}} - {{$detalle->nombre}}
+                    {{ $detalle->codigo }} - {{ $detalle->nombre }}
                     @if(($detalle->pivot->descuento_porcentaje ?? 0) > 0)
-                    <span class="inline-discount">
-                        | P. original: {{ number_format($detalle->pivot->precio_original ?? $detalle->pivot->precio_venta, 2) }}
-                        | Desc: {{ number_format($detalle->pivot->descuento_porcentaje, 2) }}%
-                        | P. final: {{ number_format($detalle->pivot->precio_venta, 2) }}
-                    </span>
+                        <span class="inline-discount"> | Desc {{ number_format($detalle->pivot->descuento_porcentaje, 2) }}% ({{ number_format($detalle->pivot->precio_original ?? $detalle->pivot->precio_venta, 2) }} → {{ number_format($detalle->pivot->precio_venta, 2) }})</span>
                     @endif
                 </td>
                 <td class="qty">{{ $detalle->pivot->cantidad }}</td>
