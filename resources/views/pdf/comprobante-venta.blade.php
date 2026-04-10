@@ -32,7 +32,14 @@
             margin: 0;
             padding: 0;
             background: #fff;
-            width: {{ $ticketWidthMm }}mm;
+
+            width: {
+                    {
+                    $ticketWidthMm
+                }
+            }
+
+            mm;
         }
 
         .ticket {
