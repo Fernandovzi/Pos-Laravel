@@ -151,7 +151,7 @@
                         <th class="text-end">{{ $venta->impuesto }} {{ $empresa->moneda->simbolo }}</th>
                     </tr>
                     <tr>
-                       <th colspan="6" class="text-end">Total</th>
+                        <th colspan="6" class="text-end">Total</th>
                         <th class="text-end">{{ $venta->total }} {{ $empresa->moneda->simbolo }}</th>
                     </tr>
                 </tfoot>

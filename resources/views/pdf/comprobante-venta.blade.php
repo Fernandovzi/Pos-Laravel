@@ -9,12 +9,13 @@
     $ticketWidthMm = (float) config('printing.ticket_width_mm', 80);
     $ticketPaddingMm = (float) config('printing.ticket_padding_mm', 2);
     $printableWidthMm = (float) config('printing.ticket_printable_width_mm', 72);
-    $safeTicketWidthMm = max(min($printableWidthMm, $ticketWidthMm) - ($ticketPaddingMm * 2), 40);
+    $extraInnerPaddingMm = 2.5;
+    $safeTicketWidthMm = max(min($printableWidthMm, $ticketWidthMm) - (($ticketPaddingMm + $extraInnerPaddingMm) * 2), 36);
     @endphp
 
     <style>
         @page {
-            margin: 0;
+            margin: 1.5mm 0;
 
             size: {
                     {
@@ -49,18 +50,18 @@
             }
 
             mm;
-            margin: 2mm auto;
+            margin: 3mm auto;
 
             padding: 0 {
                     {
-                    $ticketPaddingMm
+                    $ticketPaddingMm + $extraInnerPaddingMm
                 }
             }
 
             mm;
             box-sizing: border-box;
-            font-size: 12px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 900;
         }
 
         .center {
@@ -81,9 +82,8 @@
         }
 
         .label {
-            opacity: .9;
+            opacity: 1;
         }
-
 
         .divider {
             border-top: 1px dashed #000;
@@ -126,8 +126,9 @@
         }
 
         .muted {
-            font-size: 11px;
-            opacity: .75;
+            font-size: 12px;
+            opacity: 1;
+            font-weight: 900;
         }
     </style>
 </head>
@@ -144,7 +145,7 @@
 
         <!-- EMPRESA -->
         <div class="center bold title">{{ strtoupper($empresa->nombre) }}</div>
-        <div class="center">RFC: {{ $empresa->ruc }}</div>
+        <div class="center">RUC: {{ $empresa->ruc }}</div>
         <div class="center">{{ strtoupper($empresa->direccion) }}</div>
         <div class="center">{{ strtoupper($empresa->ubicacion) }}</div>
         <div class="center">TEL: {{ $empresa->telefono ?? '' }}</div>
