@@ -183,6 +183,15 @@
                 <td class="qty">{{ $detalle->pivot->cantidad }}</td>
                 <td class="total">{{ number_format($detalle->pivot->cantidad * $detalle->pivot->precio_venta, 2) }}</td>
             </tr>
+            @if(($detalle->pivot->descuento_porcentaje ?? 0) > 0)
+            <tr>
+                <td colspan="3" class="muted">
+                    P. original: {{ number_format($detalle->pivot->precio_original ?? $detalle->pivot->precio_venta, 2) }}
+                    | Desc: {{ number_format($detalle->pivot->descuento_porcentaje, 2) }}%
+                    | P. final: {{ number_format($detalle->pivot->precio_venta, 2) }}
+                </td>
+            </tr>
+            @endif
             @endforeach
         </table>
 

@@ -27,7 +27,7 @@
         <form action="{{ route('ventas.destroy', $venta) }}" method="post" onsubmit="return confirm('¿Deseas cancelar esta venta? Se regresará caja, inventario y kardex.');">
             @csrf
             @method('DELETE')
-              <button type="submit" class="btn btn-danger btn-ui" @disabled(!$tieneCajaAbierta) title="{{ !$tieneCajaAbierta ? 'Debe aperturar una caja para cancelar' : '' }}">
+            <button type="submit" class="btn btn-danger btn-ui" @disabled(!$tieneCajaAbierta) title="{{ !$tieneCajaAbierta ? 'Debe aperturar una caja para cancelar' : '' }}">
                 <i class="fa-solid fa-ban me-1"></i>Cancelar venta
             </button>
         </form>
