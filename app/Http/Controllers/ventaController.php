@@ -78,17 +78,31 @@ class ventaController extends Controller
                     'arrayidproducto',
                     'arraycantidad',
                     'arrayprecioventa',
-                    'arraydescuentoproducto',
-                    'descuento_total_porcentaje'
+                    'arraydescuentoproducto'
                 ));
+
                 $detalleVenta = $this->obtenerDetalleVenta($request);
+
+                $subtotalBruto = $detalleVenta->sum(fn(array $detalle): float => (float) $detalle['cantidad'] * (float) $detalle['precio_original']);
+                $subtotalNeto = (float) $request->validated('subtotal');
+                $descuentoTotalMonto = round(max($subtotalBruto - $subtotalNeto, 0), 2);
+                $descuentoTotalPorcentaje = $subtotalBruto > 0
+                    ? round(($descuentoTotalMonto / $subtotalBruto) * 100, 2)
+                    : 0;
+
+                $venta->update([
+                    'descuento_total_porcentaje' => $descuentoTotalPorcentaje,
+                    'descuento_total_monto' => $descuentoTotalMonto,
+                ]);
 
                 $pivotData = $detalleVenta
                     ->mapWithKeys(function (array $detalle): array {
                         return [
                             $detalle['producto_id'] => [
                                 'cantidad' => $detalle['cantidad'],
+                                'precio_original' => $detalle['precio_original'],
                                 'precio_venta' => $detalle['precio_venta'],
+                                'descuento_porcentaje' => $detalle['descuento_porcentaje'],
                             ],
                         ];
                     })
@@ -249,13 +263,19 @@ class ventaController extends Controller
         $cantidades = $request->validated('arraycantidad');
         $preciosVenta = $request->validated('arrayprecioventa');
         $descuentosProducto = $request->validated('arraydescuentoproducto');
+        $preciosBasePorProducto = Producto::query()
+            ->whereIn('id', $idsProductos)
+            ->pluck('precio', 'id');
 
         return collect($idsProductos)
             ->values()
-            ->map(function ($productoId, int $index) use ($cantidades, $preciosVenta, $descuentosProducto): array {
+            ->map(function ($productoId, int $index) use ($cantidades, $preciosVenta, $descuentosProducto, $preciosBasePorProducto): array {
+                $precioOriginal = (float) ($preciosBasePorProducto[(int) $productoId] ?? $preciosVenta[$index]);
+
                 return [
                     'producto_id' => (int) $productoId,
                     'cantidad' => $cantidades[$index],
+                    'precio_original' => $precioOriginal,
                     'precio_venta' => $preciosVenta[$index],
                     'descuento_porcentaje' => $descuentosProducto[$index] ?? 0,
                 ];

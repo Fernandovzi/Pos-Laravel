@@ -52,7 +52,7 @@ class Venta extends Model
     {
         return $this->belongsToMany(Producto::class)
             ->withTimestamps()
-            ->withPivot('cantidad', 'precio_venta');
+            ->withPivot('cantidad', 'precio_original', 'precio_venta', 'descuento_porcentaje');
     }
 
     public function pagos(): HasMany
@@ -60,7 +60,7 @@ class Venta extends Model
         return $this->hasMany(VentaPago::class);
     }
 
-     /**
+    /**
      * Obtener solo la fecha
      * @return string
      */
