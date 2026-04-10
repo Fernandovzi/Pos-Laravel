@@ -80,6 +80,7 @@ class ventaController extends Controller
                     'arrayprecioventa',
                     'arraydescuentoproducto'
                 ));
+
                 $detalleVenta = $this->obtenerDetalleVenta($request);
                 $subtotalBruto = $detalleVenta->sum(fn (array $detalle): float => (float) $detalle['cantidad'] * (float) $detalle['precio_original']);
                 $subtotalNeto = (float) $request->validated('subtotal');

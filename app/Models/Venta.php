@@ -60,7 +60,7 @@ class Venta extends Model
         return $this->hasMany(VentaPago::class);
     }
 
-     /**
+    /**
      * Obtener solo la fecha
      * @return string
      */
