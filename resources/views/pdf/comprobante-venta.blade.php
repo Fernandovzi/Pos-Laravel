@@ -125,9 +125,8 @@
             text-align: right;
         }
 
-        .muted {
-            font-size: 12px;
-            opacity: 1;
+        .inline-discount {
+            font-size: 13px;
             font-weight: 900;
         }
     </style>
@@ -173,7 +172,16 @@
         <table>
             @foreach ($venta->productos as $detalle)
             <tr>
-                <td class="desc"> {{$detalle->codigo}} - {{$detalle->nombre}}</td>
+                <td class="desc">
+                    {{$detalle->codigo}} - {{$detalle->nombre}}
+                    @if(($detalle->pivot->descuento_porcentaje ?? 0) > 0)
+                    <span class="inline-discount">
+                        | P. original: {{ number_format($detalle->pivot->precio_original ?? $detalle->pivot->precio_venta, 2) }}
+                        | Desc: {{ number_format($detalle->pivot->descuento_porcentaje, 2) }}%
+                        | P. final: {{ number_format($detalle->pivot->precio_venta, 2) }}
+                    </span>
+                    @endif
+                </td>
                 <td class="qty">{{ $detalle->pivot->cantidad }}</td>
                 <td class="total">{{ number_format($detalle->pivot->cantidad * $detalle->pivot->precio_venta, 2) }}</td>
             </tr>

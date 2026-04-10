@@ -94,18 +94,6 @@ class ventaController extends Controller
                     'descuento_total_monto' => $descuentoTotalMonto,
                 ]);
 
-                $subtotalBruto = $detalleVenta->sum(fn(array $detalle): float => (float) $detalle['cantidad'] * (float) $detalle['precio_original']);
-                $subtotalNeto = (float) $request->validated('subtotal');
-                $descuentoTotalMonto = round(max($subtotalBruto - $subtotalNeto, 0), 2);
-                $descuentoTotalPorcentaje = $subtotalBruto > 0
-                    ? round(($descuentoTotalMonto / $subtotalBruto) * 100, 2)
-                    : 0;
-
-                $venta->update([
-                    'descuento_total_porcentaje' => $descuentoTotalPorcentaje,
-                    'descuento_total_monto' => $descuentoTotalMonto,
-                ]);
-
                 $pivotData = $detalleVenta
                     ->mapWithKeys(function (array $detalle): array {
                         return [
