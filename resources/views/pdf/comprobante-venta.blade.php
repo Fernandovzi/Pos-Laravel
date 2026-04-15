@@ -505,15 +505,20 @@ body {
   <hr class="div-dash">
 
   {{-- ══ 4. RESUMEN DE PAGO ══ --}}
+  @php
+    $descuentoAplicado = (float) ($venta->descuento_total_monto ?? 0);
+    $subtotalAntesDescuento = (float) $venta->subtotal + $descuentoAplicado;
+  @endphp
+
   <table class="totals-table">
     <tr>
       <td class="lbl">Subtotal</td>
-      <td class="amt">{{ number_format($venta->subtotal, 2) }}</td>
+      <td class="amt">{{ number_format($subtotalAntesDescuento, 2) }}</td>
     </tr>
-    @if(($venta->descuento_total_monto ?? 0) > 0)
+    @if($descuentoAplicado > 0)
     <tr>
-      <td class="lbl">Descuento</td>
-      <td class="amt">-{{ number_format($venta->descuento_total_monto, 2) }}</td>
+      <td class="lbl">Descuento aplicado</td>
+      <td class="amt">-{{ number_format($descuentoAplicado, 2) }}</td>
     </tr>
     @endif
     <tr>
