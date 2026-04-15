@@ -238,10 +238,13 @@ body {
 }
 
 .p-discount-row {
-    font-size: 10px;
+    font-size: 9px;
     color: #000000;
     margin-top: 2px;
     line-height: 1.8;
+    display: flex;
+    align-items: center;
+    gap: 4px; /* espacio entre todos */
 }
 
 .p-original {
@@ -252,7 +255,7 @@ body {
 }
 
 .disc-tag {
-    font-size: 11px;
+    font-size: 10px;
     font-weight: 700 !important;
     background: #000000;
     color: #fff;
@@ -532,7 +535,7 @@ body {
   <table class="totals-table">
     <tr class="total-row">
       <td class="lbl">Total</td>
-      <td class="amt">{{ number_format($venta->total, 2) }}{{ $descuentoAplicado > 0 ? ' (desc. aplicado)' : '' }}</td>
+      <td class="amt">{{ number_format($venta->total, 2) }}</td>
     </tr>
   </table>
 
