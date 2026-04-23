@@ -70,7 +70,7 @@ class ProductoService
      * 
      */
 
-    private function updateImage(UploadedFile $image, string $oldPath): string
+    private function updateImage(UploadedFile $image, ?string $oldPath): string
     {
         if (!empty($oldPath)) {
             $relativePath = str_replace('storage/', '', $oldPath);
