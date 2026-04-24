@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\UploadedFile;
 
 class StoreProductoRequest extends FormRequest
 {
@@ -25,7 +26,18 @@ class StoreProductoRequest extends FormRequest
             'codigo' => 'nullable|unique:productos,codigo|max:50',
             'nombre' => 'required|unique:productos,nombre|max:255',
             'descripcion' => 'nullable|max:255',
-            'img_path' => 'nullable|file|extensions:png,jpg,jpeg|max:2048',
+            'img_path' => ['nullable', 'file', 'max:2048', function ($attribute, $value, $fail) {
+                if (!$value instanceof UploadedFile) {
+                    return;
+                }
+
+                $allowedExtensions = ['png', 'jpg', 'jpeg'];
+                $extension = strtolower((string) $value->getClientOriginalExtension());
+
+                if (!in_array($extension, $allowedExtensions, true)) {
+                    $fail('El campo '.$attribute.' debe tener una extensión válida: png, jpg o jpeg.');
+                }
+            }],
             'proveedore_id' => 'required|exists:proveedores,id',
             'presentacione_id' => 'required|integer|exists:presentaciones,id',
             'categoria_id' => 'nullable|integer|exists:categorias,id',
