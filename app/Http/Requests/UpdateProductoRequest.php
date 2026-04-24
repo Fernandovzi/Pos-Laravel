@@ -27,9 +27,18 @@ class UpdateProductoRequest extends FormRequest
             'codigo' => 'nullable|unique:productos,codigo,'.$producto->id.'|max:50',
             'nombre' => 'required|unique:productos,nombre,'.$producto->id.'|max:255',
             'descripcion' => 'nullable|max:255',
-            'img_path' => ['nullable', 'file', 'max:2048', function ($attribute, $value, $fail) {
+            'img_path' => ['nullable', function ($attribute, $value, $fail) {
                 if (!$value instanceof UploadedFile) {
                     return;
+                }
+
+                if (!$value->isValid()) {
+                    $fail('El archivo cargado en '.$attribute.' no es válido.');
+                    return;
+                }
+
+                if ($value->getSize() > 2048 * 1024) {
+                    $fail('El campo '.$attribute.' no debe superar los 2MB.');
                 }
 
                 $allowedExtensions = ['png', 'jpg', 'jpeg'];
