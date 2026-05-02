@@ -29,6 +29,7 @@ class UpdateProductoRequest extends FormRequest
             'descripcion' => 'nullable|max:255',
             'img_path' => ['nullable', function ($attribute, $value, $fail) {
                 if (!$value instanceof UploadedFile) {
+                    $fail('El campo '.$attribute.' debe ser un archivo válido.');
                     return;
                 }
 

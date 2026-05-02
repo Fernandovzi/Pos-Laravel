@@ -176,8 +176,14 @@ class ProductoController extends Controller
     public function update(UpdateProductoRequest $request, Producto $producto): RedirectResponse
     {
         try {
-            $this->productoService->editarProducto($request->validated(), $producto);
-            ActivityLogService::log('Edición de producto', 'Productos', $request->validated());
+            $data = $request->validated();
+
+            if ($request->hasFile('img_path')) {
+                $data['img_path'] = $request->file('img_path');
+            }
+
+            $this->productoService->editarProducto($data, $producto);
+            ActivityLogService::log('Edición de producto', 'Productos', $data);
             return redirect()->route('productos.index')->with('success', 'Producto editado');
         } catch (Throwable $e) {
             Log::error('Error al editar el producto', ['error' => $e->getMessage()]);
