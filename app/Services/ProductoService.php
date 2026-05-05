@@ -61,7 +61,7 @@ class ProductoService
 
         $image->storeAs('productos', $name, 'public');
 
-        return 'storage/productos/' . $name;
+        return 'media/productos/' . $name;
     }
 
 
@@ -73,7 +73,7 @@ class ProductoService
     private function updateImage(UploadedFile $image, ?string $oldPath): string
     {
         if (!empty($oldPath)) {
-            $relativePath = str_replace('storage/', '', $oldPath);
+            $relativePath = str_replace(['storage/', 'media/'], '', $oldPath);
 
             if (Storage::disk('public')->exists($relativePath)) {
                 Storage::disk('public')->delete($relativePath);
