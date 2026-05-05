@@ -27,6 +27,7 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\ventaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,21 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
+Route::get('/media/productos/{filename}', function (string $filename) {
+    if (!preg_match('/^[A-Za-z0-9._-]+$/', $filename)) {
+        abort(404);
+    }
+
+    $path = 'productos/' . $filename;
+
+    if (!Storage::disk('public')->exists($path)) {
+        abort(404);
+    }
+
+    return response()->file(Storage::disk('public')->path($path));
+})->where('filename', '[A-Za-z0-9._-]+');
 
 Route::get('/', [homeController::class, 'index'])->name('panel');
 
