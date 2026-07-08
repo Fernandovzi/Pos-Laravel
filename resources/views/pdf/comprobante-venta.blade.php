@@ -227,14 +227,19 @@ body {
 }
 
 .p-code {
-    display: block;
-    width: 100%;
-    font-size: 7.8px;
-    color: #555;
+    display: inline-block;
+    max-width: 100%;
+    font-size: 9.4px;
+    color: #000000;
+    background: #f0f0f0;
+    border: 1px solid #111;
+    border-radius: 2px;
     font-family: 'DM Mono', monospace;
     font-weight: 700 !important;
-    line-height: 1.05;
-    margin-top: 1px;
+    line-height: 1.15;
+    margin-top: 3px;
+    padding: 1px 4px;
+    letter-spacing: .3px;
 }
 
 .p-discount-row {
@@ -358,13 +363,53 @@ body {
 ══════════════════════════════ */
 .pago-badge {
     display: inline-block;
-    border: 1px solid #ccc;
+    border: 1px solid #111;
     padding: 2px 7px;
     font-size: 9.5px;
     font-weight: 700 !important;
     text-transform: uppercase;
     letter-spacing: .4px;
     color: #000000;
+}
+
+.payment-title {
+    font-size: 9px;
+    font-weight: 700 !important;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    margin-bottom: 3px;
+}
+
+.payment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.payment-table td {
+    padding: 1.5px 0;
+    font-size: 9.5px;
+    font-weight: 700 !important;
+    color: #000000;
+    vertical-align: top;
+}
+
+.payment-table .payment-method {
+    text-transform: uppercase;
+}
+
+.payment-table .payment-amount {
+    width: 28%;
+    text-align: right;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+}
+
+.payment-reference {
+    display: block;
+    font-size: 8px;
+    font-family: 'DM Mono', monospace;
+    color: #000000;
+    line-height: 1.1;
 }
 
 .footer-msg {
@@ -539,12 +584,31 @@ body {
     </tr>
   </table>
 
-  <div style="margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
-    <span class="pago-badge">{{ $venta->metodo_pago?->label() }}</span>
+  <div style="margin-top:8px;">
+    <div class="payment-title">Métodos de pago utilizados</div>
+
+    @if($venta->pagos->isNotEmpty())
+      <table class="payment-table">
+        @foreach($venta->pagos as $pago)
+          <tr>
+            <td>
+              <span class="payment-method">{{ $pago->metodo_pago?->label() }}</span>
+              @if($pago->referencia)
+                <span class="payment-reference">Ref: {{ $pago->referencia }}</span>
+              @endif
+            </td>
+            <td class="payment-amount">{{ number_format($pago->monto, 2) }}</td>
+          </tr>
+        @endforeach
+      </table>
+    @else
+      <span class="pago-badge">{{ $venta->metodo_pago?->label() }}</span>
+    @endif
+
     @if(isset($venta->cambio) && $venta->cambio > 0)
-      <span style="font-size:9.5px; font-weight:700 !important; color:#888; font-family:'DM Mono',monospace;">
+      <div style="font-size:9.5px; font-weight:700 !important; color:#000; font-family:'DM Mono',monospace; margin-top:3px; text-align:right;">
         Cambio: {{ number_format($venta->cambio, 2) }}
-      </span>
+      </div>
     @endif
   </div>
 
