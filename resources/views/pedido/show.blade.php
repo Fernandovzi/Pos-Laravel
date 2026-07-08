@@ -13,9 +13,22 @@
     </ol>
 
     <div class="page-toolbar mb-4">
+        @if($pedido->estado->value === 'BORRADOR')
+        <a href="{{ route('pedidos.edit', $pedido) }}" class="btn btn-primary btn-ui text-white">
+            <i class="fa-solid fa-pen-to-square me-1"></i>Editar borrador
+        </a>
+        <form action="{{ route('pedidos.apartar', $pedido) }}" method="POST" class="d-inline">
+            @csrf
+            <button type="submit" class="btn btn-success btn-ui text-white">
+                <i class="fa-solid fa-box-archive me-1"></i>Apartar pedido
+            </button>
+        </form>
+        @endif
+        @if($pedido->estado->value === 'APARTADO')
         <a href="{{ route('pedidos.pdf', $pedido) }}" target="_blank" class="btn btn-secondary btn-ui text-white">
             <i class="fa-solid fa-file-pdf me-1"></i>Descargar PDF
         </a>
+        @endif
     </div>
 
     <div class="row g-4 mb-4">
@@ -32,7 +45,7 @@
                     </div>
                     <div class="col-md-2">
                         <p class="text-muted text-uppercase small fw-semibold mb-2">Estado</p>
-                        <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
+                        <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : ($pedido->estado->value === 'BORRADOR' ? 'warning' : 'success')) }}">
                             {{ $pedido->estado->value }}
                         </span>
                     </div>

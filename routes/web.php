@@ -79,7 +79,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('movimientos', MovimientoController::class)->except('show', 'edit', 'update', 'destroy');
     Route::get('/cajas/{caja}/movimientos/excel', [MovimientoController::class, 'exportCajaExcel'])
         ->name('cajas.movimientos.excel');
-    Route::resource('pedidos', PedidoController::class)->except('edit', 'update');
+    Route::post('/pedidos/{pedido}/apartar', [PedidoController::class, 'apartar'])->name('pedidos.apartar');
+    Route::resource('pedidos', PedidoController::class);
     Route::get('/pedidos/{pedido}/pdf', [PedidoController::class, 'exportPdf'])->name('pedidos.pdf');
 
 

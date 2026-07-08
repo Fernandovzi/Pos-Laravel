@@ -20,6 +20,8 @@ class Pedido extends Model
 
     protected $casts = [
         'estado' => EstadoPedidoEnum::class,
+        'fecha_apartado' => 'datetime',
+        'fecha_entrega_estimada' => 'datetime',
     ];
 
     /**
@@ -38,6 +40,11 @@ class Pedido extends Model
 
             return 'P' . str_pad((string) $nuevoConsecutivo, 5, '0', STR_PAD_LEFT);
         });
+    }
+
+    public function getFechaFormatAttribute(): string
+    {
+        return $this->fecha_apartado?->format('d/m/Y H:i') ?? 'Sin apartar';
     }
 
     public function user(): BelongsTo

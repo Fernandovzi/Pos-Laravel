@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Crear pedido')
+@section('title', isset($pedido) ? 'Editar pedido' : 'Crear pedido')
 
 @push('css')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
@@ -9,15 +9,18 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Nuevo pedido" />
+    <x-ui.page-header :title="isset($pedido) ? 'Editar pedido ' . $pedido->folio : 'Nuevo pedido'" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
         <li class="breadcrumb-item"><a href="{{ route('pedidos.index')}}">Pedidos</a></li>
-        <li class="breadcrumb-item active">Crear pedido</li>
+        <li class="breadcrumb-item active">{{ isset($pedido) ? 'Editar pedido' : 'Crear pedido' }}</li>
     </ol>
 
-    <form action="{{ route('pedidos.store') }}" method="POST">
+    <form action="{{ isset($pedido) ? route('pedidos.update', $pedido) : route('pedidos.store') }}" method="POST">
         @csrf
+        @isset($pedido)
+            @method('PUT')
+        @endisset
 
         <x-ui.card title="Datos generales del pedido">
             <div class="row g-4">
@@ -26,21 +29,21 @@
                     <select name="proveedore_id" class="form-control" required>
                         <option value="">Seleccione</option>
                         @foreach($proveedores as $proveedor)
-                        <option value="{{ $proveedor->id }}">{{ $proveedor->nombre_documento }}</option>
+                        <option value="{{ $proveedor->id }}" @selected(old('proveedore_id', $pedido->proveedore_id ?? null) == $proveedor->id)>{{ $proveedor->nombre_documento }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Persona que recoge</label>
-                    <input type="text" name="persona_recojo" class="form-control" required>
+                    <input type="text" name="persona_recojo" class="form-control" value="{{ old('persona_recojo', $pedido->persona_recojo ?? '') }}" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Fecha estimada de entrega</label>
-                    <input type="datetime-local" name="fecha_entrega_estimada" class="form-control">
+                    <input type="datetime-local" name="fecha_entrega_estimada" class="form-control" value="{{ old('fecha_entrega_estimada', isset($pedido) && $pedido->fecha_entrega_estimada ? $pedido->fecha_entrega_estimada->format('Y-m-d\TH:i') : '') }}">
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Observaciones</label>
-                    <input type="text" name="observaciones" class="form-control">
+                    <input type="text" name="observaciones" class="form-control" value="{{ old('observaciones', $pedido->observaciones ?? '') }}">
                 </div>
             </div>
         </x-ui.card>
@@ -81,7 +84,19 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+                @isset($pedido)
+                    @foreach($pedido->productos as $productoPedido)
+                    <tr>
+                        <td>{{ $productoPedido->codigo }} - {{ $productoPedido->nombre }}<input type="hidden" name="arrayidproducto[]" value="{{ $productoPedido->id }}"></td>
+                        <td class="text-end">{{ $productoPedido->pivot->cantidad }}<input type="hidden" name="arraycantidad[]" value="{{ $productoPedido->pivot->cantidad }}"></td>
+                        <td class="text-end">{{ number_format($productoPedido->pivot->precio, 2, '.', '') }}<input type="hidden" name="arrayprecio[]" value="{{ $productoPedido->pivot->precio }}"></td>
+                        <td class="item-subtotal text-end">{{ number_format($productoPedido->pivot->cantidad * $productoPedido->pivot->precio, 2, '.', '') }}</td>
+                        <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove(); recalcularTotales();">Eliminar</button></td>
+                    </tr>
+                    @endforeach
+                @endisset
+            </tbody>
             <tfoot>
                 <tr><th colspan="3" class="text-end">Subtotal</th><th class="text-end"><span id="subtotal">0.00</span></th><th></th></tr>
                 <tr><th colspan="3" class="text-end">Impuesto ({{ $empresa->porcentaje_impuesto ?? 0 }}%)</th><th class="text-end"><span id="impuesto">0.00</span></th><th></th></tr>
@@ -89,12 +104,12 @@
             </tfoot>
         </x-ui.table>
 
-        <input type="hidden" name="subtotal" id="inputSubtotal" value="0">
-        <input type="hidden" name="impuesto" id="inputImpuesto" value="0">
-        <input type="hidden" name="total" id="inputTotal" value="0">
+        <input type="hidden" name="subtotal" id="inputSubtotal" value="{{ old('subtotal', $pedido->subtotal ?? 0) }}">
+        <input type="hidden" name="impuesto" id="inputImpuesto" value="{{ old('impuesto', $pedido->impuesto ?? 0) }}">
+        <input type="hidden" name="total" id="inputTotal" value="{{ old('total', $pedido->total ?? 0) }}">
 
         <div class="page-toolbar mt-4">
-            <x-ui.button variant="primary" type="submit" class="text-white">Guardar entrada</x-ui.button>
+            <x-ui.button variant="primary" type="submit" class="text-white">{{ isset($pedido) ? 'Actualizar borrador' : 'Guardar borrador' }}</x-ui.button>
             <a href="{{ route('pedidos.index') }}">
             <x-ui.button variant="danger" class="text-white">Cancelar</x-ui.button>
             </a>
@@ -108,6 +123,7 @@
 const porcentajeImpuesto = Number(@json($empresa->porcentaje_impuesto ?? 0));
 
 document.getElementById('producto').addEventListener('change', actualizarStockProducto);
+recalcularTotales();
 
 function actualizarStockProducto() {
     const select = document.getElementById('producto');
