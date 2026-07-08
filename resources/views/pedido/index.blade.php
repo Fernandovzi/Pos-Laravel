@@ -47,7 +47,7 @@
                         <td>{{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</td>
                         <td>{{ $pedido->persona_recojo }}</td>
                         <td>
-                            <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : 'success') }}">
+                            <span class="badge rounded-pill text-bg-{{ $pedido->estado->value === 'APARTADO' ? 'success' : ($pedido->estado->value === 'CANCELADO' ? 'danger' : ($pedido->estado->value === 'BORRADOR' ? 'warning' : 'success')) }}">
                                 {{ $pedido->estado->value }}
                             </span>
                         </td>
@@ -62,9 +62,22 @@
                                     </button>
                                     <ul class="dropdown-menu text-bg-light dropdown-menu-sm">
                                         <li><a class="dropdown-item" href="{{ route('pedidos.show', $pedido) }}">Ver detalle</a></li>
+                                        @if($pedido->estado->value === 'BORRADOR')
+                                        <li><a class="dropdown-item" href="{{ route('pedidos.edit', $pedido) }}">Editar borrador</a></li>
+                                        @endif
+                                        @if($pedido->estado->value === 'APARTADO')
                                         <li><a class="dropdown-item" href="{{ route('pedidos.pdf', $pedido) }}" target="_blank">Descargar PDF</a></li>
+                                        @endif
                                     </ul>
                                 </div>
+                                @if($pedido->estado->value === 'BORRADOR')
+                                <form action="{{ route('pedidos.apartar', $pedido) }}" method="POST" class="ms-2">
+                                    @csrf
+                                    <button type="submit" title="Apartar pedido" class="btn btn-datatable btn-icon btn-transparent-dark">
+                                        <i class="fa-solid fa-box-archive"></i>
+                                    </button>
+                                </form>
+                                @endif
                                 @if($pedido->estado->value === 'APARTADO')
                                 <div>
                                     <div class="vr"></div>

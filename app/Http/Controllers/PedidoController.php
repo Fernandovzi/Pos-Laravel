@@ -17,6 +17,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class PedidoController extends Controller
 {
@@ -35,62 +36,93 @@ class PedidoController extends Controller
      */
     public function create(): View
     {
-        $productos = Producto::query()
-            ->join('inventario as i', 'i.producto_id', '=', 'productos.id')
-            ->join('presentaciones as p', 'p.id', '=', 'productos.presentacione_id')
-            ->select('productos.id', 'productos.codigo', 'productos.nombre', 'productos.precio', 'i.cantidad', 'p.sigla')
-            ->where('productos.estado', 1)
-            ->where('i.cantidad', '>', 0)
-            ->orderBy('productos.nombre')
-            ->get();
-
-        $proveedores = Proveedore::whereHas('persona', fn ($query) => $query->where('estado', 1))->get();
-        $empresa = Empresa::first();
+        [$productos, $proveedores, $empresa] = $this->getFormData();
 
         return view('pedido.create', compact('productos', 'proveedores', 'empresa'));
     }
 
     /**
-     * Crea el pedido, aparta stock y registra salida temporal en kardex.
+     * Crea el pedido como borrador para permitir editarlo antes de apartar stock.
      */
     public function store(StorePedidoRequest $request): RedirectResponse
     {
         $pedido = null;
 
         DB::transaction(function () use ($request, &$pedido) {
-            $pedido = Pedido::create($request->validated());
+            $pedido = Pedido::create($request->safe()->except(['arrayidproducto', 'arraycantidad', 'arrayprecio']) + [
+                'estado' => EstadoPedidoEnum::Borrador,
+            ]);
 
-            $productoIds = $request->arrayidproducto;
-            $cantidades = $request->arraycantidad;
-            $precios = $request->arrayprecio;
+            $this->syncProductos($pedido, $request);
 
-            foreach ($productoIds as $index => $productoId) {
-                $cantidadSolicitada = (int) $cantidades[$index];
-                $precio = (float) $precios[$index];
+            ActivityLogService::log('Creación de borrador de pedido', 'Pedidos', ['pedido_id' => $pedido->id, 'folio' => $pedido->folio]);
+        });
 
-                $inventario = Inventario::where('producto_id', $productoId)->lockForUpdate()->firstOrFail();
-                abort_if($inventario->cantidad < $cantidadSolicitada, 422, 'Stock insuficiente para completar el pedido.');
+        return redirect()->route('pedidos.show', $pedido)->with('success', 'Pedido guardado como borrador. Puedes editarlo antes de apartarlo.');
+    }
 
-                $pedido->productos()->attach($productoId, [
-                    'cantidad' => $cantidadSolicitada,
-                    'precio' => $precio,
-                ]);
+    public function edit(Pedido $pedido): View|RedirectResponse
+    {
+        if ($pedido->estado !== EstadoPedidoEnum::Borrador) {
+            return redirect()->route('pedidos.show', $pedido)->with('error', 'Solo se pueden editar pedidos en borrador.');
+        }
+
+        $pedido->load('productos');
+        [$productos, $proveedores, $empresa] = $this->getFormData();
+
+        return view('pedido.create', compact('pedido', 'productos', 'proveedores', 'empresa'));
+    }
+
+    public function update(StorePedidoRequest $request, Pedido $pedido): RedirectResponse
+    {
+        if ($pedido->estado !== EstadoPedidoEnum::Borrador) {
+            return redirect()->route('pedidos.show', $pedido)->with('error', 'Solo se pueden editar pedidos en borrador.');
+        }
+
+        DB::transaction(function () use ($request, $pedido) {
+            $pedido->update($request->safe()->except(['arrayidproducto', 'arraycantidad', 'arrayprecio']));
+            $this->syncProductos($pedido, $request);
+
+            ActivityLogService::log('Actualización de borrador de pedido', 'Pedidos', ['pedido_id' => $pedido->id, 'folio' => $pedido->folio]);
+        });
+
+        return redirect()->route('pedidos.show', $pedido)->with('success', 'Borrador de pedido actualizado.');
+    }
+
+    public function apartar(Pedido $pedido): RedirectResponse
+    {
+        if ($pedido->estado !== EstadoPedidoEnum::Borrador) {
+            return back()->with('error', 'Solo se pueden apartar pedidos en borrador.');
+        }
+
+        DB::transaction(function () use ($pedido) {
+            $pedido->load('productos');
+
+            foreach ($pedido->productos as $producto) {
+                $cantidadSolicitada = (int) $producto->pivot->cantidad;
+                $inventario = Inventario::where('producto_id', $producto->id)->lockForUpdate()->firstOrFail();
+                abort_if($inventario->cantidad < $cantidadSolicitada, 422, 'Stock insuficiente para apartar el pedido.');
 
                 $inventario->decrement('cantidad', $cantidadSolicitada);
 
-                $ultimoKardex = Kardex::where('producto_id', $productoId)->latest('id')->firstOrFail();
+                $ultimoKardex = Kardex::where('producto_id', $producto->id)->latest('id')->firstOrFail();
                 (new Kardex())->crearRegistro([
                     'folio' => $pedido->folio,
-                    'producto_id' => $productoId,
+                    'producto_id' => $producto->id,
                     'cantidad' => $cantidadSolicitada,
                     'costo_unitario' => $ultimoKardex->costo_unitario,
                 ], TipoTransaccionEnum::Pedido);
             }
 
-            ActivityLogService::log('Creación de pedido', 'Pedidos', ['pedido_id' => $pedido->id, 'folio' => $pedido->folio]);
+            $pedido->update([
+                'estado' => EstadoPedidoEnum::Apartado,
+                'fecha_apartado' => now(),
+            ]);
+
+            ActivityLogService::log('Apartado de pedido', 'Pedidos', ['pedido_id' => $pedido->id, 'folio' => $pedido->folio]);
         });
 
-        return redirect()->route('pedidos.show', $pedido)->with('success', 'Pedido registrado y stock apartado.');
+        return redirect()->route('pedidos.show', $pedido)->with('success', 'Pedido apartado y stock reservado.');
     }
 
     /**
@@ -148,11 +180,52 @@ class PedidoController extends Controller
      */
     public function exportPdf(Pedido $pedido): Response
     {
+        abort_if($pedido->estado !== EstadoPedidoEnum::Apartado, HttpResponse::HTTP_NOT_FOUND);
+
         $pedido->load(['proveedore.persona', 'cliente.persona', 'productos', 'user']);
         $empresa = Empresa::first();
 
         $pdf = Pdf::loadView('pdf.pedido', compact('pedido', 'empresa'));
 
         return $pdf->stream('pedido-' . $pedido->folio . '.pdf');
+    }
+
+    private function getFormData(): array
+    {
+        $productos = Producto::query()
+            ->join('inventario as i', 'i.producto_id', '=', 'productos.id')
+            ->join('presentaciones as p', 'p.id', '=', 'productos.presentacione_id')
+            ->select('productos.id', 'productos.codigo', 'productos.nombre', 'productos.precio', 'i.cantidad', 'p.sigla')
+            ->where('productos.estado', 1)
+            ->where('i.cantidad', '>', 0)
+            ->orderBy('productos.nombre')
+            ->get();
+
+        $proveedores = Proveedore::whereHas('persona', fn ($query) => $query->where('estado', 1))->get();
+        $empresa = Empresa::first();
+
+        return [$productos, $proveedores, $empresa];
+    }
+
+    private function syncProductos(Pedido $pedido, StorePedidoRequest $request): void
+    {
+        $productos = [];
+
+        foreach ($request->arrayidproducto as $index => $productoId) {
+            $cantidad = (int) $request->arraycantidad[$index];
+            $precio = (float) $request->arrayprecio[$index];
+
+            if (isset($productos[$productoId])) {
+                $productos[$productoId]['cantidad'] += $cantidad;
+                continue;
+            }
+
+            $productos[$productoId] = [
+                'cantidad' => $cantidad,
+                'precio' => $precio,
+            ];
+        }
+
+        $pedido->productos()->sync($productos);
     }
 }

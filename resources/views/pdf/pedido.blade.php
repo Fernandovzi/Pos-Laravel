@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Pedido {{ $pedido->folio }}</title>
     <style>
-        @page { margin: 24px; }
+        @page { margin: 20px; }
 
         * { box-sizing: border-box; }
 
@@ -21,7 +21,7 @@
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px;
         }
 
         .hero {
@@ -36,21 +36,21 @@
         .logo { max-height: 58px; max-width: 135px; }
         .company-name { color: #ffffff; font-size: 23px; font-weight: 700; margin: 0; }
         .document-title { color: #cbd5e1; font-size: 12px; letter-spacing: 1.6px; margin: 3px 0 0; text-transform: uppercase; }
-        .folio-badge { background: #2563eb; border-radius: 999px; color: #ffffff; display: inline-block; font-size: 12px; font-weight: 700; padding: 7px 14px; }
+        .folio-badge { background: #2563eb; border-radius: 999px; color: #ffffff; display: inline-block; font-size: 10px; font-weight: 700; padding: 7px 14px; }
         .text-right { text-align: right; }
 
-        .section { margin-top: 18px; }
+        .section { margin-top: 14px; }
         .section-title { color: #0f172a; font-size: 13px; font-weight: 700; letter-spacing: .6px; margin: 0 0 8px; text-transform: uppercase; }
 
-        .info-grid { width: 100%; border-collapse: separate; border-spacing: 0 8px; }
+        .info-grid { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
         .info-card {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 11px 12px;
+            border-radius: 10px;
+            padding: 7px 9px;
             width: 33.333%;
         }
-        .info-label { color: #64748b; display: block; font-size: 9px; font-weight: 700; letter-spacing: .7px; margin-bottom: 3px; text-transform: uppercase; }
+        .info-label { color: #64748b; display: block; font-size: 8px; font-weight: 700; letter-spacing: .6px; margin-bottom: 2px; text-transform: uppercase; }
         .info-value { color: #0f172a; font-size: 12px; font-weight: 700; }
 
         .summary-table { width: 100%; border-collapse: separate; border-spacing: 10px 0; margin-left: -10px; margin-right: -10px; }

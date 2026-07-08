@@ -14,6 +14,6 @@ class PedidoObserver
     {
         $pedido->folio = Pedido::generarFolio();
         $pedido->user_id = Auth::id();
-        $pedido->fecha_apartado = now();
+        $pedido->fecha_apartado ??= null;
     }
 }
