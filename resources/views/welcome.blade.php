@@ -46,6 +46,10 @@
 
         $categorias = $productosCatalogoData->pluck('categoria')->filter()->unique()->sort()->values();
         $destacados = $productosCatalogoData->where('stock', '>', 0)->take(3)->values();
+        $heroSlides = $productosCatalogoData->where('stock', '>', 0)->take(6)->values();
+        if ($heroSlides->isEmpty()) {
+            $heroSlides = $productosCatalogoData->take(6)->values();
+        }
     @endphp
 
     <nav class="topbar">
@@ -61,8 +65,25 @@
 
     <header class="hero">
         <p class="hero-eyebrow">Fine &amp; Fashion Jewlery — Catálogo para clientes</p>
-        <h1 class="hero-title">Maleri<br><em>Joyería</em></h1>
-        <p class="hero-sub">Explora nuestra colección completa. Filtra por categoría, precio o disponibilidad para encontrar la pieza perfecta.</p>
+        <div class="hero-showcase">
+            <div class="hero-copy">
+                <h1 class="hero-title">Maleri<br><em>Joyería</em></h1>
+                <p class="hero-sub">Explora nuestra colección completa. Filtra por categoría, precio o disponibilidad para encontrar la pieza perfecta.</p>
+            </div>
+            @if ($heroSlides->isNotEmpty())
+                <div class="hero-carousel" aria-label="Carrusel de productos destacados">
+                    @foreach ($heroSlides as $slideIndex => $slide)
+                        <figure class="hero-slide{{ $slideIndex === 0 ? ' active' : '' }}">
+                            <img src="{{ $slide['img'] }}" alt="{{ $slide['nombre'] }}">
+                            <figcaption>
+                                <span>{{ $slide['categoria'] }}</span>
+                                {{ $slide['nombre'] }}
+                            </figcaption>
+                        </figure>
+                    @endforeach
+                </div>
+            @endif
+        </div>
         <div class="hero-meta">
             <div class="hero-stat">
                 <span class="hero-stat-n" id="heroTotal">{{ $productosCatalogoData->count() }}</span>
@@ -216,25 +237,54 @@
 
         const modal = document.getElementById('quickViewModal');
 
+        const openQuickView = productId => {
+            const data = PRODUCTS.find(product => String(product.id) === String(productId));
+            if (!data) return;
+
+            document.getElementById('modalImagen').src = data.img;
+            document.getElementById('modalImagen').alt = data.nombre;
+            document.getElementById('modalNombre').textContent = data.nombre;
+            document.getElementById('modalCategoria').textContent = data.categoria;
+            document.getElementById('modalPrecio').textContent = `$${Number(data.precio).toFixed(2)}`;
+            document.getElementById('modalDescripcion').textContent = data.descripcion;
+            document.getElementById('modalCodigo').textContent = data.codigo;
+            document.getElementById('modalStock').textContent = data.stock;
+            document.getElementById('modalEstado').textContent = data.estado ? 'Activo' : 'Inactivo';
+            document.getElementById('modalUnidad').textContent = data.unidad;
+            modal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        };
+
         const bindQuickView = () => {
-            document.querySelectorAll('.quick-view-btn').forEach(button => {
-                button.addEventListener('click', event => {
+            document.querySelectorAll('.quick-view-trigger').forEach(trigger => {
+                trigger.addEventListener('click', event => {
                     event.stopPropagation();
-                    const data = PRODUCTS.find(product => String(product.id) === button.dataset.productId);
-                    document.getElementById('modalImagen').src = data.img;
-                    document.getElementById('modalImagen').alt = data.nombre;
-                    document.getElementById('modalNombre').textContent = data.nombre;
-                    document.getElementById('modalCategoria').textContent = data.categoria;
-                    document.getElementById('modalPrecio').textContent = `$${Number(data.precio).toFixed(2)}`;
-                    document.getElementById('modalDescripcion').textContent = data.descripcion;
-                    document.getElementById('modalCodigo').textContent = data.codigo;
-                    document.getElementById('modalStock').textContent = data.stock;
-                    document.getElementById('modalEstado').textContent = data.estado ? 'Activo' : 'Inactivo';
-                    document.getElementById('modalUnidad').textContent = data.unidad;
-                    modal.classList.add('open');
-                    document.body.style.overflow = 'hidden';
+                    openQuickView(trigger.dataset.productId);
                 });
             });
+        };
+
+        const getPaginationRange = (totalPages, currentPage) => {
+            const visibleNeighbors = 1;
+
+            if (totalPages <= 7) {
+                return Array.from({ length: totalPages }, (_, index) => index + 1);
+            }
+
+            const pages = [1];
+            const start = Math.max(2, currentPage - visibleNeighbors);
+            const end = Math.min(totalPages - 1, currentPage + visibleNeighbors);
+
+            if (start > 2) pages.push('ellipsis');
+
+            for (let page = start; page <= end; page += 1) {
+                pages.push(page);
+            }
+
+            if (end < totalPages - 1) pages.push('ellipsis');
+
+            pages.push(totalPages);
+            return pages;
         };
 
         const renderPagination = (totalPages, totalItems) => {
@@ -243,20 +293,32 @@
 
             if (totalItems <= state.perPage) return;
 
-            for (let i = 1; i <= totalPages; i += 1) {
+            const pages = getPaginationRange(totalPages, state.page);
+
+            pages.forEach(page => {
                 const item = document.createElement('li');
+
+                if (page === 'ellipsis') {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.className = 'page-ellipsis';
+                    ellipsis.textContent = '…';
+                    item.appendChild(ellipsis);
+                    pagination.appendChild(item);
+                    return;
+                }
+
                 const button = document.createElement('button');
-                button.className = `page-btn${i === state.page ? ' active' : ''}`;
+                button.className = `page-btn${page === state.page ? ' active' : ''}`;
                 button.type = 'button';
-                button.textContent = i;
+                button.textContent = page;
                 button.addEventListener('click', () => {
-                    state.page = i;
+                    state.page = page;
                     render();
                     window.scrollTo({ top: document.getElementById('productsGrid').offsetTop - 120, behavior: 'smooth' });
                 });
                 item.appendChild(button);
                 pagination.appendChild(item);
-            }
+            });
         };
 
         const render = () => {
@@ -280,10 +342,10 @@
                     card.className = 'product-card';
                     card.style.animationDelay = `${index * 40}ms`;
                     card.innerHTML = `
-                        <div class="card-img-wrap">
+                        <button class="card-img-wrap quick-view-trigger" type="button" data-product-id="${product.id}" aria-label="Ver detalles de ${product.nombre}">
                             <img class="card-img" src="${product.img}" alt="${product.nombre}" loading="lazy">
                             <span class="card-badge ${inStock ? 'badge-in' : 'badge-out'}">${inStock ? 'Disponible' : 'Sin stock'}</span>
-                        </div>
+                        </button>
                         <div class="card-body">
                             <p class="card-cat">${product.categoria}</p>
                             <h3 class="card-name">${product.nombre}</h3>
@@ -293,7 +355,7 @@
                                 <span class="card-stock">Stock: ${product.stock}</span>
                                 <span class="card-unit">${product.unidad}</span>
                             </div>
-                            <button class="card-view-btn quick-view-btn" type="button" data-product-id="${product.id}">Ver detalles</button>
+                            <button class="card-view-btn quick-view-btn quick-view-trigger" type="button" data-product-id="${product.id}">Ver detalles</button>
                         </div>`;
                     grid.appendChild(card);
                 });
@@ -350,6 +412,17 @@
         document.addEventListener('keydown', event => {
             if (event.key === 'Escape') closeModal();
         });
+
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        let heroSlideIndex = 0;
+
+        if (heroSlides.length > 1) {
+            setInterval(() => {
+                heroSlides[heroSlideIndex].classList.remove('active');
+                heroSlideIndex = (heroSlideIndex + 1) % heroSlides.length;
+                heroSlides[heroSlideIndex].classList.add('active');
+            }, 3500);
+        }
 
         render();
     </script>
