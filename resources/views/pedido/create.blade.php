@@ -87,9 +87,12 @@
             <tbody>
                 @isset($pedido)
                     @foreach($pedido->productos as $productoPedido)
-                    <tr>
+                    <tr data-producto-id="{{ $productoPedido->id }}">
                         <td>{{ $productoPedido->codigo }} - {{ $productoPedido->nombre }}<input type="hidden" name="arrayidproducto[]" value="{{ $productoPedido->id }}"></td>
-                        <td class="text-end">{{ $productoPedido->pivot->cantidad }}<input type="hidden" name="arraycantidad[]" value="{{ $productoPedido->pivot->cantidad }}"></td>
+                        <td class="text-end">
+                            <input type="number" name="arraycantidad[]" value="{{ $productoPedido->pivot->cantidad }}" min="1" max="{{ $productoPedido->inventario->cantidad ?? 0 }}" class="form-control form-control-sm text-end cantidad-producto" data-precio="{{ $productoPedido->pivot->precio }}" aria-label="Cantidad de {{ $productoPedido->nombre }}" oninput="actualizarCantidad(this)">
+                            <small class="text-muted">Disponible: {{ $productoPedido->inventario->cantidad ?? 0 }}</small>
+                        </td>
                         <td class="text-end">{{ number_format($productoPedido->pivot->precio, 2, '.', '') }}<input type="hidden" name="arrayprecio[]" value="{{ $productoPedido->pivot->precio }}"></td>
                         <td class="item-subtotal text-end">{{ number_format($productoPedido->pivot->cantidad * $productoPedido->pivot->precio, 2, '.', '') }}</td>
                         <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove(); recalcularTotales();">Eliminar</button></td>
@@ -145,17 +148,45 @@ function agregarProducto() {
     }
 
     const tbody = document.querySelector('#tabla-productos tbody');
+    const filaExistente = tbody.querySelector(`tr[data-producto-id="${option.value}"]`);
+
+    if (filaExistente) {
+        const inputCantidad = filaExistente.querySelector('.cantidad-producto');
+        const nuevaCantidad = Number(inputCantidad.value) + cantidad;
+
+        if (nuevaCantidad > stock) {
+            alert('La cantidad total es mayor al stock disponible');
+            return;
+        }
+
+        inputCantidad.value = nuevaCantidad;
+        actualizarCantidad(inputCantidad);
+        return;
+    }
+
     const subtotal = (cantidad * precio).toFixed(2);
 
     const tr = document.createElement('tr');
+    tr.dataset.productoId = option.value;
     tr.innerHTML = `
         <td>${option.dataset.texto}<input type="hidden" name="arrayidproducto[]" value="${option.value}"></td>
-        <td class="text-end">${cantidad}<input type="hidden" name="arraycantidad[]" value="${cantidad}"></td>
+        <td class="text-end"><input type="number" name="arraycantidad[]" value="${cantidad}" min="1" max="${stock}" class="form-control form-control-sm text-end cantidad-producto" data-precio="${precio}" aria-label="Cantidad de producto" oninput="actualizarCantidad(this)"><small class="text-muted">Disponible: ${stock}</small></td>
         <td class="text-end">${precio.toFixed(2)}<input type="hidden" name="arrayprecio[]" value="${precio}"></td>
         <td class="item-subtotal text-end">${subtotal}</td>
         <td><button type="button" class="btn btn-danger btn-sm" onclick="this.closest('tr').remove(); recalcularTotales();">Eliminar</button></td>`;
     tbody.appendChild(tr);
 
+    recalcularTotales();
+}
+
+function actualizarCantidad(input) {
+    const cantidad = Number(input.value);
+    const stock = Number(input.max);
+
+    input.setCustomValidity(cantidad > stock ? 'La cantidad supera la existencia disponible.' : '');
+
+    const subtotal = Math.max(cantidad, 0) * Number(input.dataset.precio);
+    input.closest('tr').querySelector('.item-subtotal').textContent = subtotal.toFixed(2);
     recalcularTotales();
 }
 

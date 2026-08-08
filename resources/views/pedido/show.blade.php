@@ -70,6 +70,7 @@
             <table class="table table-striped align-middle mb-0">
                 <thead>
                     <tr>
+                        <th>Código</th>
                         <th>Producto</th>
                         <th class="text-end">Cantidad</th>
                         <th class="text-end">Precio</th>
@@ -79,6 +80,7 @@
                 <tbody>
                     @foreach($pedido->productos as $producto)
                     <tr>
+                        <td><span class="font-monospace">{{ $producto->codigo }}</span></td>
                         <td class="fw-semibold">{{ $producto->nombre }}</td>
                         <td class="text-end">{{ $producto->pivot->cantidad }}</td>
                         <td class="text-end">{{ number_format($producto->pivot->precio, 2) }}</td>
@@ -88,7 +90,7 @@
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th colspan="3" class="text-end">Total</th>
+                        <th colspan="4" class="text-end">Total</th>
                         <th class="text-end">{{ number_format($pedido->total, 2) }}</th>
                     </tr>
                 </tfoot>

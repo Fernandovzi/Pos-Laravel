@@ -67,7 +67,7 @@ class PedidoController extends Controller
             return redirect()->route('pedidos.show', $pedido)->with('error', 'Solo se pueden editar pedidos en borrador.');
         }
 
-        $pedido->load('productos');
+        $pedido->load('productos.inventario');
         [$productos, $proveedores, $empresa] = $this->getFormData();
 
         return view('pedido.create', compact('pedido', 'productos', 'proveedores', 'empresa'));
