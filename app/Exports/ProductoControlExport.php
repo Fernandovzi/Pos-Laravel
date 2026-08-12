@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Exports\Sheets\AnalisisPedidosSheet;
 use App\Exports\Sheets\ProductosControlSheet;
 use App\Exports\Sheets\ResumenInventarioSheet;
 use Illuminate\Support\Collection;
@@ -57,12 +58,13 @@ class ProductoControlExport implements WithMultipleSheets
                 title: 'Pedidos a proveedor',
                 encabezado: 'Pedidos vigentes (no cancelados)',
                 logoPath: public_path('img/maleri.png'),
-                headings: ['Folio', 'Fecha', 'Proveedor', 'Producto', 'Cantidad', 'Precio', 'Subtotal', 'Estatus'],
+                headings: ['Folio', 'Fecha', 'Proveedor', 'Código', 'Producto', 'Cantidad', 'Precio', 'Subtotal', 'Estatus'],
                 rows: $this->pedidosNoCancelados->flatMap(function ($pedido) {
                     return $pedido->productos->map(fn ($producto) => [
                         $pedido->folio,
                         optional($pedido->fecha_apartado)->format('d/m/Y H:i'),
                         $pedido->proveedore?->persona?->razon_social ?? 'Sin proveedor',
+                        $producto->codigo,
                         $producto->nombre,
                         (int) ($producto->pivot->cantidad ?? 0),
                         (float) ($producto->pivot->precio ?? 0),
@@ -70,10 +72,15 @@ class ProductoControlExport implements WithMultipleSheets
                         $pedido->estado->value,
                     ]);
                 })->values()->toArray(),
-                dataValidationColumn: 'H',
+                dataValidationColumn: 'I',
                 dataValidationOptions: ['APARTADO', 'ENTREGADO', 'CANCELADO'],
             ),
             new ResumenInventarioSheet(
+                productos: $this->productos,
+                pedidosNoCancelados: $this->pedidosNoCancelados,
+                logoPath: public_path('img/maleri.png'),
+            ),
+            new AnalisisPedidosSheet(
                 productos: $this->productos,
                 pedidosNoCancelados: $this->pedidosNoCancelados,
                 logoPath: public_path('img/maleri.png'),
