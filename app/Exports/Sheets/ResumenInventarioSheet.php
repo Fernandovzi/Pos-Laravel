@@ -72,16 +72,17 @@ class ResumenInventarioSheet implements FromArray, WithTitle, WithEvents, Should
                 $sheet->setCellValue('C1', 'Maleri - Resumen de inventario');
                 $sheet->setCellValue('C2', 'Existencia actual y cantidades en pedidos pendientes no cancelados');
                 $sheet->setCellValue('C3', 'Generado: ' . now()->format('d/m/Y H:i'));
-                $sheet->mergeCells('C1:D1');
-                $sheet->mergeCells('C2:D2');
-                $sheet->mergeCells('C3:D3');
+                $sheet->mergeCells('C1:E1');
+                $sheet->mergeCells('C2:E2');
+                $sheet->mergeCells('C3:E3');
 
                 $totalRow = $lastRow + 1;
                 $sheet->setCellValue("A{$totalRow}", 'TOTAL');
                 $sheet->setCellValue("C{$totalRow}", "=SUM(C6:C{$lastRow})");
                 $sheet->setCellValue("D{$totalRow}", "=SUM(D6:D{$lastRow})");
+                $sheet->setCellValue("E{$totalRow}", "=SUM(E6:E{$lastRow})");
 
-                $sheet->getStyle("A5:D5")->applyFromArray([
+                $sheet->getStyle("A5:E5")->applyFromArray([
                     'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                     'fill' => [
                         'fillType' => Fill::FILL_SOLID,
@@ -90,7 +91,7 @@ class ResumenInventarioSheet implements FromArray, WithTitle, WithEvents, Should
                     'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
                 ]);
 
-                $sheet->getStyle("A5:D{$totalRow}")->applyFromArray([
+                $sheet->getStyle("A5:E{$totalRow}")->applyFromArray([
                     'borders' => [
                         'allBorders' => [
                             'borderStyle' => Border::BORDER_THIN,
@@ -99,9 +100,9 @@ class ResumenInventarioSheet implements FromArray, WithTitle, WithEvents, Should
                     ],
                 ]);
 
-                $sheet->getStyle("A{$totalRow}:D{$totalRow}")->getFont()->setBold(true);
+                $sheet->getStyle("A{$totalRow}:E{$totalRow}")->getFont()->setBold(true);
                 $sheet->getStyle('C1:C3')->getFont()->setBold(true);
-                $sheet->setAutoFilter("A5:D{$lastRow}");
+                $sheet->setAutoFilter("A5:E{$lastRow}");
                 $sheet->freezePane('A6');
             },
         ];
