@@ -72,9 +72,9 @@ class ResumenInventarioSheet implements FromArray, WithTitle, WithEvents, Should
                 $sheet->setCellValue('C1', 'Maleri - Resumen de inventario');
                 $sheet->setCellValue('C2', 'Existencia actual y cantidades en pedidos pendientes no cancelados');
                 $sheet->setCellValue('C3', 'Generado: ' . now()->format('d/m/Y H:i'));
-                $sheet->mergeCells('C1:E1');
-                $sheet->mergeCells('C2:E2');
-                $sheet->mergeCells('C3:E3');
+                $sheet->mergeCells('C1:D1');
+                $sheet->mergeCells('C2:D2');
+                $sheet->mergeCells('C3:D3');
 
                 $totalRow = $lastRow + 1;
                 $sheet->setCellValue("A{$totalRow}", 'TOTAL');

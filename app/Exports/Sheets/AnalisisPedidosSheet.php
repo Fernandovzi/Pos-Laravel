@@ -48,7 +48,7 @@ class AnalisisPedidosSheet implements FromArray, WithTitle, WithEvents, ShouldAu
             $row = [
                 $producto->codigo,
                 $producto->nombre,
-                max(0, (int) ($producto->inventario?->cantidad ?? 0) - $totalEnPedidos),
+                (int) ($producto->inventario?->cantidad ?? 0),
             ];
 
             foreach ($vendedores as $vendedor) {

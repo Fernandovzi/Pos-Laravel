@@ -32,7 +32,7 @@ class ProductoControlExportTest extends TestCase
         $this->assertCount(4, $resumenRows[1]);
     }
 
-    public function test_analysis_groups_quantities_by_seller_and_puts_unordered_stock_in_maleri(): void
+    public function test_analysis_groups_quantities_by_seller_and_shows_remaining_inventory_in_maleri(): void
     {
         $pedidoProducto = $this->producto(10, 'P-010', 'Producto pedido', 12);
         $productoMaleri = $this->producto(20, 'P-020', 'Producto sin pedido', 9);
@@ -52,7 +52,7 @@ class ProductoControlExportTest extends TestCase
             ['Código', 'Producto', 'Maleri', 'Vendedor Norte', 'Vendedor Sur', 'Total en pedidos'],
             $rows[0],
         );
-        $this->assertSame(['P-010', 'Producto pedido', 3, 3, 6, 9], $rows[1]);
+        $this->assertSame(['P-010', 'Producto pedido', 12, 3, 6, 9], $rows[1]);
         $this->assertSame(['P-020', 'Producto sin pedido', 9, 0, 0, 0], $rows[2]);
     }
 
