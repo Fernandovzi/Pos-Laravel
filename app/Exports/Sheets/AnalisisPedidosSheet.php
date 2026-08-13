@@ -44,17 +44,18 @@ class AnalisisPedidosSheet implements FromArray, WithTitle, WithEvents, ShouldAu
 
         $rows = $this->productos->map(function ($producto) use ($vendedores, $cantidades) {
             $cantidadesProducto = $cantidades[$producto->id] ?? [];
+            $totalEnPedidos = array_sum($cantidadesProducto);
             $row = [
                 $producto->codigo,
                 $producto->nombre,
-                $cantidadesProducto === [] ? (int) ($producto->inventario?->cantidad ?? 0) : 0,
+                max(0, (int) ($producto->inventario?->cantidad ?? 0) - $totalEnPedidos),
             ];
 
             foreach ($vendedores as $vendedor) {
                 $row[] = (int) ($cantidadesProducto[$vendedor] ?? 0);
             }
 
-            $row[] = array_sum($cantidadesProducto);
+            $row[] = $totalEnPedidos;
 
             return $row;
         })->toArray();
