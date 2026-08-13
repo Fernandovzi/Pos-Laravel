@@ -39,15 +39,15 @@ class ResumenInventarioSheet implements FromArray, WithTitle, WithEvents, Should
             $pendiente = (int) ($pendientesPorProducto->get($producto->id, 0));
 
             return [
+                $producto->codigo,
                 $producto->nombre,
                 $existencia,
                 $pendiente,
-                null,
             ];
         })->toArray();
 
         return array_merge([
-            ['Producto', 'Existencia actual', 'Cantidad en pedidos pendientes', 'Stock disponible real'],
+            ['Código', 'Producto', 'Existencia actual', 'Cantidad en pedidos pendientes'],
         ], $rows);
     }
 
@@ -70,19 +70,14 @@ class ResumenInventarioSheet implements FromArray, WithTitle, WithEvents, Should
 
                 $lastRow = max(5, $sheet->getHighestRow());
                 $sheet->setCellValue('C1', 'Maleri - Resumen de inventario');
-                $sheet->setCellValue('C2', 'Stock real (existencia + pedidos pendientes no cancelados)');
+                $sheet->setCellValue('C2', 'Existencia actual y cantidades en pedidos pendientes no cancelados');
                 $sheet->setCellValue('C3', 'Generado: ' . now()->format('d/m/Y H:i'));
                 $sheet->mergeCells('C1:D1');
                 $sheet->mergeCells('C2:D2');
                 $sheet->mergeCells('C3:D3');
 
-                for ($row = 6; $row <= $lastRow; $row++) {
-                    $sheet->setCellValue("D{$row}", "=B{$row}+C{$row}");
-                }
-
                 $totalRow = $lastRow + 1;
                 $sheet->setCellValue("A{$totalRow}", 'TOTAL');
-                $sheet->setCellValue("B{$totalRow}", "=SUM(B6:B{$lastRow})");
                 $sheet->setCellValue("C{$totalRow}", "=SUM(C6:C{$lastRow})");
                 $sheet->setCellValue("D{$totalRow}", "=SUM(D6:D{$lastRow})");
 
