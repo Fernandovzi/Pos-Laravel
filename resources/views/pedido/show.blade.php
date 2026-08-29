@@ -64,7 +64,10 @@
                 <i class="fas fa-table me-1"></i>
                 Productos del pedido
             </div>
-            <span class="text-muted small">{{ $pedido->productos->count() }} productos</span>
+            <span class="text-muted small">
+                {{ $pedido->productos->count() }} productos ·
+                {{ $pedido->productos->sum(fn ($producto) => $producto->pivot->cantidad) }} unidades
+            </span>
         </div>
         <div class="card-body">
             <table class="table table-striped align-middle mb-0">
@@ -89,6 +92,11 @@
                     @endforeach
                 </tbody>
                 <tfoot>
+                    <tr>
+                        <th colspan="2" class="text-end">Cantidad total de productos</th>
+                        <th class="text-end">{{ $pedido->productos->sum(fn ($producto) => $producto->pivot->cantidad) }}</th>
+                        <th colspan="2"></th>
+                    </tr>
                     <tr>
                         <th colspan="4" class="text-end">Total</th>
                         <th class="text-end">{{ number_format($pedido->total, 2) }}</th>
