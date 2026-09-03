@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\storeEmpleadoRequest;
+use App\Http\Requests\StoreEmpleadoRequest;
 use App\Models\Empleado;
 use App\Services\ActivityLogService;
 use Illuminate\Contracts\View\View;
@@ -70,7 +70,7 @@ class EmpleadoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(storeEmpleadoRequest $request, Empleado $empleado): RedirectResponse
+    public function update(StoreEmpleadoRequest $request, Empleado $empleado): RedirectResponse
     {
         try {
             $request->merge([
