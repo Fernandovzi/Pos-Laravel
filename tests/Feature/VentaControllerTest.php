@@ -97,6 +97,48 @@ class VentaControllerTest extends TestCase
         ]);
     }
 
+    public function test_store_rejects_a_duplicated_payment_method(): void
+    {
+        $ventaExistente = $this->crearVentaActiva();
+        $producto = $ventaExistente->productos()->firstOrFail();
+
+        $response = $this->from(route('ventas.create'))->post(route('ventas.store'), [
+            'cliente_id' => $ventaExistente->cliente_id,
+            'comprobante_id' => $ventaExistente->comprobante_id,
+            'metodo_pago' => MetodoPagoEnum::EFECTIVO->value,
+            'subtotal' => 40,
+            'impuesto' => 0,
+            'total' => 40,
+            'descuento_total_porcentaje' => 0,
+            'monto_recibido' => 40,
+            'vuelto_entregado' => 0,
+            'pagos' => [
+                [
+                    'metodo_pago' => MetodoPagoEnum::EFECTIVO->value,
+                    'monto' => 20,
+                    'referencia' => null,
+                ],
+                [
+                    'metodo_pago' => MetodoPagoEnum::EFECTIVO->value,
+                    'monto' => 20,
+                    'referencia' => null,
+                ],
+            ],
+            'arrayidproducto' => [$producto->id],
+            'arraycantidad' => [2],
+            'arrayprecioventa' => [20],
+            'arraydescuentoproducto' => [0],
+        ]);
+
+        $response->assertRedirect(route('ventas.create'));
+        $response->assertSessionHasErrors([
+            'pagos.0.metodo_pago' => 'Cada método de pago solo puede agregarse una vez.',
+            'pagos.1.metodo_pago' => 'Cada método de pago solo puede agregarse una vez.',
+        ]);
+        $this->assertDatabaseCount('ventas', 1);
+        $this->assertDatabaseCount('venta_pagos', 1);
+    }
+
     private function crearVentaActiva(): Venta
     {
         $caracteristica = Caracteristica::create([
