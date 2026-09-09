@@ -362,6 +362,9 @@
         const referencia = $('#pago_referencia').val();
 
         if (!metodo || isNaN(monto) || monto <= 0) return showModal('Capture método y monto válidos.');
+        if (pagos.some(pago => pago.metodo_pago === metodo)) {
+            return showModal('Este método de pago ya fue agregado. Elimínalo para cambiar su monto.');
+        }
 
         pagos.push({
             metodo_pago: metodo,

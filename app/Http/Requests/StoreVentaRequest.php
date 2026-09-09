@@ -29,7 +29,7 @@ class StoreVentaRequest extends FormRequest
             'monto_recibido' => 'required|numeric|min:0',
             'vuelto_entregado' => 'required|numeric|min:0',
             'pagos' => 'required|array|min:1',
-            'pagos.*.metodo_pago' => ['required', new Enum(MetodoPagoEnum::class)],
+            'pagos.*.metodo_pago' => ['required', 'distinct:strict', new Enum(MetodoPagoEnum::class)],
             'pagos.*.monto' => 'required|numeric|min:0.01',
             'pagos.*.referencia' => 'nullable|string|max:255',
             'arrayidproducto' => 'required|array|min:1',
@@ -40,6 +40,13 @@ class StoreVentaRequest extends FormRequest
             'arrayprecioventa.*' => 'required|numeric|min:0',
             'arraydescuentoproducto' => 'required|array|min:1',
             'arraydescuentoproducto.*' => 'required|numeric|min:0|max:100',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'pagos.*.metodo_pago.distinct' => 'Cada método de pago solo puede agregarse una vez.',
         ];
     }
 
