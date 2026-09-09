@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Crear proveedor')
+@section('title','Crear vendedor')
 
 @push('css')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
@@ -8,11 +8,11 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Crear Proveedor" />
+    <x-ui.page-header title="Crear Vendedor" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('proveedores.index')}}">Proveedor</a></li>
-        <li class="breadcrumb-item active">Crear proveedor</li>
+        <li class="breadcrumb-item"><a href="{{ route('proveedores.index')}}">Vendedor</a></li>
+        <li class="breadcrumb-item active">Crear vendedor</li>
     </ol>
 
     <div class="card">
@@ -21,7 +21,7 @@
             <div class="card-body text-bg-light">
                 <div class="row g-3">
                     <div class="col-md-6">
-                        <label for="tipo" class="form-label">Tipo de proveedor:</label>
+                        <label for="tipo" class="form-label">Tipo de vendedor:</label>
                         <select class="form-select" name="tipo" id="tipo">
                             <option value="" selected disabled>Seleccione una opción</option>
                             @foreach ($optionsTipoPersona as $item)

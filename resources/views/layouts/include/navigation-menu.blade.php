@@ -47,7 +47,7 @@
                 @endcan
 
                 @can('ver-proveedore')
-                <x-nav.nav-link content='Proveedores'
+                <x-nav.nav-link content='Vendedores'
                     icon='fa-solid fa-user-group'
                     :href="route('proveedores.index')" />
                 @endcan
@@ -95,7 +95,7 @@
                 <x-nav.link-collapsed
                     id="collapsePedidos"
                     icon="fa-solid fa-receipt"
-                    content="Pedidos">
+                    content="Consigna">
                     <x-nav.link-collapsed-item :href="route('pedidos.index')" content="Ver" />
                     <x-nav.link-collapsed-item :href="route('pedidos.create')" content="Crear" />
                 </x-nav.link-collapsed>

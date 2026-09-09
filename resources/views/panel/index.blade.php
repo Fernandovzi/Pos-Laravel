@@ -56,7 +56,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-8">
-                            <i class="fa-solid fa-cart-plus"></i><span class="m-1">Pedidos apartados</span>
+                            <i class="fa-solid fa-cart-plus"></i><span class="m-1">Consignas apartadas</span>
                         </div>
                         <div class="col-4">
                             <p class="text-center fw-bold fs-4">{{ $pedidosApartados }}</p>

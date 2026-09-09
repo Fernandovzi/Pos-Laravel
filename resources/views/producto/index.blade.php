@@ -72,7 +72,7 @@
                             }}
                         </td>
                         <td>
-                            {{$item->proveedore?->persona?->razon_social ?? 'Sin proveedor'}}
+                            {{$item->proveedore?->persona?->razon_social ?? 'Sin vendedor'}}
                         </td>
                         <td>
                             {{$item->categoria->caracteristica->nombre ?? 'Sin categoría'}}

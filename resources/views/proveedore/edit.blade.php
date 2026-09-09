@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('title','Editar proveedor')
+@section('title','Editar vendedor')
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Editar Proveedor" />
+    <x-ui.page-header title="Editar Vendedor" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('proveedores.index')}}">Proveedores</a></li>
-        <li class="breadcrumb-item active">Editar proveedor</li>
+        <li class="breadcrumb-item"><a href="{{ route('proveedores.index')}}">Vendedores</a></li>
+        <li class="breadcrumb-item active">Editar vendedor</li>
     </ol>
 
     <div class="card text-bg-light">

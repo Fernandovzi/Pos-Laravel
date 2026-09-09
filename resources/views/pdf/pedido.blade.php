@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Pedido {{ $pedido->folio }}</title>
+    <title>Consigna {{ $pedido->folio }}</title>
     <style>
         @page { margin: 20px; }
 
@@ -123,7 +123,7 @@
                 </td>
                 <td width="45%">
                     <h1 class="company-name">{{ $empresa->nombre ?? 'Maleri' }}</h1>
-                    <p class="document-title">Comprobante de pedido</p>
+                    <p class="document-title">Comprobante de consigna</p>
                 </td>
                 <td width="30%" class="text-right">
                     <span class="folio-badge">{{ $pedido->folio }}</span>
@@ -132,10 +132,10 @@
         </table>
 
         <div class="section">
-            <p class="section-title">Información del pedido</p>
+            <p class="section-title">Información de la consigna</p>
             <table class="info-grid">
                 <tr>
-                    <td class="info-card"><span class="info-label">Proveedor / Cliente</span><span class="info-value">{{ $proveedorNombre }}</span></td>
+                    <td class="info-card"><span class="info-label">Vendedor / Cliente</span><span class="info-value">{{ $proveedorNombre }}</span></td>
                     <td class="info-card"><span class="info-label">RFC</span><span class="info-value">{{ $proveedorRfc }}</span></td>
                     <td class="info-card"><span class="info-label">Estado</span><span class="info-value">{{ $pedido->estado->value }}</span></td>
                 </tr>
@@ -152,7 +152,7 @@
                 <tr>
                     <td class="summary-card"><div class="summary-label">Productos registrados</div><div class="summary-value">{{ number_format($totalProductosRegistrados) }}</div></td>
                     <td class="summary-card"><div class="summary-label">Cantidad total</div><div class="summary-value">{{ number_format($totalCantidadProductos) }}</div></td>
-                    <td class="summary-card total"><div class="summary-label">Total del pedido</div><div class="summary-value">${{ number_format($pedido->total, 2) }}</div></td>
+                    <td class="summary-card total"><div class="summary-label">Total de la consigna</div><div class="summary-value">${{ number_format($pedido->total, 2) }}</div></td>
                 </tr>
             </table>
         </div>

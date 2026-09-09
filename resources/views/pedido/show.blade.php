@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title','Detalle pedido')
+@section('title','Detalle de consigna')
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header :title="'Pedido ' . $pedido->folio" subtitle="Consulta la información general del pedido y el detalle de productos apartados." />
+    <x-ui.page-header :title="'Consigna ' . $pedido->folio" subtitle="Consulta la información general de la consigna y el detalle de productos apartados." />
 
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('pedidos.index') }}">Pedidos</a></li>
-        <li class="breadcrumb-item active">Detalle pedido</li>
+        <li class="breadcrumb-item"><a href="{{ route('pedidos.index') }}">Consigna</a></li>
+        <li class="breadcrumb-item active">Detalle de consigna</li>
     </ol>
 
     <div class="page-toolbar mb-4">
@@ -20,7 +20,7 @@
         <form action="{{ route('pedidos.apartar', $pedido) }}" method="POST" class="d-inline">
             @csrf
             <button type="submit" class="btn btn-success btn-ui text-white">
-                <i class="fa-solid fa-box-archive me-1"></i>Apartar pedido
+                <i class="fa-solid fa-box-archive me-1"></i>Apartar consigna
             </button>
         </form>
         @endif
@@ -33,10 +33,10 @@
 
     <div class="row g-4 mb-4">
         <div class="col-12">
-            <x-ui.card title="Datos del pedido" subtitle="Resumen del proveedor, estado y fecha del apartado.">
+            <x-ui.card title="Datos de la consigna" subtitle="Resumen del proveedor, estado y fecha del apartado.">
                 <div class="row g-3">
                     <div class="col-md-4">
-                        <p class="text-muted text-uppercase small fw-semibold mb-2">Proveedor / cliente</p>
+                        <p class="text-muted text-uppercase small fw-semibold mb-2">Vendedor / cliente</p>
                         <p class="fw-semibold mb-0">{{ optional($pedido->proveedore)->nombre_documento ?? optional($pedido->cliente)->nombre_documento ?? 'N/D' }}</p>
                     </div>
                     <div class="col-md-3">
@@ -62,7 +62,7 @@
         <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div>
                 <i class="fas fa-table me-1"></i>
-                Productos del pedido
+                Productos de la consigna
             </div>
             <span class="text-muted small">
                 {{ $pedido->productos->count() }} productos ·
