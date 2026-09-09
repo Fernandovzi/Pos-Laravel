@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','proveedores')
+@section('title','vendedores')
 
 @push('css-datatable')
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -13,10 +13,10 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Proveedores" />
+    <x-ui.page-header title="Vendedores" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item active">Proveedores</li>
+        <li class="breadcrumb-item active">Vendedores</li>
     </ol>
 
     @can('crear-proveedore')
@@ -30,7 +30,7 @@
     <div class="card">
         <div class="card-header">
             <i class="fa-solid fa-user-group"></i>
-            Tabla proveedores
+            Tabla de vendedores
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6">
@@ -113,7 +113,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    {{ $item->persona->estado == 1 ? '¿Seguro que quieres eliminar el proveedor?' : '¿Seguro que quieres restaurar el proveedor?' }}
+                                    {{ $item->persona->estado == 1 ? '¿Seguro que quieres eliminar el vendedor?' : '¿Seguro que quieres restaurar el vendedor?' }}
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>

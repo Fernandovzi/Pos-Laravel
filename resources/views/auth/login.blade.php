@@ -22,7 +22,7 @@
             <div class="panel-copy">
                 <p class="panel-eyebrow">Fine &amp; Fashion Jewelry</p>
                 <h1 class="panel-headline">Bienvenido<br><em>de vuelta</em></h1>
-                <p class="panel-sub">Accede al panel de administración para gestionar tu catálogo, inventario y pedidos.</p>
+                <p class="panel-sub">Accede al panel de administración para gestionar tu catálogo, inventario y consignas.</p>
             </div>
 
             <p class="panel-footer">&copy; BlueCrow {{ date('Y') }}</p>

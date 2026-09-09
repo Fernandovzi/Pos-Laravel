@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title','Pedidos')
+@section('title','Consigna')
 
 @push('css-datatable')
 <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
@@ -9,16 +9,16 @@
 @section('content')
 
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header title="Pedidos" />
+    <x-ui.page-header title="Consigna" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item active">Pedidos</li>
+        <li class="breadcrumb-item active">Consigna</li>
     </ol>
 
     @can('crear-presentacione')
     <div class="page-toolbar mb-4">
         <a href="{{route('pedidos.create')}}">
-            <button type="button" class="btn btn-primary btn-ui">Nuevo pedido</button>
+            <button type="button" class="btn btn-primary btn-ui">Nueva consigna</button>
         </a>
     </div>
     @endcan
@@ -26,14 +26,14 @@
     <div class="card">
         <div class="card-header">
             <i class="fa-solid fa-receipt"></i>
-            Listado de pedidos
+            Listado de consignas
         </div>
         <div class="card-body">
             <table id="datatablesSimple" class="table table-striped fs-6">
                 <thead>
                     <tr>
                         <th>Folio</th>
-                        <th>Proveedor</th>
+                        <th>Vendedor</th>
                         <th>Persona de recojo</th>
                         <th>Estado</th>
                         <th class="text-end">Total</th>
@@ -73,7 +73,7 @@
                                 @if($pedido->estado->value === 'BORRADOR')
                                 <form action="{{ route('pedidos.apartar', $pedido) }}" method="POST" class="ms-2">
                                     @csrf
-                                    <button type="submit" title="Apartar pedido" class="btn btn-datatable btn-icon btn-transparent-dark">
+                                    <button type="submit" title="Apartar consigna" class="btn btn-datatable btn-icon btn-transparent-dark">
                                         <i class="fa-solid fa-box-archive"></i>
                                     </button>
                                 </form>
@@ -83,7 +83,7 @@
                                     <div class="vr"></div>
                                 </div>
                                 <div>
-                                    <button type="button" title="Cancelar pedido" class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $pedido->id }}">
+                                    <button type="button" title="Cancelar consigna" class="btn btn-datatable btn-icon btn-transparent-dark" data-bs-toggle="modal" data-bs-target="#confirmModal-{{ $pedido->id }}">
                                         <i class="fa-solid fa-ban"></i>
                                     </button>
                                 </div>
@@ -101,7 +101,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    ¿Cancelar pedido y liberar stock?
+                                    ¿Cancelar consigna y liberar stock?
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>

@@ -98,14 +98,14 @@
 
                             <!---Proveedor---->
                             <div class="col-12">
-                                <label for="proveedore_id" class="form-label">Proveedor:</label>
+                                <label for="proveedore_id" class="form-label">Vendedor:</label>
                                 <select data-size="4"
-                                    title="Seleccione un proveedor"
+                                    title="Seleccione un vendedor"
                                     data-live-search="true"
                                     name="proveedore_id"
                                     id="proveedore_id"
                                     class="form-control selectpicker show-tick">
-                                    <option value="">No tiene proveedor</option>
+                                    <option value="">No tiene vendedor</option>
                                     @foreach ($proveedores as $item)
                                     <option value="{{$item->id}}"
                                         {{$producto->proveedore_id == $item->id || old('proveedore_id') == $item->id ? 'selected' : '' }}>

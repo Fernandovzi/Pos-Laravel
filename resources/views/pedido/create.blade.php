@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', isset($pedido) ? 'Editar pedido' : 'Crear pedido')
+@section('title', isset($pedido) ? 'Editar consigna' : 'Crear consigna')
 
 @push('css')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/css/bootstrap-select.min.css">
@@ -9,11 +9,11 @@
 
 @section('content')
 <div class="container-fluid px-4 page-shell">
-    <x-ui.page-header :title="isset($pedido) ? 'Editar pedido ' . $pedido->folio : 'Nuevo pedido'" />
+    <x-ui.page-header :title="isset($pedido) ? 'Editar consigna ' . $pedido->folio : 'Nueva consigna'" />
     <ol class="breadcrumb mb-4">
         <li class="breadcrumb-item"><a href="{{ route('panel') }}">Inicio</a></li>
-        <li class="breadcrumb-item"><a href="{{ route('pedidos.index')}}">Pedidos</a></li>
-        <li class="breadcrumb-item active">{{ isset($pedido) ? 'Editar pedido' : 'Crear pedido' }}</li>
+        <li class="breadcrumb-item"><a href="{{ route('pedidos.index')}}">Consigna</a></li>
+        <li class="breadcrumb-item active">{{ isset($pedido) ? 'Editar consigna' : 'Crear consigna' }}</li>
     </ol>
 
     <form action="{{ isset($pedido) ? route('pedidos.update', $pedido) : route('pedidos.store') }}" method="POST">
@@ -22,10 +22,10 @@
             @method('PUT')
         @endisset
 
-        <x-ui.card title="Datos generales del pedido">
+        <x-ui.card title="Datos generales de la consigna">
             <div class="row g-4">
                 <div class="col-md-6">
-                    <label class="form-label">Proveedor</label>
+                    <label class="form-label">Vendedor</label>
                     <select name="proveedore_id" class="form-control" required>
                         <option value="">Seleccione</option>
                         @foreach($proveedores as $proveedor)
@@ -74,7 +74,7 @@
             </div>
         </x-ui.card>
 
-        <x-ui.table title="Detalle del pedido" id="tabla-productos">
+        <x-ui.table title="Detalle de la consigna" id="tabla-productos">
             <thead>
                 <tr>
                     <th>Producto</th>
@@ -101,6 +101,7 @@
                 @endisset
             </tbody>
             <tfoot>
+                <tr><th colspan="2" class="text-end">Cantidad total</th><th class="text-end"><span id="cantidadTotal">0</span></th><th class="text-end text-muted">unidades</th><th></th></tr>
                 <tr><th colspan="3" class="text-end">Subtotal</th><th class="text-end"><span id="subtotal">0.00</span></th><th></th></tr>
                 <tr><th colspan="3" class="text-end">Impuesto ({{ $empresa->porcentaje_impuesto ?? 0 }}%)</th><th class="text-end"><span id="impuesto">0.00</span></th><th></th></tr>
                 <tr><th colspan="3" class="text-end">Total</th><th class="text-end"><span id="total">0.00</span></th><th></th></tr>
@@ -191,11 +192,14 @@ function actualizarCantidad(input) {
 }
 
 function recalcularTotales() {
+    const cantidades = [...document.querySelectorAll('.cantidad-producto')].map(input => Math.max(Number(input.value) || 0, 0));
     const subtotales = [...document.querySelectorAll('.item-subtotal')].map(td => Number(td.textContent));
+    const cantidadTotal = cantidades.reduce((acc, val) => acc + val, 0);
     const subtotal = subtotales.reduce((acc, val) => acc + val, 0);
     const impuesto = subtotal * (porcentajeImpuesto / 100);
     const total = subtotal + impuesto;
 
+    document.getElementById('cantidadTotal').textContent = cantidadTotal;
     document.getElementById('subtotal').textContent = subtotal.toFixed(2);
     document.getElementById('impuesto').textContent = impuesto.toFixed(2);
     document.getElementById('total').textContent = total.toFixed(2);
