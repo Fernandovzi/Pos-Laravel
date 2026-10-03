@@ -69,6 +69,17 @@
                     </div>
 
                     <div class="col-md-6">
+                        <label for="porcentaje_comision" class="form-label">Porcentaje de comisión:</label>
+                        <div class="input-group">
+                            <input required type="number" name="porcentaje_comision" id="porcentaje_comision" min="0" max="100" step="0.01" class="form-control" value="{{ old('porcentaje_comision', 0) }}">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        @error('porcentaje_comision')
+                        <small class="text-danger">{{'*'.$message}}</small>
+                        @enderror
+                    </div>
+
+                    <div class="col-md-6">
                         <label for="regimen_fiscal" class="form-label">Régimen fiscal (SAT):</label>
                         <select class="form-select" name="regimen_fiscal" id="regimen_fiscal">
                             <option value="">Seleccione una opción</option>

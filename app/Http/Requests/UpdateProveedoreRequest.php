@@ -51,6 +51,7 @@ class UpdateProveedoreRequest extends FormRequest
             'regimen_fiscal' => 'nullable|string|size:3|exists:sat_regimenes_fiscales,clave',
             'codigo_postal_fiscal' => 'nullable|string|size:5',
             'uso_cfdi' => 'nullable|string|size:3|exists:sat_usos_cfdi,clave',
+            'porcentaje_comision' => ['required', 'numeric', 'between:0,100'],
         ];
     }
 }

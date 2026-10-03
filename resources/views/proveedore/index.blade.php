@@ -39,6 +39,7 @@
                         <th>Nombre</th>
                         <th>Dirección</th>
                         <th>Documento</th>
+                        <th>Comisión</th>
                         <th>Tipo de persona</th>
                         <th>Estado</th>
                         <th>Acciones</th>
@@ -57,6 +58,7 @@
                             <p class="fw-semibold mb-1">RFC</p>
                             <p class="text-muted mb-0">{{$item->persona->rfc ?? 'N/D'}}</p>
                         </td>
+                        <td>{{ number_format((float) $item->porcentaje_comision, 2) }}%</td>
                         <td>
                             {{$item->persona->tipo->value}}
                         </td>

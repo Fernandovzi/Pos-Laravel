@@ -106,9 +106,7 @@
         $proveedorNombre = optional(optional($pedido->proveedore)->persona)->razon_social
             ?? optional(optional($pedido->cliente)->persona)->razon_social
             ?? 'N/D';
-        $proveedorRfc = optional(optional($pedido->proveedore)->persona)->rfc
-            ?? optional(optional($pedido->cliente)->persona)->rfc
-            ?? 'N/D';
+        $porcentajeComision = optional($pedido->proveedore)->porcentaje_comision ?? 0;
         $totalProductosRegistrados = $pedido->productos->count();
         $totalCantidadProductos = $pedido->productos->sum(fn ($producto) => $producto->pivot->cantidad);
     @endphp
@@ -136,7 +134,7 @@
             <table class="info-grid">
                 <tr>
                     <td class="info-card"><span class="info-label">Vendedor / Cliente</span><span class="info-value">{{ $proveedorNombre }}</span></td>
-                    <td class="info-card"><span class="info-label">RFC</span><span class="info-value">{{ $proveedorRfc }}</span></td>
+                    <td class="info-card"><span class="info-label">Comisión</span><span class="info-value">{{ number_format((float) $porcentajeComision, 2) }}%</span></td>
                     <td class="info-card"><span class="info-label">Estado</span><span class="info-value">{{ $pedido->estado->value }}</span></td>
                 </tr>
                 <tr>
