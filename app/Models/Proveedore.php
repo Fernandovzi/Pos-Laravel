@@ -12,7 +12,11 @@ class Proveedore extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['persona_id'];
+    protected $fillable = ['persona_id', 'porcentaje_comision'];
+
+    protected $casts = [
+        'porcentaje_comision' => 'decimal:2',
+    ];
 
     public function persona(): BelongsTo
     {

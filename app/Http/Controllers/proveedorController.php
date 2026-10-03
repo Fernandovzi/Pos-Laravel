@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\TipoPersonaEnum;
-use App\Http\Requests\StorePersonaRequest;
+use App\Http\Requests\StoreProveedoreRequest;
 use App\Http\Requests\UpdateProveedoreRequest;
 use App\Models\Persona;
 use App\Models\Proveedore;
@@ -51,12 +51,12 @@ class proveedorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorePersonaRequest $request): RedirectResponse
+    public function store(StoreProveedoreRequest $request): RedirectResponse
     {
         try {
             DB::transaction(function () use ($request): void {
-                $persona = Persona::create($request->validated());
-                $persona->proveedore()->create([]);
+                $persona = Persona::create($request->safe()->except('porcentaje_comision'));
+                $persona->proveedore()->create($request->safe()->only('porcentaje_comision'));
             });
 
             ActivityLogService::log('Creacion de proveedor', 'Proveedores', $request->validated());
@@ -95,7 +95,10 @@ class proveedorController extends Controller
     public function update(UpdateProveedoreRequest $request, Proveedore $proveedore): RedirectResponse
     {
         try {
-            $proveedore->persona->update($request->validated());
+            DB::transaction(function () use ($request, $proveedore): void {
+                $proveedore->persona->update($request->safe()->except('porcentaje_comision'));
+                $proveedore->update($request->safe()->only('porcentaje_comision'));
+            });
             ActivityLogService::log('Edición de proveedor', 'Proveedores', $request->validated());
 
             return redirect()->route('proveedores.index')->with('success', 'Proveedor editado');
